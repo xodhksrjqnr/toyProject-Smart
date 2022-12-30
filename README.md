@@ -1,2 +1,21 @@
 # toyProject-Smart
-toyProject about shopping mall web service
+
+### 목표
+간단한 형태의 쇼핑몰 웹 서비스를 구현하며, 구현시 발생한 문제나 고민한 생각에 대해 정리하는 학습형 토이프로젝트를 진행
+
+### 개발 기간
+2023.01.01 ~ 2023.01.31
+
+### 개발 환경
+- Spring Boot 2.7.2
+- Java 11
+- MySQL
+- Spring Data JPA
+- Thymeleaf
+- lombok
+
+### 구현 기능
+1. 로그인 & 로그아웃
+2. 회원가입 및 탈퇴
+3. 물품 등록 및 조회
+4. 결제
