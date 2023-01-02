@@ -12,10 +12,15 @@
 - MySQL
 - Spring Data JPA
 - Thymeleaf
-- lombok
+- Lombok
 
 ### 구현 기능
 1. 로그인 & 로그아웃
 2. 회원가입 및 탈퇴
 3. 물품 등록 및 조회
 4. 결제
+
+### 구조
+
+
+### 생각&고민
