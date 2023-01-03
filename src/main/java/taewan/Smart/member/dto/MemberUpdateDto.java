@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class MemberSaveDto {
+public class MemberUpdateDto {
 
     private Long memberId;
     private String nickName;
