@@ -1,4 +1,7 @@
 package taewan.Smart.item.repository;
 
-public interface ItemRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import taewan.Smart.item.entity.Item;
+
+public interface ItemRepository extends JpaRepository<Item, Long> {
 }
