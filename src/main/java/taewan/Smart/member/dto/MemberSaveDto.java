@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Setter
 public class MemberSaveDto {
 
-    private Long memberId;
     private String nickName;
     private String email;
     private String password;
