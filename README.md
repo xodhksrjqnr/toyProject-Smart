@@ -20,7 +20,25 @@
 3. 물품 등록 및 조회
 4. 결제
 
-### 구조
+### REST API
 
+|설명|API| 비고 |
+|---|---|---|
+|물품 단일 조회|Get : item/{itemId}||
+|물품 전체 조회|Get : item||
+|물품 등록|Post : item||
+|물품 수정|Post : item/{itemId}||
+|물품 삭제|Delete : item/{itemId}||
+
+|설명|API|비고|
+|---|---|---|
+|회원 단일 조회|Get : member/{memberId}||
+|회원 전체 조회|Get : member||
+|회원 등록|Post : member||
+|회원 수정|Post : member/{memberId}||
+|회원 삭제|Delete : member/{memberId}||
+
+### 구조
+<img width="534" alt="스크린샷 2023-01-02 오후 11 46 53" src="https://user-images.githubusercontent.com/48250370/210246842-ad9d702c-6398-49f0-aa7f-92b5309372ce.png">
 
 ### 생각&고민
