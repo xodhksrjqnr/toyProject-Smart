@@ -3,9 +3,9 @@ package taewan.Smart.item.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import taewan.Smart.item.entity.ItemInfoDto;
-import taewan.Smart.item.entity.ItemSaveDto;
-import taewan.Smart.item.entity.ItemUpdateDto;
+import taewan.Smart.item.dto.ItemInfoDto;
+import taewan.Smart.item.dto.ItemSaveDto;
+import taewan.Smart.item.dto.ItemUpdateDto;
 import taewan.Smart.item.service.ItemService;
 
 import java.util.List;

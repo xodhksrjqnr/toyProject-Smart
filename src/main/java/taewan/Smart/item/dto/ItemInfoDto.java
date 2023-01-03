@@ -1,6 +1,7 @@
-package taewan.Smart.item.entity;
+package taewan.Smart.item.dto;
 
 import lombok.Getter;
+import taewan.Smart.item.entity.Item;
 
 @Getter
 public class ItemInfoDto {

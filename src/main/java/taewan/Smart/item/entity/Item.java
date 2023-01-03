@@ -2,6 +2,8 @@ package taewan.Smart.item.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import taewan.Smart.item.dto.ItemSaveDto;
+import taewan.Smart.item.dto.ItemUpdateDto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

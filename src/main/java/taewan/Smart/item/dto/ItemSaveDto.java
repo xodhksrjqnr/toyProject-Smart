@@ -1,13 +1,12 @@
-package taewan.Smart.item.entity;
+package taewan.Smart.item.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemUpdateDto {
+public class ItemSaveDto {
 
-    private Long itemId;
     private String itemImg;
     private String itemName;
     private Integer price;

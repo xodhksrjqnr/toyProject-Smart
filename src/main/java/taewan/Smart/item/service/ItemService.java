@@ -1,8 +1,8 @@
 package taewan.Smart.item.service;
 
-import taewan.Smart.item.entity.ItemInfoDto;
-import taewan.Smart.item.entity.ItemSaveDto;
-import taewan.Smart.item.entity.ItemUpdateDto;
+import taewan.Smart.item.dto.ItemInfoDto;
+import taewan.Smart.item.dto.ItemSaveDto;
+import taewan.Smart.item.dto.ItemUpdateDto;
 
 import java.util.List;
 
