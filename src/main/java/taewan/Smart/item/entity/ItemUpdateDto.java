@@ -5,8 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ItemSaveDto {
+public class ItemUpdateDto {
 
+    private Long itemId;
     private String itemImg;
     private String itemName;
     private Integer price;
