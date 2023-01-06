@@ -25,7 +25,6 @@ public class Member {
     private LocalDate birthday;
 
     public Member(MemberSaveDto dto) {
-        this.memberId = dto.getMemberId();
         this.nickName = dto.getNickName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
