@@ -2,6 +2,7 @@ package taewan.Smart.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.item.entity.Item;
 import taewan.Smart.item.dto.ItemInfoDto;
 import taewan.Smart.item.dto.ItemSaveDto;
@@ -37,12 +38,12 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.save(new Item(itemSaveDto)).getItemId();
     }
 
+    @Transactional
     @Override
-    public Long modify(Long itemId, ItemUpdateDto itemUpdateDto) {
-        Item found = itemRepository.findById(itemId).orElseThrow();
-
+    public Long modify(ItemUpdateDto itemUpdateDto) {
+        Item found = itemRepository.findById(itemUpdateDto.getItemId()).orElseThrow();
         found.updateItem(itemUpdateDto);
-        return itemId;
+        return found.getItemId();
     }
 
     @Override

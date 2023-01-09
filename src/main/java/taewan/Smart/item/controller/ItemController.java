@@ -2,6 +2,7 @@ package taewan.Smart.item.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.item.dto.ItemInfoDto;
 import taewan.Smart.item.dto.ItemSaveDto;
@@ -22,32 +23,44 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public String theItemPage(@PathVariable Long itemId) {
-        ItemInfoDto item = itemService.findOne(itemId);
-        return "";
+    public String searchOne(@PathVariable Long itemId, Model model) {
+        model.addAttribute("item", itemService.findOne(itemId));
+        return "item/view";
     }
 
     @GetMapping
-    public String itemsPage() {
-        List<ItemInfoDto> items = itemService.findAll();
-        return "";
+    public String itemListPage(Model model) {
+        model.addAttribute("itemList", itemService.findAll());
+        return "item/list_view";
+    }
+
+    @GetMapping("/create")
+    public String createForm(Model model) {
+        model.addAttribute("item", new ItemSaveDto());
+        return "item/write";
     }
 
     @PostMapping
-    public String itemUpload(ItemSaveDto dto) {
+    public String upload(ItemSaveDto dto) {
         Long saved = itemService.save(dto);
-        return "";
+        return "redirect:item/" + saved;
     }
 
-    @PostMapping("/{itemId}")
-    public String itemUpdate(@PathVariable Long itemId, ItemUpdateDto dto) {
-        Long updatedId = itemService.modify(itemId, dto);
-        return "";
+    @GetMapping("/update/{itemId}")
+    public String updateForm(@PathVariable Long itemId, Model model) {
+        model.addAttribute("item", itemService.findOne(itemId));
+        return "item/update";
     }
 
-    @DeleteMapping("/{itemId}")
-    public String itemDelete(@PathVariable Long itemId) {
+    @PostMapping("/update")
+    public String update(ItemUpdateDto dto) {
+        Long updatedId = itemService.modify(dto);
+        return "redirect:/item/" + updatedId;
+    }
+
+    @PostMapping("/delete/{itemId}")
+    public String remove(@PathVariable Long itemId) {
         itemService.delete(itemId);
-        return "";
+        return "redirect:/item";
     }
 }

@@ -11,6 +11,6 @@ public interface ItemService {
     ItemInfoDto findOne(Long itemId);
     List<ItemInfoDto> findAll();
     Long save(ItemSaveDto itemSaveDto);
-    Long modify(Long itemId, ItemUpdateDto itemUpdateDto);
+    Long modify(ItemUpdateDto itemUpdateDto);
     void delete(Long itemId);
 }
