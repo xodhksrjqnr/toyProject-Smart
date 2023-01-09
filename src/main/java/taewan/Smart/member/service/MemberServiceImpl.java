@@ -2,6 +2,7 @@ package taewan.Smart.member.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.member.dto.MemberInfoDto;
 import taewan.Smart.member.dto.MemberSaveDto;
 import taewan.Smart.member.dto.MemberUpdateDto;
@@ -38,12 +39,13 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(new Member(memberSaveDto)).getMemberId();
     }
 
+    @Transactional
     @Override
-    public Long modify(Long memberId, MemberUpdateDto memberUpdateDto) {
-        Member found = memberRepository.findById(memberId).orElseThrow();
+    public Long modify(MemberUpdateDto memberUpdateDto) {
+        Member found = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow();
 
         found.updateMember(memberUpdateDto);
-        return memberId;
+        return found.getMemberId();
     }
 
     @Override

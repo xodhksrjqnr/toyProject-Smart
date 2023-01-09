@@ -11,6 +11,6 @@ public interface MemberService {
     MemberInfoDto findOne(Long memberId);
     List<MemberInfoDto> findAll();
     Long save(MemberSaveDto memberSaveDto);
-    Long modify(Long memberId, MemberUpdateDto memberUpdateDto);
+    Long modify(MemberUpdateDto memberUpdateDto);
     void delete(Long memberId);
 }
