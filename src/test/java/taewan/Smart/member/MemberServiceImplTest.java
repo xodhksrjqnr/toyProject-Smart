@@ -33,7 +33,7 @@ class MemberServiceImplTest {
     static List<Member> entities = new ArrayList<>();
 
     @BeforeAll
-    static void init() {
+    static void setUp() {
         for (int i = 1; i <= 3; i++) {
             MemberSaveDto dto = new MemberSaveDto();
             dto.setNickName("test" + i);
