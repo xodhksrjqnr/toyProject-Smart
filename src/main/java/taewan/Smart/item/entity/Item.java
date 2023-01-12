@@ -1,7 +1,9 @@
 package taewan.Smart.item.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import taewan.Smart.item.dto.ItemSaveDto;
 import taewan.Smart.item.dto.ItemUpdateDto;
 
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

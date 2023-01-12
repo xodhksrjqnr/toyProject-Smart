@@ -43,7 +43,7 @@ public class ItemController {
     @PostMapping
     public String upload(ItemSaveDto dto) {
         Long saved = itemService.save(dto);
-        return "redirect:item/" + saved;
+        return "redirect:/item/" + saved;
     }
 
     @GetMapping("/update/{itemId}")

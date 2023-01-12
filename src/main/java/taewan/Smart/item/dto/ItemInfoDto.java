@@ -1,9 +1,12 @@
 package taewan.Smart.item.dto;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import taewan.Smart.item.entity.Item;
 
 @Getter
+@ToString
 public class ItemInfoDto {
 
     private Long itemId;
