@@ -8,8 +8,6 @@ import taewan.Smart.member.dto.MemberSaveDto;
 import taewan.Smart.member.dto.MemberUpdateDto;
 import taewan.Smart.member.service.MemberService;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("member")
 public class MemberController {

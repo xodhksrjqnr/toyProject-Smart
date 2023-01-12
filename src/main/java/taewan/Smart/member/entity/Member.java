@@ -1,7 +1,9 @@
 package taewan.Smart.member.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import taewan.Smart.member.dto.MemberSaveDto;
 import taewan.Smart.member.dto.MemberUpdateDto;
 
@@ -14,6 +16,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
