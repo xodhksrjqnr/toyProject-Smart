@@ -6,7 +6,7 @@
 </head>
 <body>
     <div th:object="${product}">
-        <form th:action="@{/templates/product/update}" method="post">
+        <form th:action="@{/product/update}" method="post">
             <input type="number" name="productId" th:value="*{productId}" hidden>
             <label>제품명 : <input type="text" name="productName" th:value="*{productName}"></label><br/>
             <label>이미지 : <input type="text" name="productImg" th:value="*{productImg}"/></label><br/>

@@ -13,7 +13,7 @@
         <p th:text="'category = ' + *{category}"/>
         <p th:text="'productInformation = ' + *{productInformation}"/>
     </div>
-    <form th:action="@{/templates/product/delete/{productId} (productId=${product.productId})}" th:object="${product}" method="post">
+    <form th:action="@{/product/delete/{productId} (productId=${product.productId})}" th:object="${product}" method="post">
         <button type="submit">삭제</button>
     </form>
 </body>

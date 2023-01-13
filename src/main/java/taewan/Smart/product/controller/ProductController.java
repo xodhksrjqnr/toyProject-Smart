@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public String productListPage(Model model) {
+    public String searchAll(Model model) {
         model.addAttribute("productList", productService.findAll());
         return "product/list_view";
     }
