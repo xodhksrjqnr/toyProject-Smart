@@ -7,7 +7,7 @@
 2023.01.01 ~ 2023.01.31
 
 ### 개발 인원
-- Front : 1명
+- Frontend : 1명
 - Backend : 1명
 
 ### 개발 환경
@@ -17,6 +17,7 @@
 - Spring Data JPA
 - Thymeleaf
 - Lombok
+- ReactJS
 
 ### 구현 기능
 1. 로그인 & 로그아웃
@@ -26,15 +27,20 @@
 
 ### REST API
 
-|설명| API                               | 비고 |
-|---|-----------------------------------|---|
-|물품 단일 조회| Get : product/{productId}         ||
-|물품 전체 조회| Get : product                     ||
-|물품 등록 양식| Get : product/create              ||
-|물품 수정 양식| Get : product/update/{productId}  ||
-|물품 등록| Post : product                    ||
-|물품 수정| Post : product/update             ||
-|물품 삭제| Post : product/delete/{productId} ||
+|설명| API            |비고|
+|---|----------------|---|
+|분류 전체 조회| Get : category ||
+
+|설명| API                          | 비고                     |
+|---|------------------------------|------------------------|
+|물품 단일 조회| Get : product/{productId}    ||
+|물품 전체 조회| Get : product                ||
+|물품 등록 양식| Get : product/create         ||
+|물품 수정 양식| Get : product/{productId}/update ||
+|물품 필터 조| Get : product/filter?code={}&option={}&sex={}| code:분류번호, option:필터조건 |
+|물품 등록| Post : product               ||
+|물품 수정| Post : product/update        ||
+|물품 삭제| Delete : product/{productId} ||
 
 |설명| API                             |비고|
 |---|---------------------------------|---|
@@ -47,6 +53,6 @@
 |회원 삭제| Post : member/delete/{memberId} ||
 
 ### 구조
-<img width="534" alt="스크린샷 2023-01-02 오후 11 46 53" src="https://user-images.githubusercontent.com/48250370/210246842-ad9d702c-6398-49f0-aa7f-92b5309372ce.png">
+<img width="949" alt="스크린샷 2023-01-13 오후 9 54 06" src="https://user-images.githubusercontent.com/48250370/212324851-7bf4691d-61a6-408a-96ba-4491b5c92928.png">
 
 ### 생각&고민
