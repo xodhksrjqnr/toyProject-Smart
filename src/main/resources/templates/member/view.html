@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:object="${member}">
+        <p th:text="'memberId = ' + *{memberId}"/>
+        <p th:text="'nickName = ' + *{nickName}"/>
+        <p th:text="'email = ' + *{email}"/>
+        <p th:text="'password = ' + *{password}"/>
+        <p th:text="'phoneNumber = ' + *{phoneNumber}"/>
+        <p th:text="'birthday = ' + *{birthday}"/>
+    </div>
+    <form th:action="@{/member/delete/{memberId} (memberId=${member.memberId})}" th:method="post">
+        <button type="submit">탈퇴하기</button>
+    </form>
+</body>
+</html>
