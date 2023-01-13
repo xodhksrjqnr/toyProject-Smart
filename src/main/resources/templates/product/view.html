@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:object="${product}">
+        <p th:text="'productId = ' + *{productId}"/>
+        <p th:text="'productImg = ' + *{productImg}"/>
+        <p th:text="'productName = ' + *{productName}"/>
+        <p th:text="'price = ' + *{price}"/>
+        <p th:text="'category = ' + *{category}"/>
+        <p th:text="'productInformation = ' + *{productInformation}"/>
+    </div>
+    <form th:action="@{/templates/product/delete/{productId} (productId=${product.productId})}" th:object="${product}" method="post">
+        <button type="submit">삭제</button>
+    </form>
+</body>
+</html>
