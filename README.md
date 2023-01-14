@@ -30,16 +30,16 @@
 |---|----------------|---|
 |분류 전체 조회| Get : category ||
 
-|설명| API                                              | 비고                     |
-|---|--------------------------------------------------|------------------------|
-|물품 단일 조회| Get : product/{productId}                        ||
-|물품 전체 조회| Get : product                                    ||
-|물품 등록 양식| Get : product/create                             ||
-|물품 수정 양식| Get : product/{productId}/update                 ||
-|물품 필터 조| Get : product/filter?code={}&option={}&gender={} | code:분류번호, option:필터조건 |
-|물품 등록| Post : product                                   ||
-|물품 수정| Post : product/update                            ||
-|물품 삭제| Delete : product/{productId}                     ||
+|설명| API                                               | 비고                     |
+|---|---------------------------------------------------|------------------------|
+|물품 단일 조회| Get : products/{productId}                        ||
+|물품 전체 조회| Get : products                                    ||
+|물품 등록 양식| Get : products/create                             ||
+|물품 수정 양식| Get : products/{productId}/update                 ||
+|물품 필터 조| Get : products/filter?code={}&option={}&gender={} | code:분류번호, option:필터조건 |
+|물품 등록| Post : products                                   ||
+|물품 수정| Post : products/update                            ||
+|물품 삭제| Delete : products/{productId}                     ||
 
 |설명| API                             |비고|
 |---|---------------------------------|---|
