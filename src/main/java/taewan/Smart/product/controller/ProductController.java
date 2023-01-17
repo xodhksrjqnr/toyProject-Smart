@@ -1,5 +1,6 @@
 package taewan.Smart.product.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import taewan.Smart.product.service.ProductService;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("products")
 public class ProductController {

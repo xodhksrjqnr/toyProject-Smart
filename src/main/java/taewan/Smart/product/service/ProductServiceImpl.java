@@ -35,15 +35,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        return productRepository.save(new Product(productSaveDto)).getProductId();
+        return productRepository.save(new Product(productSaveDto)).getId();
     }
 
     @Transactional
     @Override
     public Long modify(ProductUpdateDto productUpdateDto) {
-        Product found = productRepository.findById(productUpdateDto.getProductId()).orElseThrow();
+        Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
         found.updateProduct(productUpdateDto);
-        return found.getProductId();
+        return found.getId();
     }
 
     @Override
