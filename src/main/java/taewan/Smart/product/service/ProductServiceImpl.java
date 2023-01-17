@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import taewan.Smart.product.entity.Product;
 import taewan.Smart.product.dto.ProductInfoDto;
 import taewan.Smart.product.dto.ProductSaveDto;
@@ -34,28 +35,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductInfoDto findOne(Long productId) {
         Product found = productRepository.findById(productId).orElseThrow();
-        List<String> imgFiles = new ArrayList<>();
-        File dir = new File(found.getImgFolderPath());
-        File[] files = dir.listFiles();
-        for (File file : files)
-            if (file.isFile())
-                imgFiles.add(found.getImgFolderPath() + "/" + file.getName());
-        return new ProductInfoDto(found, imgFiles);
+
+        return new ProductInfoDto(found, findImgFiles(found.getImgFolderPath()));
     }
 
     @Override
     public List<ProductInfoDto> findAll() {
         List<Product> found = productRepository.findAll();
         List<ProductInfoDto> converted = new ArrayList<>();
-        for (Product p : found) {
-            List<String> imgFiles = new ArrayList<>();
-            File dir = new File(p.getImgFolderPath());
-            File[] files = dir.listFiles();
-            for (File file : files)
-                if (file.isFile())
-                    imgFiles.add(p.getImgFolderPath() + "/" + file.getName());
-            converted.add(new ProductInfoDto(p, imgFiles));
-        }
+
+        found.forEach(p -> converted.add(new ProductInfoDto(p, findImgFiles(p.getImgFolderPath()))));
         return converted;
     }
 
@@ -63,26 +52,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long save(ProductSaveDto productSaveDto) {
         String path = resourceSavePath + "images/products/" + productSaveDto.getCode() + "/" + productSaveDto.getName();
-        String infoFileName = "";
-        try {
-            Files.createDirectories(Paths.get(path + "/view"));
-            productSaveDto.getImgFiles().forEach(file -> {
-                try {
-                    String extension = file.getOriginalFilename().replaceFirst(".*\\.", ".");
-                    String uploadName = UUID.randomUUID().toString() + extension;
-                    file.transferTo(new File(path + "/view", uploadName));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            String extension = productSaveDto.getDetailInfo().getOriginalFilename().replaceFirst(".*\\.", ".");
-            String uploadName = UUID.randomUUID().toString() + extension;
-            productSaveDto.getDetailInfo().transferTo(new File(path, uploadName));
-            infoFileName = uploadName;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return productRepository.save(new Product(productSaveDto, path + "/view", path + "/" + infoFileName)).getId();
+        String infoFileName = path + "/" + saveImgFile(productSaveDto.getDetailInfo(), path);
+
+        saveImgFiles(productSaveDto.getImgFiles(), path + "/view");
+        return productRepository.save(new Product(productSaveDto, path + "/view", infoFileName)).getId();
     }
 
     @Transactional
@@ -96,17 +69,54 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long productId) {
         Product found = productRepository.findById(productId).orElseThrow();
+        String directoryPath = found.getImgFolderPath().replaceFirst("/view", "");
+
+        deleteDirectory(directoryPath);
+        productRepository.deleteById(productId);
+    }
+
+    private List<String> findImgFiles(String directoryPath) {
+        List<String> found = new ArrayList<>();
+        File dir = new File(directoryPath);
+        File[] files = dir.listFiles();
+
+        for (File f : files)
+            if (f.isFile())
+                found.add(directoryPath + "/" + f.getName());
+        return found;
+    }
+
+    private void saveImgFiles(List<MultipartFile> files, String path) {
+        files.forEach(f -> saveImgFile(f, path));
+    }
+
+    private String saveImgFile(MultipartFile file, String path) {
+        String extension = file.getOriginalFilename().replaceFirst(".*\\.", ".");
+        String uploadName = UUID.randomUUID().toString() + extension;
+
         try {
-            File dir = new File(found.getImgFolderPath());
-            File[] files = dir.listFiles();
-            for (File f : files)
-                Files.deleteIfExists(Paths.get(found.getImgFolderPath() + "/" + f.getName()));
-            Files.deleteIfExists(Paths.get(found.getImgFolderPath()));
-            Files.deleteIfExists(Paths.get(found.getDetailInfo()));
-            Files.deleteIfExists(Paths.get(found.getImgFolderPath().replaceFirst("/view", "")));
+            Files.createDirectories(Paths.get(path));
+            file.transferTo(new File(path, uploadName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        productRepository.deleteById(productId);
+        return uploadName;
+    }
+
+    private void deleteDirectory(String directoryPath) {
+        File dir = new File(directoryPath);
+        File[] files = dir.listFiles();
+
+        try {
+            for (File f : files) {
+                String target = directoryPath + "/" + f.getName();
+                if (f.isDirectory())
+                    deleteDirectory(target);
+                Files.deleteIfExists(Paths.get(target));
+            }
+            Files.deleteIfExists(Paths.get(directoryPath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
