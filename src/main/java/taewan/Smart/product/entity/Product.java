@@ -35,10 +35,6 @@ public class Product {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    public Product(ProductSaveDto dto) {
-        this(dto, null, null);
-    }
-
     public Product(ProductSaveDto dto, String imgFolderPath, String infoPath) {
         this.imgFolderPath = imgFolderPath;
         this.name = dto.getName();
