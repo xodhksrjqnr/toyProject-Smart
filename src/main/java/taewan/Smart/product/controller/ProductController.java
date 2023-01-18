@@ -37,9 +37,10 @@ public class ProductController {
 
     @GetMapping("/filter")
     public List<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "page") Integer page,
-                                                    @RequestParam(name = "code") Long code,
-                                                    @RequestParam(name = "option") Long option) {
-        return productService.findAllWithFilter(page, code, option);
+                                                    @RequestParam(name = "code") String code,
+                                                    @RequestParam(name = "option") Long option,
+                                                    @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        return productService.findAllWithFilter(page, code, option, size);
     }
 
     @PostMapping

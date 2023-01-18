@@ -3,6 +3,8 @@ package taewan.Smart.product.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductInfoDto> findAll() {
+    public List<ProductInfoDto> findAll(Integer page) {
         List<Product> found = productRepository.findAll();
         List<ProductInfoDto> converted = new ArrayList<>(found.size());
 
@@ -49,9 +51,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductInfoDto> findAllWithFilter(Long code, Long option, Integer gender) {
-
-        List<Product> found = productRepository.findByFilter(code, gender);
+    public List<ProductInfoDto> findAllWithFilter(Integer page, String code, Long option, Integer size) {
+        PageRequest condition = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate", "price"));
+        List<Product> found = productRepository.findByCodeContaining(code, condition);
         List<ProductInfoDto> converted = new ArrayList<>(found.size());
 
         found.forEach(p -> converted.add(new ProductInfoDto(p, findImgFiles(p.getImgFolderPath()))));

@@ -9,8 +9,8 @@ import java.util.List;
 public interface ProductService {
 
     ProductInfoDto findOne(Long productId);
-    List<ProductInfoDto> findAll();
-    List<ProductInfoDto> findAllWithFilter(Long code, Long option, Integer gender);
+    List<ProductInfoDto> findAll(Integer page);
+    List<ProductInfoDto> findAllWithFilter(Integer page, String code, Long option, Integer size);
     Long save(ProductSaveDto productSaveDto);
     Long modify(ProductUpdateDto productUpdateDto);
     void delete(Long productId);
