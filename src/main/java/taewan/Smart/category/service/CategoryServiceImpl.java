@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryItemRepository = categoryItemRepository;
     }
 
-    public List<CategoryFullInfoDto> searchAll() {
+    public List<CategoryFullInfoDto> findAll() {
         List<Category> categories = categoryRepository.findAll(Sort.by("code"));
         List<CategoryItem> categoryItems = categoryItemRepository.findAll(Sort.by("parentCode"));
         List<CategoryFullInfoDto> result = new ArrayList<>();

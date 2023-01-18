@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CategoryService {
 
-    List<CategoryFullInfoDto> searchAll();
+    List<CategoryFullInfoDto> findAll();
 }
