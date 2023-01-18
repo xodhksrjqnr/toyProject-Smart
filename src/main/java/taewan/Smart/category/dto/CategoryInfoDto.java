@@ -7,14 +7,12 @@ import taewan.Smart.category.entity.Category;
 public class CategoryInfoDto {
 
     private Long id;
-    private String type1;
-    private String type2;
-    private Long code;
+    private String name;
+    private String code;
 
     public CategoryInfoDto(Category category) {
         this.id = category.getId();
-        this.type1 = category.getType1();
-        this.type2 = category.getType2();
+        this.name = category.getName();
         this.code = category.getCode();
     }
 }

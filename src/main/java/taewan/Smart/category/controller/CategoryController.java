@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import taewan.Smart.category.dto.CategoryFullInfoDto;
 import taewan.Smart.category.service.CategoryService;
-import taewan.Smart.category.service.CategoryServiceImpl;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("category")
@@ -16,12 +16,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoryServiceImpl categoryService) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @GetMapping
-    public Map<String, Map<String, Long>> searchAll() {
+    public List<CategoryFullInfoDto> searchAll() {
         return categoryService.searchAll();
     }
 }
