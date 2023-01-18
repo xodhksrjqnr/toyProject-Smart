@@ -11,10 +11,10 @@ export default function Header() {
     navigate(`/categories/${text}`);
   };
   return (
-    <header className="flex justify-center bg-violet-400">
+    <header className="w-full flex justify-center bg-blue-800 drop-shadow-md">
       <div className="max-w-screen-2xl w-full flex items-center px-2 py-1">
         <Link to="/" className="mr-8 relative -top-1">
-          <h1 className="text-3xl text-slate-900">Smart</h1>
+          <h1 className="text-3xl text-white">Smart</h1>
         </Link>
         <form
           className="flex justify-between rounded-full bg-white overflow-hidden h-7 px-2"

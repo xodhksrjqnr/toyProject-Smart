@@ -9,10 +9,12 @@ function App() {
   return (
     <>
       <Header />
-      <SideNav />
-      <QueryClientProvider client={queryClient}>
-        <Outlet />
-      </QueryClientProvider>
+      <main className="flex justify-center max-w-screen-2xl w-full">
+        <SideNav />
+        <QueryClientProvider client={queryClient}>
+          <Outlet />
+        </QueryClientProvider>
+      </main>
     </>
   );
 }
