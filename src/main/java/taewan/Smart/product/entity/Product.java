@@ -25,8 +25,7 @@ public class Product {
     private String imgFolderPath;
     private String name;
     private Integer price;
-    private Long code;
-    private Integer gender;
+    private String code;
     @Embedded
     private Size size;
     private String detailInfo;
@@ -40,7 +39,6 @@ public class Product {
         this.name = dto.getName();
         this.price = dto.getPrice();
         this.code = dto.getCode();
-        this.gender = dto.getGender();
         this.size = dto.getSize();
         this.detailInfo = infoPath;
     }
@@ -51,7 +49,6 @@ public class Product {
         this.name = dto.getName();
         this.price = dto.getPrice();
         this.code = dto.getCode();
-        this.gender = dto.getGender();
         this.size = dto.getSize();
         this.detailInfo = infoPath;
     }

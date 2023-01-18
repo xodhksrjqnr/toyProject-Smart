@@ -20,8 +20,7 @@ public class ProductInfoDto {
     private List<String> imgFiles;
     private String name;
     private Integer price;
-    private Long code;
-    private Integer gender;
+    private String code;
     @Embedded
     private Size size;
     private String detailInfo;
@@ -32,7 +31,6 @@ public class ProductInfoDto {
         this.name = product.getName();
         this.price = product.getPrice();
         this.code = product.getCode();
-        this.gender = product.getGender();
         this.size = product.getSize();
         this.detailInfo = product.getDetailInfo();
     }

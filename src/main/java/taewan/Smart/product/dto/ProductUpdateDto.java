@@ -18,8 +18,7 @@ public class ProductUpdateDto {
     private List<MultipartFile> imgFiles;
     private String name;
     private Integer price;
-    private Long code;
-    private Integer gender;
+    private String code;
     @Embedded
     private Size size;
     private MultipartFile detailInfo;;
