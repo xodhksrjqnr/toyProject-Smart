@@ -13,6 +13,7 @@ import taewan.Smart.product.service.ProductService;
 import java.util.List;
 
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("products")
 public class ProductController {
@@ -30,15 +31,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductInfoDto> searchAll() {
-        return productService.findAll();
+    public List<ProductInfoDto> searchAll(@RequestParam(name = "page") Integer page) {
+        return productService.findAll(page);
     }
 
     @GetMapping("/filter")
-    public List<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "code") Long code,
-                                                    @RequestParam(name = "option") Long option,
-                                                    @RequestParam(name = "gender") Integer gender) {
-        return productService.findAllWithFilter(code, option, gender);
+    public List<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "page") Integer page,
+                                                    @RequestParam(name = "code") Long code,
+                                                    @RequestParam(name = "option") Long option) {
+        return productService.findAllWithFilter(page, code, option);
     }
 
     @PostMapping
