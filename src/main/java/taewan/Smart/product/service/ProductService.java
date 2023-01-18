@@ -10,6 +10,7 @@ public interface ProductService {
 
     ProductInfoDto findOne(Long productId);
     List<ProductInfoDto> findAll();
+    List<ProductInfoDto> findAllWithFilter(Long code, Long option, Integer gender);
     Long save(ProductSaveDto productSaveDto);
     Long modify(ProductUpdateDto productUpdateDto);
     void delete(Long productId);

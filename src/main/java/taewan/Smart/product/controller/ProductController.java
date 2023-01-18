@@ -34,6 +34,13 @@ public class ProductController {
         return productService.findAll();
     }
 
+    @GetMapping("/filter")
+    public List<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "code") Long code,
+                                                    @RequestParam(name = "option") Long option,
+                                                    @RequestParam(name = "gender") Integer gender) {
+        return productService.findAllWithFilter(code, option, gender);
+    }
+
     @PostMapping
     public Long upload(ProductSaveDto dto) {
         return productService.save(dto);

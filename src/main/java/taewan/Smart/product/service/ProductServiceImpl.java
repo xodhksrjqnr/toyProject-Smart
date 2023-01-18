@@ -42,7 +42,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductInfoDto> findAll() {
         List<Product> found = productRepository.findAll();
-        List<ProductInfoDto> converted = new ArrayList<>();
+        List<ProductInfoDto> converted = new ArrayList<>(found.size());
+
+        found.forEach(p -> converted.add(new ProductInfoDto(p, findImgFiles(p.getImgFolderPath()))));
+        return converted;
+    }
+
+    @Override
+    public List<ProductInfoDto> findAllWithFilter(Long code, Long option, Integer gender) {
+
+        List<Product> found = productRepository.findByFilter(code, gender);
+        List<ProductInfoDto> converted = new ArrayList<>(found.size());
 
         found.forEach(p -> converted.add(new ProductInfoDto(p, findImgFiles(p.getImgFolderPath()))));
         return converted;
