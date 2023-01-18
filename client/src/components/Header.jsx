@@ -11,25 +11,27 @@ export default function Header() {
     navigate(`/categories/${text}`);
   };
   return (
-    <header className="flex items-center border-b-2 border-gray-400 p-2">
-      <Link to="/" className="mr-8">
-        <h1 className="text-4xl">Smart</h1>
-      </Link>
-      <form
-        className="flex justify-between border-2 border-gray-300 rounded-full px-3 py-1 w-72"
-        onSubmit={handleSumbit}
-      >
-        <input
-          className="text-sm w-full "
-          type="text"
-          placeholder="상품 검색"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <button>
-          <FiSearch />
-        </button>
-      </form>
+    <header className="flex justify-center bg-violet-400">
+      <div className="max-w-screen-2xl w-full flex items-center px-2 py-1">
+        <Link to="/" className="mr-8 relative -top-1">
+          <h1 className="text-3xl text-slate-900">Smart</h1>
+        </Link>
+        <form
+          className="flex justify-between rounded-full bg-white overflow-hidden h-7 px-2"
+          onSubmit={handleSumbit}
+        >
+          <input
+            className="text-sm w-full "
+            type="text"
+            placeholder="Search"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button>
+            <FiSearch />
+          </button>
+        </form>
+      </div>
     </header>
   );
 }
