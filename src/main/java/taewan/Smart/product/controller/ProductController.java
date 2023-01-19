@@ -2,6 +2,7 @@ package taewan.Smart.product.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public List<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "page") Integer page,
+    public Page<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "page") Integer page,
                                                     @RequestParam(name = "code") String code,
                                                     @RequestParam(name = "option") Long option,
                                                     @RequestParam(name = "size", defaultValue = "20") Integer size) {
