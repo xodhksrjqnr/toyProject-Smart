@@ -3,6 +3,7 @@ package taewan.Smart.product.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,16 +33,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductInfoDto> searchAll(@RequestParam(name = "page") Integer page) {
-        return productService.findAll(page);
+    public Page<ProductInfoDto> searchAll(Pageable pageable) {
+        return productService.findAll(pageable);
     }
 
     @GetMapping("/filter")
-    public Page<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "page") Integer page,
-                                                    @RequestParam(name = "code") String code,
-                                                    @RequestParam(name = "option") Long option,
-                                                    @RequestParam(name = "size", defaultValue = "20") Integer size) {
-        return productService.findAllWithFilter(page, code, option, size);
+    public Page<ProductInfoDto> searchAllWithFilter(Pageable pageable, @RequestParam(name = "code", required = false) String code) {
+        return productService.findAllWithFilter(pageable, code);
     }
 
     @PostMapping
