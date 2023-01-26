@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import taewan.Smart.product.dto.ProductSaveDto;
 import taewan.Smart.product.dto.ProductUpdateDto;
 import taewan.Smart.product.embedded.Size;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

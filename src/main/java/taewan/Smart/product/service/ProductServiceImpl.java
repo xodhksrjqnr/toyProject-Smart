@@ -92,11 +92,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void saveImgFiles(List<MultipartFile> files, String path) {
-        files.forEach(f -> saveImgFile(f, path));
+        for (MultipartFile f : files)
+            saveImgFile(f, path);
     }
 
     private String saveImgFile(MultipartFile file, String path) {
-        String extension = file.getOriginalFilename().replaceFirst(".*\\.", ".");
+        String extension = file.getContentType().replaceFirst(".*/", ".");
         String uploadName = UUID.randomUUID().toString() + extension;
 
         try {
