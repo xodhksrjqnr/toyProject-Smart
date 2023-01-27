@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { categories } from '../constants/categories';
 
@@ -10,7 +10,10 @@ export default function SideNav() {
   return (
     <nav className="w-36 text-left h-screen bg-gray-50 px-2 py-4 drop-shadow-md">
       {categories.map((category) => (
-        <div className="bg-white first:rounded-t-lg last:rounded-b-lg border-b drop-shadow-md">
+        <div
+          key={category.main}
+          className="bg-white first:rounded-t-lg last:rounded-b-lg border-b drop-shadow-md"
+        >
           <button
             className="flex justify-between items-center text-sm font-bold w-full p-2"
             onClick={handleClick}
@@ -21,7 +24,9 @@ export default function SideNav() {
           <div className="hidden">
             <ul className="py-2 bg-gray-50">
               {category.subdivision.map((item) => (
-                <li className="text-xs text-slate-800 mb-2 pl-2 ">{item}</li>
+                <li key={item} className="text-xs text-slate-800 mb-2 pl-2 ">
+                  {item}
+                </li>
               ))}
             </ul>
           </div>
