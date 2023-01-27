@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import CategoryProducts from './pages/CategoryProducts';
 import ProductDetail from './pages/ProductDetail';
+import Register from './pages/Register';
+import Admin from './pages/Admin';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ const router = createBrowserRouter([
       { index: true, path: '/', element: <Home /> },
       { path: '/categories/:id', element: <CategoryProducts /> },
       { path: '/products/:id', element: <ProductDetail /> },
+      { path: '/admin', element: <Admin /> },
+      { path: '/admin/register', element: <Register /> },
     ],
   },
 ]);
