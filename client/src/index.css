@@ -28,3 +28,7 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.main-card li:nth-child(n + 6) {
+  display: none;
+}
