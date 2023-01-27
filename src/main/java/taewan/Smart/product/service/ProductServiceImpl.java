@@ -31,19 +31,19 @@ public class ProductServiceImpl implements ProductService {
     public ProductInfoDto findOne(Long productId) {
         Product found = productRepository.findById(productId).orElseThrow();
 
-        return new ProductInfoDto(found, findImgFiles(found.getImgFolderPath(), root, address));
+        return new ProductInfoDto(found, findImgFiles(found.getImgFolderPath(), root, address), address);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address)));
+                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address), address));
     }
 
     @Override
     public Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code) {
         return productRepository.findByCodeContaining(pageable, code)
-                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address)));
+                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address), address));
     }
 
     @Transactional
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 
         path += "/view";
         saveImgFiles(productSaveDto.getImgFiles(), root + path);
-        return productRepository.save(new Product(productSaveDto, root + path, infoFileName)).getId();
+        return productRepository.save(new Product(productSaveDto, path, infoFileName)).getId();
     }
 
     @Transactional
