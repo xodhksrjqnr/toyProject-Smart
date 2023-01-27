@@ -1,6 +1,5 @@
 package taewan.Smart.product.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,12 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Value("${resource.save.path}")
     private String resourceSavePath;
+    @Value("${server.address}")
+    private String serverAddress;
+    @Value("${server.port}")
+    private String serverPort;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository) {
@@ -56,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        String path = resourceSavePath + "images/products/" + productSaveDto.getCode() + "/" + productSaveDto.getName();
+        String path = "images/products/" + productSaveDto.getCode() + "/" + productSaveDto.getName();
         String infoFileName = path + "/" + saveImgFile(productSaveDto.getDetailInfo(), path);
 
         saveImgFiles(productSaveDto.getImgFiles(), path + "/view");
@@ -82,12 +84,12 @@ public class ProductServiceImpl implements ProductService {
 
     private List<String> findImgFiles(String directoryPath) {
         List<String> found = new ArrayList<>();
-        File dir = new File(directoryPath);
+        File dir = new File(resourceSavePath + directoryPath);
         File[] files = dir.listFiles();
 
         for (File f : files)
             if (f.isFile())
-                found.add(directoryPath + "/" + f.getName());
+                found.add(serverAddress + ":" + serverPort + "/" + directoryPath + "/" + f.getName());
         return found;
     }
 
@@ -101,8 +103,8 @@ public class ProductServiceImpl implements ProductService {
         String uploadName = UUID.randomUUID().toString() + extension;
 
         try {
-            Files.createDirectories(Paths.get(path));
-            file.transferTo(new File(path, uploadName));
+            Files.createDirectories(Paths.get(resourceSavePath + path));
+            file.transferTo(new File(resourceSavePath + path, uploadName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import taewan.Smart.product.embedded.Size;
 import taewan.Smart.product.entity.Product;
 
-import javax.persistence.Embedded;
 import java.util.List;
 
 @Getter
@@ -21,8 +19,7 @@ public class ProductInfoDto {
     private String name;
     private Integer price;
     private String code;
-    @Embedded
-    private Size size;
+    private String size;
     private String detailInfo;
 
     public ProductInfoDto(Product product, List<String> imgFiles) {

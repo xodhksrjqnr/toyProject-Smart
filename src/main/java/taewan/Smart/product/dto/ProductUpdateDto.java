@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
-import taewan.Smart.product.embedded.Size;
 
-import javax.persistence.Embedded;
 import java.util.List;
 
 @Getter
@@ -19,7 +17,6 @@ public class ProductUpdateDto {
     private String name;
     private Integer price;
     private String code;
-    @Embedded
-    private Size size;
+    private String size;
     private MultipartFile detailInfo;;
 }

@@ -1,6 +1,5 @@
 package taewan.Smart.product.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +11,8 @@ import taewan.Smart.product.dto.ProductSaveDto;
 import taewan.Smart.product.dto.ProductUpdateDto;
 import taewan.Smart.product.service.ProductService;
 
-import java.util.List;
+import javax.validation.Valid;
 
-@Slf4j
 @RestController
 @RequestMapping("products")
 public class ProductController {
@@ -37,12 +35,12 @@ public class ProductController {
     }
 
     @GetMapping("/filter")
-    public Page<ProductInfoDto> searchAllWithFilter(Pageable pageable, @RequestParam(name = "code", required = false) String code) {
+    public Page<ProductInfoDto> searchAllWithFilter(Pageable pageable, @RequestParam(name = "code", defaultValue = "") String code) {
         return productService.findAllWithFilter(pageable, code);
     }
 
     @PostMapping
-    public Long upload(ProductSaveDto dto) {
+    public Long upload(@Valid ProductSaveDto dto) {
         return productService.save(dto);
     }
 

@@ -1,5 +1,6 @@
 package taewan.Smart.product.entity;
 
+import com.sun.istack.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import taewan.Smart.product.dto.ProductSaveDto;
 import taewan.Smart.product.dto.ProductUpdateDto;
-import taewan.Smart.product.embedded.Size;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,12 +24,16 @@ public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String imgFolderPath;
+    @NotNull
     private String name;
+    @NotNull
     private Integer price;
+    @NotNull
     private String code;
-    @Embedded
-    private Size size;
+    private String size;
+    @NotNull
     private String detailInfo;
     @CreatedDate
     private LocalDateTime createdDate;
