@@ -23,4 +23,8 @@ export default class Product {
       })
       .then((res) => res.data);
   }
+
+  async getProduct(id) {
+    return this.httpClient.get(`products/${id}`).then((res) => res.data);
+  }
 }
