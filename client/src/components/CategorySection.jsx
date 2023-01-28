@@ -4,12 +4,17 @@ import { useProductApi } from '../context/ProductApiContext';
 import ProductCard from './ProductCard';
 
 export default function CategorySection({ category }) {
+  const { code } = category;
   const { product } = useProductApi();
   const {
     isLoading,
     error,
     data: products,
-  } = useQuery(['products'], () => product.popular());
+  } = useQuery(
+    ['products', code],
+    () => product.mainProduct(code, 5, 'id,DESC'),
+    { staleTime: 1000 * 60 * 5 }
+  );
   return (
     <section className="p-4">
       <h2 className="bg-slate-200 px-2 py-1 mb-2 font-bold rounded-xl">

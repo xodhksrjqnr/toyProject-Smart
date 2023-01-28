@@ -10,4 +10,17 @@ export default class Product {
   async popular() {
     return this.httpClient.get('products').then((res) => res.data);
   }
+
+  async mainProduct(code, size, sort) {
+    console.log(code, size, sort);
+    return this.httpClient
+      .get('products/filter', {
+        params: {
+          code: code,
+          size: size,
+          sort: sort,
+        },
+      })
+      .then((res) => res.data);
+  }
 }
