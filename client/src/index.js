@@ -10,6 +10,7 @@ import CategoryProducts from './pages/CategoryProducts';
 import ProductDetail from './pages/ProductDetail';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
+import Update from './pages/Update';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: '/products/:id', element: <ProductDetail /> },
       { path: '/admin', element: <Admin /> },
       { path: '/admin/register', element: <Register /> },
+      { path: '/admin/update/:id', element: <Update /> },
     ],
   },
 ]);
