@@ -7,11 +7,11 @@ export default class Product {
     });
   }
 
-  async popular() {
+  async registeredProducts() {
     return this.httpClient.get('products').then((res) => res.data);
   }
 
-  async mainProduct(code, size = null, sort = 'id,DESC') {
+  async mainProduct(code = null, size = null, sort = 'id,DESC') {
     console.log(code, size, sort);
     return this.httpClient
       .get('products/filter', {
