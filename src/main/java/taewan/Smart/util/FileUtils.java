@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class FileUtils {
 
-    public static List<String> findImgFiles(String directoryPath, String root, String address) {
+    public static List<String> findFiles(String directoryPath, String root, String address) {
         List<String> found = new ArrayList<>();
         File dir = new File(root + directoryPath);
         File[] files = dir.listFiles();
@@ -24,12 +24,12 @@ public class FileUtils {
         return found;
     }
 
-    public static void saveImgFiles(List<MultipartFile> files, String path) {
+    public static void saveFiles(List<MultipartFile> files, String path) {
         for (MultipartFile f : files)
-            saveImgFile(f, path);
+            saveFile(f, path);
     }
 
-    public static String saveImgFile(MultipartFile file, String path) {
+    public static String saveFile(MultipartFile file, String path) {
         String extension = file.getContentType().replaceFirst(".*/", ".");
         String uploadName = UUID.randomUUID().toString() + extension;
 

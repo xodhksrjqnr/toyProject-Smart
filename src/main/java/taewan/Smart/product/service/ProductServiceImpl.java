@@ -31,44 +31,57 @@ public class ProductServiceImpl implements ProductService {
     public ProductInfoDto findOne(Long productId) {
         Product found = productRepository.findById(productId).orElseThrow();
 
-        return new ProductInfoDto(found, findImgFiles(found.getImgFolderPath(), root, address), address);
+        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), root, address), address);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address), address));
+                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
     }
 
     @Override
     public Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code) {
         return productRepository.findByCodeContaining(pageable, code)
-                .map(p -> new ProductInfoDto(p, findImgFiles(p.getImgFolderPath(), root, address), address));
+                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
     }
 
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        String path = "images/products/" + productSaveDto.getCode() + "/" + productSaveDto.getName();
-        String infoFileName = path + "/" + saveImgFile(productSaveDto.getDetailInfo(), root + path);
+        String[] paths = saveImgFile(productSaveDto);
 
-        path += "/view";
-        saveImgFiles(productSaveDto.getImgFiles(), root + path);
-        return productRepository.save(new Product(productSaveDto, path, infoFileName)).getId();
+        return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getId();
     }
 
     @Transactional
     @Override
     public Long modify(ProductUpdateDto productUpdateDto) {
         Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
-        found.updateProduct(productUpdateDto, "tmp", "tmp");
+        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
+
+        deleteDirectory(directoryPath);
+
+        String[] paths = saveImgFile((ProductSaveDto) productUpdateDto);
+
+        found.updateProduct(productUpdateDto, paths[0], paths[1]);
         return found.getId();
+    }
+
+    private String[] saveImgFile(ProductSaveDto dto) {
+        String[] paths = new String[2];
+
+        paths[0] = "images/products/" + dto.getCode() + "/" + dto.getName();
+        paths[1] = paths[0] + "/" + saveFile(dto.getDetailInfo(), root + paths[0]);
+        paths[0] += "/view";
+        saveFiles(dto.getImgFiles(), root + paths[0]);
+        return paths;
     }
 
     @Override
     public void delete(Long productId) {
         Product found = productRepository.findById(productId).orElseThrow();
-        String directoryPath = found.getImgFolderPath().replaceFirst("/view", "");
+        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
         deleteDirectory(directoryPath);
         productRepository.deleteById(productId);
