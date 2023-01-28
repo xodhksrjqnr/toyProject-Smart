@@ -1,5 +1,6 @@
 import React from 'react';
 import { BsCaretDownFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 import { categories } from '../constants/categories';
 
 export default function SideNav() {
@@ -24,9 +25,16 @@ export default function SideNav() {
           <div className="hidden">
             <ul className="py-2 bg-gray-50">
               {category.subdivision.map((item) => (
-                <li key={item} className="text-xs text-slate-800 mb-2 pl-2 ">
-                  {item}
-                </li>
+                <Link
+                  to={`/categories/${item.code}`}
+                  state={category.subdivision}
+                  className="w-full"
+                  key={item.code}
+                >
+                  <li className="text-xs text-slate-800 mb-2 pl-2">
+                    {item.title}
+                  </li>
+                </Link>
               ))}
             </ul>
           </div>
