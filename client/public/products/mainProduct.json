@@ -1,0 +1,77 @@
+{
+  "content": [
+    {
+      "id": 7,
+      "imgFiles": [
+        "http://3.37.87.23:8080/images/products/A02/반팔맨투맨/view/a58cf2cf-1aa7-4661-a15b-544280cb5928.jpeg"
+      ],
+      "name": "반팔맨투맨",
+      "price": 5000,
+      "code": "A02",
+      "size": "s,m,l",
+      "detailInfo": "http://3.37.87.23:8080/images/products/A02/반팔맨투맨/5a4b334d-3644-45fe-aaac-9048ff3978ca.jpeg"
+    },
+    {
+      "id": 6,
+      "imgFiles": [
+        "http://3.37.87.23:8080/images/products/A01/레드 후드티/view/df37fe60-5911-4b49-b870-ff4e88f3b4c3.jpeg"
+      ],
+      "name": "레드 후드티",
+      "price": 100000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://3.37.87.23:8080/images/products/A01/레드 후드티/d688f6d7-0870-4a9b-ab48-be0b1883ac16.jpeg"
+    },
+    {
+      "id": 5,
+      "imgFiles": [
+        "http://3.37.87.23:8080/images/products/A01/하얀 후드티/view/9945e20a-db4e-4498-ab37-97d29fae33d9.jpeg",
+        "http://3.37.87.23:8080/images/products/A01/하얀 후드티/view/a06e140e-ea92-4b25-b172-7c2e6579f98e.jpeg"
+      ],
+      "name": "하얀 후드티",
+      "price": 5000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://3.37.87.23:8080/images/products/A01/하얀 후드티/a45c7f71-94bc-4e6a-9701-3fc290107410.jpeg"
+    },
+    {
+      "id": 4,
+      "imgFiles": [
+        "http://3.37.87.23:8080/images/products/A02/폴라맨투맨/view/65eb72ae-f9a4-4f4e-9d8e-323eb36c5330.jpeg"
+      ],
+      "name": "폴라맨투맨",
+      "price": 5000,
+      "code": "A02",
+      "size": "s,m,l",
+      "detailInfo": "http://3.37.87.23:8080/images/products/A02/폴라맨투맨/fb56bdb1-0558-41b2-9d5e-9cdcb8ee6fd6.jpeg"
+    },
+    {
+      "id": 2,
+      "imgFiles": [
+        "http://3.37.87.23:8080/images/products/A02/흑백맨투맨/view/ac876347-7273-45a4-a544-1139b37f96c0.jpeg"
+      ],
+      "name": "흑백맨투맨",
+      "price": 10000,
+      "code": "A02",
+      "size": "s,m,l",
+      "detailInfo": "http://3.37.87.23:8080/images/products/A02/흑백맨투맨/f158ca34-9e18-4b47-a877-c0add156a8b8.jpeg"
+    }
+  ],
+  "pageable": {
+    "sort": { "empty": false, "sorted": true, "unsorted": false },
+    "offset": 0,
+    "pageNumber": 0,
+    "pageSize": 5,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalElements": 6,
+  "totalPages": 2,
+  "last": false,
+  "number": 0,
+  "sort": { "empty": false, "sorted": true, "unsorted": false },
+  "size": 5,
+  "numberOfElements": 5,
+  "first": true,
+  "empty": false
+}
