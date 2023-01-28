@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product }) {
   return (
-    <li className="m-2 bg-white rounded-lg overflow-hidden drop-shadow-xl hover:scale-95 cursor-pointer">
+    <li className="m-2 bg-white rounded-lg overflow-hidden drop-shadow-xl hover:scale-95 cursor-pointer border-2 border-neutral-200">
       <Link to={`/products/${product.id}`}>
         <img
           className="w-48 h-48 object-cover object-center "
