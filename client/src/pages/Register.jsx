@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { upload } from '../api/uploader';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Register() {
   const [product, setProduct] = useState({});
@@ -8,6 +9,7 @@ export default function Register() {
   const [detail, setDetail] = useState();
   const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
+  const client = useQueryClient();
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'imgFiles') {
@@ -31,7 +33,10 @@ export default function Register() {
           navigate('/admin');
         }
       })
-      .finally(() => setIsUploading(false));
+      .finally(() => {
+        setIsUploading(false);
+        client.invalidateQueries(['products']);
+      });
   };
   return (
     <section className="register-section w-full p-8 text-sm">
