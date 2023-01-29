@@ -1460,6 +1460,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.5.5":
+  version: 7.20.13
+  resolution: "@babel/runtime@npm:7.20.13"
+  dependencies:
+    regenerator-runtime: ^0.13.11
+  checksum: 09b7a97a05c80540db6c9e4ddf8c5d2ebb06cae5caf3a87e33c33f27f8c4d49d9c67a2d72f1570e796045288fad569f98a26ceba0c4f5fad2af84b6ad855c4fb
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.18.10, @babel/template@npm:^7.20.7, @babel/template@npm:^7.3.3":
   version: 7.20.7
   resolution: "@babel/template@npm:7.20.7"
@@ -2029,6 +2038,13 @@ __metadata:
     "@types/yargs": ^17.0.8
     chalk: ^4.0.0
   checksum: 6f9faf27507b845ff3839c1adc6dbd038d7046d03d37e84c9fc956f60718711a801a5094c7eeee6b39ccf42c0ab61347fdc0fa49ab493ae5a8efd2fd41228ee8
+  languageName: node
+  linkType: hard
+
+"@jkroso/type@npm:1":
+  version: 1.1.1
+  resolution: "@jkroso/type@npm:1.1.1"
+  checksum: c2bb3cf56d8225e8e74ccb5e1dcc44132ab89056389f18ac05866c540873a4b330034e78cc3f95628f80ed576e58d4a6dea7dbcd09447992187ee3f0883a8509
   languageName: node
   linkType: hard
 
@@ -4308,6 +4324,7 @@ __metadata:
     "@testing-library/user-event": ^13.2.1
     axios: ^1.2.2
     eslint-config-react-app: ^7.0.1
+    pure-react-carousel: ^1.30.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-icons: ^4.7.1
@@ -4988,10 +5005,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deep-freeze@npm:0.0.1":
+  version: 0.0.1
+  resolution: "deep-freeze@npm:0.0.1"
+  checksum: 1e43c98e44c7849382d9f896e679d48a1b5bf40993f7cc858e3730ef4e2ba387b9b7b7fe722cac34febe7f6a564cd242c27bbc319e8df793c2a287f21e5ba038
+  languageName: node
+  linkType: hard
+
 "deep-is@npm:^0.1.3, deep-is@npm:~0.1.3":
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: edb65dd0d7d1b9c40b2f50219aef30e116cedd6fc79290e740972c132c09106d2e80aa0bc8826673dd5a00222d4179c84b36a790eef63a4c4bca75a37ef90804
+  languageName: node
+  linkType: hard
+
+"deepmerge@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "deepmerge@npm:2.2.1"
+  checksum: 284b71065079e66096229f735a9a0222463c9ca9ee9dda7d5e9a0545bf254906dbc7377e3499ca3b2212073672b1a430d80587993b43b87d8de17edc6af649a8
   languageName: node
   linkType: hard
 
@@ -5399,6 +5430,15 @@ __metadata:
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
+  languageName: node
+  linkType: hard
+
+"equals@npm:^1.0.5":
+  version: 1.1.0
+  resolution: "equals@npm:1.1.0"
+  dependencies:
+    "@jkroso/type": 1
+  checksum: 8b4aafef92e7dfa795245700fc25d19a920a08da5a9ffb781649e272689daf3fb6b076d252da430cf49eb43760bf4115345c907b920069dde27fcd94690cfc50
   languageName: node
   linkType: hard
 
@@ -10404,7 +10444,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -10443,6 +10483,22 @@ __metadata:
   version: 2.2.0
   resolution: "punycode@npm:2.2.0"
   checksum: 32f291c1b1e8bef8a7d351a369579565bc17530ee5224d2f2b5c37b2647aa0ec7f1972294e2de1b632812f90c8080a7c0c5645c14758aadc0f27b35dd4906d89
+  languageName: node
+  linkType: hard
+
+"pure-react-carousel@npm:^1.30.1":
+  version: 1.30.1
+  resolution: "pure-react-carousel@npm:1.30.1"
+  dependencies:
+    "@babel/runtime": ^7.5.5
+    deep-freeze: 0.0.1
+    deepmerge: ^2.2.1
+    equals: ^1.0.5
+    prop-types: ^15.6.2
+  peerDependencies:
+    react: 15.x || 16.x || 17.x || 18.x
+    react-dom: 15.x || 16.x || 17.x || 18.x
+  checksum: f117e2366def64464b0e58e2df257d3b4bb107e1608a317e38987bf173f23006355619cbe8d62f00652c48a80ed4ac137c7ca5375f1b9b521e56efadd255e41b
   languageName: node
   linkType: hard
 

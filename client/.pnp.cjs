@@ -34,6 +34,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:13.5.0"],\
             ["axios", "npm:1.2.2"],\
             ["eslint-config-react-app", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:7.0.1"],\
+            ["pure-react-carousel", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:1.30.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.2.0"],\
             ["react-icons", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:4.7.1"],\
@@ -2778,6 +2779,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@babel/runtime", [\
+        ["npm:7.20.13", {\
+          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.20.13-45eeb6d8ad-09b7a97a05.zip/node_modules/@babel/runtime/",\
+          "packageDependencies": [\
+            ["@babel/runtime", "npm:7.20.13"],\
+            ["regenerator-runtime", "npm:0.13.11"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:7.20.7", {\
           "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.20.7-69d8df458c-4629ce5c46.zip/node_modules/@babel/runtime/",\
           "packageDependencies": [\
@@ -3582,6 +3591,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.18"],\
             ["@types/yargs", "npm:17.0.19"],\
             ["chalk", "npm:4.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@jkroso/type", [\
+        ["npm:1.1.1", {\
+          "packageLocation": "./.yarn/cache/@jkroso-type-npm-1.1.1-4eda899d56-c2bb3cf56d.zip/node_modules/@jkroso/type/",\
+          "packageDependencies": [\
+            ["@jkroso/type", "npm:1.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6486,6 +6504,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:13.5.0"],\
             ["axios", "npm:1.2.2"],\
             ["eslint-config-react-app", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:7.0.1"],\
+            ["pure-react-carousel", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:1.30.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.2.0"],\
             ["react-icons", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:4.7.1"],\
@@ -7386,6 +7405,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["deep-freeze", [\
+        ["npm:0.0.1", {\
+          "packageLocation": "./.yarn/cache/deep-freeze-npm-0.0.1-12d684fc1a-1e43c98e44.zip/node_modules/deep-freeze/",\
+          "packageDependencies": [\
+            ["deep-freeze", "npm:0.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["deep-is", [\
         ["npm:0.1.4", {\
           "packageLocation": "./.yarn/cache/deep-is-npm-0.1.4-88938b5a67-edb65dd0d7.zip/node_modules/deep-is/",\
@@ -7396,6 +7424,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["deepmerge", [\
+        ["npm:2.2.1", {\
+          "packageLocation": "./.yarn/cache/deepmerge-npm-2.2.1-44c00cbffa-284b710650.zip/node_modules/deepmerge/",\
+          "packageDependencies": [\
+            ["deepmerge", "npm:2.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:4.2.2", {\
           "packageLocation": "./.yarn/cache/deepmerge-npm-4.2.2-112165ced2-a8c43a1ed8.zip/node_modules/deepmerge/",\
           "packageDependencies": [\
@@ -7856,6 +7891,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/env-paths-npm-2.2.1-7c7577428c-65b5df55a8.zip/node_modules/env-paths/",\
           "packageDependencies": [\
             ["env-paths", "npm:2.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["equals", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/equals-npm-1.1.0-680ab26517-8b4aafef92.zip/node_modules/equals/",\
+          "packageDependencies": [\
+            ["equals", "npm:1.1.0"],\
+            ["@jkroso/type", "npm:1.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -14462,6 +14507,37 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/punycode-npm-2.2.0-9eb533dae1-32f291c1b1.zip/node_modules/punycode/",\
           "packageDependencies": [\
             ["punycode", "npm:2.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["pure-react-carousel", [\
+        ["npm:1.30.1", {\
+          "packageLocation": "./.yarn/cache/pure-react-carousel-npm-1.30.1-8503b3beba-f117e2366d.zip/node_modules/pure-react-carousel/",\
+          "packageDependencies": [\
+            ["pure-react-carousel", "npm:1.30.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:1.30.1", {\
+          "packageLocation": "./.yarn/__virtual__/pure-react-carousel-virtual-32290c20e8/0/cache/pure-react-carousel-npm-1.30.1-8503b3beba-f117e2366d.zip/node_modules/pure-react-carousel/",\
+          "packageDependencies": [\
+            ["pure-react-carousel", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:1.30.1"],\
+            ["@babel/runtime", "npm:7.20.13"],\
+            ["@types/react", null],\
+            ["@types/react-dom", null],\
+            ["deep-freeze", "npm:0.0.1"],\
+            ["deepmerge", "npm:2.2.1"],\
+            ["equals", "npm:1.1.0"],\
+            ["prop-types", "npm:15.8.1"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
