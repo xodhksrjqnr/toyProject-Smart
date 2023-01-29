@@ -12,7 +12,6 @@ export default class Product {
   }
 
   async mainProduct(code = null, size = null, sort = 'id,DESC') {
-    console.log(code, size, sort);
     return this.httpClient
       .get('products/filter', {
         params: {
