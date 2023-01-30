@@ -39,7 +39,7 @@ export default function CategoryProducts() {
         ))}
       </h2>
       <section>
-        <ul className="w-full flex justify-start">
+        <ul className="w-full flex justify-start flex-wrap">
           {categoryProduct.content.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
