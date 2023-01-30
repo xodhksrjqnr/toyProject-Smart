@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { useProductApi } from '../context/ProductApiContext';
-import ProductCard from '../components/ProductCard';
+
+import Filter from '../components/Filter';
+import CategoryResult from '../components/CategoryResult';
 
 export default function CategoryProducts() {
   const { id } = useParams();
   const { state } = useLocation();
-  const { product } = useProductApi();
-  const {
-    isLoading,
-    error,
-    data: categoryProduct,
-  } = useQuery(['categoryProduct', id], () => product.mainProduct(id), {
-    staleTime: 1000 * 60 * 5,
-  });
+  const [orderFilter, setOrderFilter] = useState();
 
-  if (isLoading) return <p className="w-full">Loading...</p>;
-  if (error) return <p className="w-full">Something is wrong</p>;
+  const handleOrder = (order) => setOrderFilter((prev) => (prev = order));
 
   return (
     <div className="flex flex-col w-full p-4">
@@ -38,13 +30,8 @@ export default function CategoryProducts() {
           </Link>
         ))}
       </h2>
-      <section>
-        <ul className="w-full flex justify-start flex-wrap">
-          {categoryProduct.content.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </ul>
-      </section>
+      <Filter onClick={handleOrder} />
+      <CategoryResult id={id} orderFilter={orderFilter} />
     </div>
   );
 }
