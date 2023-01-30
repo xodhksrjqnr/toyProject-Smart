@@ -26,4 +26,15 @@ export default class Product {
   async getProduct(id) {
     return this.httpClient.get(`products/${id}`).then((res) => res.data);
   }
+
+  async search(search, order = 'id,desc') {
+    return this.httpClient
+      .get('/products/filter', {
+        params: {
+          search: search,
+          sort: order,
+        },
+      })
+      .then((res) => res.data);
+  }
 }

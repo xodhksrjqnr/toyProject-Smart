@@ -9,7 +9,7 @@ export default function Header() {
   const handleSumbit = (e) => {
     e.preventDefault();
     if (text.trim().length === 0) return;
-    navigate(`/categories/${text}`);
+    navigate('/search', { state: text });
   };
   return (
     <header className="w-full flex justify-center bg-blue-800 drop-shadow-md">
