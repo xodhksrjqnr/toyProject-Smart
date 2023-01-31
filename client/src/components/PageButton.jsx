@@ -7,7 +7,7 @@ export default function PageButton({ text, onClickPage, info, state, move }) {
 
   return (
     <li
-      className={`${page === text - 1 && 'bg-blue-400'} ${
+      className={`${page === text - 1 && 'bg-blue-200'} ${
         first && 'first:invisible'
       } ${page === 0 && 'first:invisible'} ${last && 'last:invisible'}
        border-2 border-blue-600 w-8 h-8 bg-white mx-1 rounded-md flex justify-center items-center cursor-pointer`}
