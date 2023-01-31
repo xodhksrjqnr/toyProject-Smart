@@ -48,13 +48,13 @@ export default function Update() {
     setIsUploading(true);
     update(updated, file, detail, true) //
       .then((data) => {
-        if (data !== 400) {
+        if (data.status !== 400) {
+          client.invalidateQueries(['products']);
           navigate('/admin');
         }
       })
       .finally(() => {
         setIsUploading(false);
-        client.invalidateQueries(['products']);
       });
   };
 

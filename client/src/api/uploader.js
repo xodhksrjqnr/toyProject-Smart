@@ -18,5 +18,5 @@ export async function upload(product, file, detail) {
   return axios
     .post(process.env.REACT_APP_REGISTER_URL, data) //
     .then((data) => data) //
-    .catch((error) => error.response.status);
+    .catch((error) => error.response);
 }

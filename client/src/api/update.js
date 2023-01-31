@@ -19,5 +19,5 @@ export async function update(product, file, detail) {
   return axios
     .post(process.env.REACT_APP_UPDATE_URL, data)
     .then((data) => data) //
-    .catch((error) => error.response.status);
+    .catch((error) => error.response);
 }

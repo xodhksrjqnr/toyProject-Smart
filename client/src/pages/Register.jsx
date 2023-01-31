@@ -29,13 +29,13 @@ export default function Register() {
     setIsUploading(true);
     upload(product, file, detail) //
       .then((data) => {
-        if (data !== 400) {
+        if (data.status !== 400) {
+          client.invalidateQueries(['products']);
           navigate('/admin');
-        }
+        } else alert(data.data.detail);
       })
       .finally(() => {
         setIsUploading(false);
-        client.invalidateQueries(['products']);
       });
   };
   return (
