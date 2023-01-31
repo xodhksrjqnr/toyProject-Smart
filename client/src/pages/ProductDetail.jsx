@@ -18,6 +18,8 @@ export default function ProductDetail() {
   });
   if (isLoading) return <p className="w-full">Loading...</p>;
   if (error) return <p className="w-full">Something is wrong</p>;
+  if (productDetail.status === 404)
+    return <p className="w-full">{productDetail.data.message}</p>;
 
   const { imgFiles, detailInfo, name } = productDetail;
 

@@ -30,7 +30,10 @@ export default class Product {
   }
 
   async getProduct(id) {
-    return this.httpClient.get(`products/${id}`).then((res) => res.data);
+    return this.httpClient
+      .get(`products/${id}`)
+      .then((res) => res.data)
+      .catch((error) => error.response);
   }
 
   async search(search, sort = 'id,desc', page) {
