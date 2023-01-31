@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -29,12 +30,15 @@ public class FileUtils {
     }
 
     public static String saveFile(MultipartFile file, String path) {
-        String extension = file.getContentType().replaceFirst(".*/", ".");
-        String uploadName = UUID.randomUUID().toString() + extension;
+        String uploadName = UUID.randomUUID().toString();
 
         try {
+            String extension = file.getContentType().replaceFirst(".*/", ".");
+            uploadName += extension;
             Files.createDirectories(Paths.get(path));
             file.transferTo(new File(path, uploadName));
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("[DetailErrorMessage:등록할 이미지가 없습니다.]");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

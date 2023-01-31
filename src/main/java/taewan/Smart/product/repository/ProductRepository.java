@@ -7,6 +7,7 @@ import taewan.Smart.product.entity.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    Boolean existsByName(String name);
     Page<Product> findAllByCodeContains(Pageable pageable, String code);
     Page<Product> findAllByNameContains(Pageable pageable, String name);
     Page<Product> findAllByCodeContainsAndNameContains(Pageable pageable, String code, String name);

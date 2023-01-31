@@ -11,15 +11,13 @@ import java.util.List;
 @ToString
 public class ProductSaveDto {
 
-    @NotEmpty(message = "최소 1개 이상의 제품 이미지가 필요합니다.")
     private List<MultipartFile> imgFiles;
-    @NotBlank(message = "제품 이름이 필요합니다.")
+    @NotBlank(message = "DetailErrorMessage:제품 이름이 필요합니다.")
     private String name;
-    @PositiveOrZero
+    @PositiveOrZero(message = "DetailErrorMessage:0 이상이어야 합니다.")
     private Integer price;
-    @NotBlank(message = "제품 분류번호가 필요합니다.")
+    @NotBlank(message = "DetailErrorMessage:제품 분류번호가 필요합니다.")
     private String code;
     private String size;
-    @NotNull(message = "제품 설명 이미지가 필요합니다.")
     private MultipartFile detailInfo;
 }

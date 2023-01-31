@@ -2,6 +2,7 @@ package taewan.Smart.product.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
+        if (productRepository.existsByName(productSaveDto.getName()))
+            throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
+
         String[] paths = saveImgFile(productSaveDto);
 
         return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getId();
@@ -65,6 +69,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long modify(ProductUpdateDto productUpdateDto) {
+        if (productRepository.existsByName(productUpdateDto.getName()))
+            throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
+
         Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
         String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
