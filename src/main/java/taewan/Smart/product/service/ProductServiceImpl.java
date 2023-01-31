@@ -13,6 +13,8 @@ import taewan.Smart.product.dto.ProductSaveDto;
 import taewan.Smart.product.dto.ProductUpdateDto;
 import taewan.Smart.product.repository.ProductRepository;
 
+import java.util.Optional;
+
 import static taewan.Smart.util.FileUtils.*;
 
 @Service
@@ -58,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        if (productRepository.existsByName(productSaveDto.getName()))
+        if (!productRepository.findByName(productSaveDto.getName()).isEmpty())
             throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
 
         String[] paths = saveImgFile(productSaveDto);
@@ -69,8 +71,11 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long modify(ProductUpdateDto productUpdateDto) {
-        if (productRepository.existsByName(productUpdateDto.getName()))
+        Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
+
+        if (equalNameProduct.isPresent() && !equalNameProduct.get().getId().equals(productUpdateDto.getId())) {
             throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
+        }
 
         Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
         String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
