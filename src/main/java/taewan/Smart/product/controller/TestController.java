@@ -33,9 +33,6 @@ public class TestController {
 
     @PostMapping("/testupload")
     public ResponseEntity testup(MultipartHttpServletRequest mr) {
-        String t = "";
-        if (t.isEmpty())
-            throw new OutOfMemoryError();
         tmpMethod(mr.getFiles("files"), mr.getFiles("detailInfos"));
         return new ResponseEntity(HttpStatus.OK);
     }
