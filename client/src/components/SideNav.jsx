@@ -27,7 +27,6 @@ export default function SideNav() {
               {category.subdivision.map((item) => (
                 <Link
                   to={`/categories/${item.code}`}
-                  state={category.subdivision}
                   className="w-full"
                   key={item.code}
                 >
