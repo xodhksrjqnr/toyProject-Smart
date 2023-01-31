@@ -16,7 +16,7 @@ import static taewan.Smart.util.FileUtils.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
     @Value("${root.path}")
     private String root;
     @Value("${server.address.basic}")
@@ -41,9 +41,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code) {
-        return productRepository.findByCodeContaining(pageable, code)
-                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
+    public Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code, String search) {
+        Page<Product> found;
+
+        if (!search.isEmpty() && !code.isEmpty()) {
+            found = productRepository.findAllByCodeContainsAndNameContains(pageable, code, search);
+        } else if (search.isEmpty()) {
+            found = productRepository.findAllByCodeContains(pageable, code);
+        } else {
+            found = productRepository.findAllByNameContains(pageable, search);
+        }
+        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
     }
 
     @Transactional
@@ -62,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
         deleteDirectory(directoryPath);
 
-        String[] paths = saveImgFile((ProductSaveDto) productUpdateDto);
+        String[] paths = saveImgFile(productUpdateDto);
 
         found.updateProduct(productUpdateDto, paths[0], paths[1]);
         return found.getId();

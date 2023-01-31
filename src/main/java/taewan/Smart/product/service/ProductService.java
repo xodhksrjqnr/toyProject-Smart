@@ -10,7 +10,7 @@ public interface ProductService {
 
     ProductInfoDto findOne(Long productId);
     Page<ProductInfoDto> findAll(Pageable pageable);
-    Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code);
+    Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code, String search);
     Long save(ProductSaveDto productSaveDto);
     Long modify(ProductUpdateDto productUpdateDto);
     void delete(Long productId);
