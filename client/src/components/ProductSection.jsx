@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useProductApi } from '../context/ProductApiContext';
 import ProductCard from './ProductCard';
-import Pagination from './Pagination';
+import Pagenation from './Pagenation';
 import { useLocation } from 'react-router-dom';
 
 export default function ProductSection({ state, orderFilter, isSearch }) {
@@ -39,7 +39,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
           <ProductCard key={product.id} product={product} />
         ))}
       </ul>
-      <Pagination
+      <Pagenation
         totalPages={totalPages}
         page={number}
         first={first}
