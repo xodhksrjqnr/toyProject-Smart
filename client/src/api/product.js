@@ -7,6 +7,10 @@ export default class Product {
     });
   }
 
+  async products(value, sort, type) {
+    return type ? this.search(value, sort) : this.categoryProduct(value, sort);
+  }
+
   async registeredProducts() {
     return this.httpClient.get('products').then((res) => res.data);
   }

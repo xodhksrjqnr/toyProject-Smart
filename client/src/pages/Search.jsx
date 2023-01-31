@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Filter from '../components/Filter';
-import SearchResult from '../components/SearchResult';
+import ProductSection from '../components/ProductSection';
 
 export default function Search() {
   const [orderFilter, setOrderFilter] = useState();
@@ -15,7 +15,7 @@ export default function Search() {
         <strong>{state}</strong>의 검색 결과
       </p>
       <Filter onClick={handleOrder} />
-      <SearchResult state={state} orderFilter={orderFilter} />
+      <ProductSection state={state} orderFilter={orderFilter} isSearch={true} />
     </div>
   );
 }

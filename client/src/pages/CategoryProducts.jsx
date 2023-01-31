@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 
 import Filter from '../components/Filter';
-import CategoryResult from '../components/CategoryResult';
+import ProductSection from '../components/ProductSection';
 
 export default function CategoryProducts() {
   const { id } = useParams();
@@ -31,7 +31,7 @@ export default function CategoryProducts() {
         ))}
       </h2>
       <Filter onClick={handleOrder} />
-      <CategoryResult id={id} orderFilter={orderFilter} />
+      <ProductSection state={id} orderFilter={orderFilter} />
     </div>
   );
 }
