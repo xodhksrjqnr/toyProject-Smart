@@ -6,7 +6,7 @@ export default function Filter({ onClick }) {
   const [selected, setSelected] = useState(filterList[0].title);
 
   return (
-    <div className="flex text-xs my-2 border-2">
+    <div className="flex text-xs my-2 border-2 border-blue-400">
       <span className="bg-gray-200 p-1">정렬</span>
       <ul className="flex  p-1 cursor-pointer">
         {filterList.map((item, index) => (

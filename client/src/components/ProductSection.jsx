@@ -26,8 +26,8 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
   const { totalPages, number, first, last } = products;
 
   return (
-    <section>
-      <ul className="w-full flex justify-start flex-wrap">
+    <section className="flex flex-col items-center">
+      <ul className="w-full max-w-6xl flex flex-wrap">
         {products.content.length === 0 ? (
           <div>상품이 존재 하지 않습니다.</div>
         ) : null}

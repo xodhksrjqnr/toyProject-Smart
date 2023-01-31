@@ -11,7 +11,7 @@ export default function ProductCard({ product }) {
           alt={product.name}
         />
         <div className="p-2 text-sm">
-          <p className="underline underline-offset-2 text-slate-700">
+          <p className="underline underline-offset-2 text-slate-700 w-40  whitespace-nowrap block text-ellipsis overflow-hidden">
             {product.name}
           </p>
           <span className="text-xs text-slate-500">
