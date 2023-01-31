@@ -2,7 +2,7 @@ import React from 'react';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import PageButton from './PageButton';
 
-export default function Pagination({
+export default function Pagenation({
   totalPages,
   page,
   first,
