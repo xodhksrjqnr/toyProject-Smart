@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
-export default function PageButton({ text, onClickPage, info, move }) {
+export default function PageButton({ text, onClickPage, info, state, move }) {
   const { page, first, last } = info;
+  const navigate = useNavigate();
+
   return (
     <li
       className={`${page === text - 1 && 'font-bold'} ${
@@ -11,7 +14,13 @@ export default function PageButton({ text, onClickPage, info, move }) {
       onClick={() => {
         if (move === 'prev') onClickPage(page - 1);
         else if (move === 'next') onClickPage(page + 1);
-        else onClickPage(text - 1);
+        else {
+          onClickPage(text - 1);
+          navigate({
+            pathname: '',
+            search: `?keyword=${state}&page=${text}`,
+          });
+        }
       }}
     >
       {text}

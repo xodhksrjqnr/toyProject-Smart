@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useProductApi } from '../context/ProductApiContext';
 import ProductCard from './ProductCard';
 import Pagination from './Pagination';
+import { useLocation } from 'react-router-dom';
 
 export default function ProductSection({ state, orderFilter, isSearch }) {
   const { product } = useProductApi();
   const [page, setPage] = useState(0);
+  const location = useLocation();
+  const queryPageNum = new URLSearchParams(location.search).get('page');
   const {
     isLoading,
     error,
@@ -19,6 +22,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
     }
   );
   const handlePage = (num) => setPage((prev) => (prev = num));
+  useEffect(() => setPage((prev) => (prev = queryPageNum - 1)), [queryPageNum]);
 
   if (isLoading) return <p className="w-full">Loading...</p>;
   if (error) return <p className="w-full">Something is wrong</p>;
@@ -40,6 +44,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
         page={number}
         first={first}
         last={last}
+        state={state}
         onClickPage={handlePage}
       />
     </section>
