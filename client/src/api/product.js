@@ -7,8 +7,10 @@ export default class Product {
     });
   }
 
-  async products(value, sort, type) {
-    return type ? this.search(value, sort) : this.categoryProduct(value, sort);
+  async products(value, sort, page, type) {
+    return type
+      ? this.search(value, sort, page)
+      : this.categoryProduct(value, sort, page);
   }
 
   async registeredProducts() {
@@ -31,23 +33,25 @@ export default class Product {
     return this.httpClient.get(`products/${id}`).then((res) => res.data);
   }
 
-  async search(search, sort = 'id,desc') {
+  async search(search, sort = 'id,desc', page) {
     return this.httpClient
       .get('/products/filter', {
         params: {
           search: search,
           sort: sort,
+          page: page,
         },
       })
       .then((res) => res.data);
   }
 
-  async categoryProduct(code, sort = 'id,desc') {
+  async categoryProduct(code, sort = 'id,desc', page) {
     return this.httpClient
       .get('/products/filter', {
         params: {
           code: code,
           sort: sort,
+          page: page,
         },
       })
       .then((res) => res.data);
