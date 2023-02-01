@@ -13,8 +13,14 @@ export default class Product {
       : this.categoryProduct(value, sort, page);
   }
 
-  async registeredProducts() {
-    return this.httpClient.get('products').then((res) => res.data);
+  async registeredProducts(page) {
+    return this.httpClient
+      .get('products', {
+        params: {
+          page: page,
+        },
+      })
+      .then((res) => res.data);
   }
 
   async mainProduct(code = null, size = null, sort = 'id,desc') {
