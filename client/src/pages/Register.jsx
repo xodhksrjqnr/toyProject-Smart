@@ -2,24 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { upload } from '../api/uploader';
 import { useQueryClient } from '@tanstack/react-query';
+import UploadImagePreview from '../components/UploadImagePreview';
 
 export default function Register() {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState([]);
-  const [detail, setDetail] = useState();
+  const [detail, setDetail] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
   const client = useQueryClient();
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === 'imgFiles') {
-      for (const value of files) {
-        setFile((prev) => [...prev, value]);
-      }
+      setFile((prev) => (prev = [...files]));
       return;
     }
     if (name === 'detailInfo') {
-      setDetail(files && files[0]);
+      setDetail((prev) => (prev = [...files]));
       return;
     }
     setProduct((product) => ({ ...product, [name]: value }));
@@ -38,6 +38,7 @@ export default function Register() {
         setIsUploading(false);
       });
   };
+
   return (
     <section className="register-section w-full p-8 text-sm">
       <form
@@ -56,6 +57,7 @@ export default function Register() {
           required
           onChange={handleChange}
         />
+        <UploadImagePreview files={file} />
         <label htmlFor="detailInfo">제품 상세 이미지</label>
         <input
           id="detailInfo"
@@ -65,6 +67,7 @@ export default function Register() {
           required
           onChange={handleChange}
         />
+        <UploadImagePreview files={detail} />
         <label htmlFor="name">제품 이름</label>
         <input
           id="name"

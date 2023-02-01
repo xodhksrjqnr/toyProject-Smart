@@ -10,7 +10,9 @@ export async function upload(product, file, detail) {
   data.append('name', name);
   data.append('price', price);
   data.append('code', code);
-  data.append('detailInfo', detail);
+  for (const value of detail) {
+    data.append('detailInfo', value);
+  }
   for (const value of size) {
     data.append('size', value);
   }

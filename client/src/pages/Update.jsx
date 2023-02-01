@@ -4,12 +4,13 @@ import { update } from '../api/update';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProductApi } from '../context/ProductApiContext';
 import { categories } from '../constants/categories';
+import UploadImagePreview from '../components/UploadImagePreview';
 
 export default function Update() {
   const { id } = useParams();
   const [updated, setUpdated] = useState({});
   const [file, setFile] = useState([]);
-  const [detail, setDetail] = useState();
+  const [detail, setDetail] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const client = useQueryClient();
   const navigate = useNavigate();
@@ -25,13 +26,11 @@ export default function Update() {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'imgFiles') {
-      for (const value of files) {
-        setFile((prev) => [...prev, value]);
-      }
+      setFile((prev) => (prev = [...files]));
       return;
     }
     if (name === 'detailInfo') {
-      setDetail(files && files[0]);
+      setDetail((prev) => (prev = [...files]));
       return;
     }
     setUpdated((updated) => ({ ...updated, [name]: value }));
@@ -79,6 +78,7 @@ export default function Update() {
           required
           onChange={handleChange}
         />
+        <UploadImagePreview files={file} />
         <label htmlFor="detailInfo">제품 상세 이미지</label>
         <input
           id="detailInfo"
@@ -88,6 +88,7 @@ export default function Update() {
           required
           onChange={handleChange}
         />
+        <UploadImagePreview files={detail} />
         <label htmlFor="name">제품 이름</label>
         <input
           id="name"
