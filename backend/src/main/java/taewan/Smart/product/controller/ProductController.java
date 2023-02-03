@@ -1,15 +1,20 @@
 package taewan.Smart.product.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import taewan.Smart.product.dto.ProductInfoDto;
 import taewan.Smart.product.dto.ProductSaveDto;
 import taewan.Smart.product.dto.ProductUpdateDto;
 import taewan.Smart.product.service.ProductService;
 
-@Controller
-@RequestMapping("product")
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("products")
 public class ProductController {
 
     private ProductService productService;
@@ -20,44 +25,35 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String searchOne(@PathVariable Long productId, Model model) {
-        model.addAttribute("product", productService.findOne(productId));
-        return "product/view";
+    public ProductInfoDto searchOne(@PathVariable Long productId) {
+        return productService.findOne(productId);
     }
 
     @GetMapping
-    public String searchAll(Model model) {
-        model.addAttribute("productList", productService.findAll());
-        return "product/list_view";
+    public Page<ProductInfoDto> searchAll(Pageable pageable) {
+        return productService.findAll(pageable);
     }
 
-    @GetMapping("/create")
-    public String createForm(Model model) {
-        model.addAttribute("product", new ProductSaveDto());
-        return "product/write";
+    @GetMapping("/filter")
+    public Page<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "code", defaultValue = "") String code,
+                                                    @RequestParam(name = "search", defaultValue = "") String search,
+                                                    Pageable pageable) {
+        return productService.findAllWithFilter(pageable, code, search);
     }
 
     @PostMapping
-    public String upload(ProductSaveDto dto) {
-        Long saved = productService.save(dto);
-        return "redirect:/product/" + saved;
-    }
-
-    @GetMapping("/update/{productId}")
-    public String updateForm(@PathVariable Long productId, Model model) {
-        model.addAttribute("product", productService.findOne(productId));
-        return "product/update";
+    public Long upload(@Valid ProductSaveDto dto) {
+        return productService.save(dto);
     }
 
     @PostMapping("/update")
-    public String update(ProductUpdateDto dto) {
-        Long updatedId = productService.modify(dto);
-        return "redirect:/product/" + updatedId;
+    public Long update(ProductUpdateDto dto) {
+        return productService.modify(dto);
     }
 
-    @PostMapping("/delete/{productId}")
-    public String remove(@PathVariable Long productId) {
+    @PostMapping("/{productId}/delete")
+    public ResponseEntity remove(@PathVariable Long productId) {
         productService.delete(productId);
-        return "redirect:/product";
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

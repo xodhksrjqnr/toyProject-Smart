@@ -6,13 +6,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-public class ProductUpdateDto {
+@ToString(callSuper = true)
+public class ProductUpdateDto extends ProductSaveDto {
 
-    private Long productId;
-    private String productImg;
-    private String productName;
-    private Integer price;
-    private Long category;
-    private String productInformation;
+    private Long id;
 }

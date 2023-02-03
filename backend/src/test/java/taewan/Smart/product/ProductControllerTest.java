@@ -5,21 +5,26 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 import taewan.Smart.product.controller.ProductController;
 import taewan.Smart.product.dto.ProductInfoDto;
 import taewan.Smart.product.dto.ProductSaveDto;
-import taewan.Smart.product.dto.ProductUpdateDto;
-import taewan.Smart.product.entity.Product;
 import taewan.Smart.product.service.ProductServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.Normalizer;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,134 +34,176 @@ class ProductControllerTest {
 
     @Autowired MockMvc mockMvc;
     @MockBean ProductServiceImpl productService;
+
+    private static String root = "/Users/taewan/Desktop/";
+
+    private static Map<String, String> codeInfo = Map.of(
+            "A01", "후드 티셔츠",
+            "A02", "맨투맨",
+            "B01", "코트",
+            "B02", "패딩",
+            "C01", "트레이닝 팬츠",
+            "C02", "숏팬츠"
+    );
+
     static List<ProductSaveDto> dtos = new ArrayList<>();
-    static List<Product> entities = new ArrayList<>();
+
+    static List<ProductInfoDto> dtos2 = new ArrayList<>();
 
     @BeforeAll
-    static void setUp() {
+    static void setup() throws IOException {
+        String[] tmp = {"A", "B", "C"};
+        String[] tmp2 = {"M", "W"};
+
         for (int i = 1; i <= 3; i++) {
             ProductSaveDto dto = new ProductSaveDto();
-            dto.setProductName("product" + i);
-            dto.setProductImg("productImg" + i);
-            dto.setPrice(1000 * i);
-            dto.setCategory(10000L + i);
-            dto.setProductInformation("productInfo" + i);
+            dto.setName("product" + i);
+            dto.setPrice((int)(Math.random() * 10 + 1) * 10000);
+            dto.setCode(tmp[i - 1] + "0" + (i % 2 + 1) + tmp2[i % 2]);
+            dto.setSize("s,m,l,xl,xxl");
+            dto.setDetailInfo(createMultipartFile(dto.getCode(), i));
+            List<MultipartFile> imgs = new ArrayList<>();
+            for (int j = 1; j <= 3; j++)
+                imgs.add(createMultipartFile(dto.getCode(), j));
+            dto.setImgFiles(imgs);
             dtos.add(dto);
 
-            Product product = new Product();
-            ProductUpdateDto dto2 = new ProductUpdateDto();
-            dto2.setProductId((long)i);
-            dto2.setProductName("product" + i);
-            dto2.setProductImg("productImg" + i);
-            dto2.setPrice(1000 * i);
-            dto2.setCategory(10000L + i);
-            dto2.setProductInformation("productInfo" + i);
-            product.updateProduct(dto2);
-            entities.add(product);
+            ProductInfoDto dto2 = new ProductInfoDto();
+            dto2.setId((long)i);
+            dto2.setName(dto.getName());
+            dto2.setPrice(dto.getPrice());
+            dto2.setCode(dto.getCode());
+            dto2.setSize(dto.getSize());
+            String path = "http://localhost:8080/images/products/" + dto2.getCode() + "/" + dto2.getName();
+            dto2.setDetailInfo(path + "/" + UUID.randomUUID());
+            List<String> imgFiles = new ArrayList<>();
+            for (int j = 1; j <= 3; j++)
+                imgFiles.add(path + "/view/" + UUID.randomUUID());
+            dto2.setImgFiles(imgFiles);
+            dtos2.add(dto2);
         }
     }
 
-    @Test
-    void 물품_단일조회() throws Exception {
-        //given
-        when(productService.findOne(1L))
-                .thenReturn(new ProductInfoDto(entities.get(0)));
+    static MultipartFile createMultipartFile(String code, int i) throws IOException {
+        String keyword = codeInfo.get(code.substring(0, 3)) + i;
+        String path = root + "testImg/product";
+        File[] imgs = new File(path).listFiles();
+        String imgName = "구두1.jpeg";
+        String contentType = "image/";
 
-        //when //then
-        mockMvc.perform(get("/product/{productId}", 1))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"))
-                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("product/view"));
+        for (File img : imgs) {
+            String normalizedName = Normalizer.normalize(img.getName(), Normalizer.Form.NFC);
+            if (normalizedName.contains(keyword)) {
+                imgName = normalizedName;
+                contentType += imgName.substring(imgName.lastIndexOf(".") + 1);
+                break;
+            }
+        }
+        if (contentType.equals("image/"))
+            contentType += "jpeg";
+        return new MockMultipartFile("image", imgName, contentType, new FileInputStream(path + "/" + imgName));
     }
 
     @Test
-    void 없는_물품_단일조회() throws Exception {
+    void 제품_단일조회() throws Exception {
         //given
-        when(productService.findOne(1L))
-                .thenThrow(new NoSuchElementException());
+        when(productService.findOne(1L)).thenReturn(dtos2.get(0));
 
         //when //then
-        mockMvc.perform(get("/product/{productId}", 1))
+        mockMvc.perform(get("/products/{productId}", 1))
+                .andExpect(status().isOk());
+        verify(productService, times(1)).findOne(1L);
+    }
+
+    @Test
+    void 없는_제품_단일조회() throws Exception {
+        //given
+        when(productService.findOne(1L)).thenThrow(new NoSuchElementException());
+
+        //when //then
+        mockMvc.perform(get("/products/{productId}", 1))
                 .andExpect(status().isNotFound())
-                .andExpect(e -> assertTrue(e.getResolvedException() instanceof NoSuchElementException))
-                .andExpect(view().name("error"));
+                .andExpect(e -> assertTrue(e.getResolvedException() instanceof NoSuchElementException));
+        verify(productService, times(1)).findOne(1L);
     }
 
     @Test
-    void 물품_전체조회() throws Exception {
+    void 제품_페이지단위_조회() throws Exception {
         //given
-        List<ProductInfoDto> infoDtos = new ArrayList<>();
-        for (Product m : entities)
-            infoDtos.add(new ProductInfoDto(m));
-        when(productService.findAll()).thenReturn(infoDtos);
+        Pageable pageable = PageRequest.ofSize(10);
+        Page<ProductInfoDto> page = new PageImpl<>(dtos2, pageable, 3);
+        when(productService.findAll(pageable)).thenReturn(page);
 
         //when //then
-        mockMvc.perform(get("/product"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("productList"))
-                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("product/list_view"));
+        mockMvc.perform(
+                get("/products")
+                        .param("size", "10"))
+                .andExpect(status().isOk());
+        verify(productService, times(1)).findAll(pageable);
     }
 
     @Test
-    void 물품_가입양식() throws Exception {
-        //when //then
-        mockMvc.perform(get("/product/create"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"))
-                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("product/write"));
-    }
-
-    @Test
-    void 물품_등록() throws Exception {
+    void 제품_필터조회() throws Exception {
         //given
-        when(productService.save(dtos.get(0))).thenReturn(1L);
+        Pageable pageable = PageRequest.ofSize(10);
+        String code = dtos2.get(0).getCode();
+        String search = dtos2.get(0).getName();
+        List<ProductInfoDto> found = new ArrayList<>();
+        found.add(dtos2.get(0));
+        Page<ProductInfoDto> page = new PageImpl<>(found, pageable, 3);
+        when(productService.findAllWithFilter(pageable, code, "")).thenReturn(page);
+        when(productService.findAllWithFilter(pageable, "", search)).thenReturn(page);
+        when(productService.findAllWithFilter(pageable, code, search)).thenReturn(page);
 
         //when //then
-        mockMvc.perform(post("/product"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/product/{productId}"));
+        mockMvc.perform(
+                get("/products/filter")
+                        .param("code", code)
+                        .param("size", "10"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(
+                        get("/products/filter")
+                                .param("search", search)
+                                .param("size", "10"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(
+                        get("/products/filter")
+                                .param("code", code)
+                                .param("search", search)
+                                .param("size", "10"))
+                .andExpect(status().isOk());
+        verify(productService, times(3)).findAllWithFilter(any(), any(), any());
     }
 
     @Test
-    void 물품정보_수정양식() throws Exception {
+    void 제품_등록() throws Exception {
         //given
-        when(productService.findOne(1L))
-                .thenReturn(new ProductInfoDto(entities.get(0)));
+        when(productService.save(any())).thenReturn(1L);
 
         //when //then
-        mockMvc.perform(get("/product/update/{productId}", 1))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("product"))
-                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-                .andExpect(view().name("product/update"));
+        mockMvc.perform(post("/products"))
+                .andExpect(status().isOk());
+        verify(productService, times(1)).save(any());
     }
 
     @Test
-    void 물품정보_수정() throws Exception {
+    void 제품_수정() throws Exception {
         //given
-        ProductUpdateDto dto = new ProductUpdateDto();
-        dto.setProductId(1L);
-        dto.setProductName("product5");
-        dto.setProductImg("productImg5");
-        dto.setPrice(1000 * 5);
-        dto.setCategory(10000L + 5);
-        dto.setProductInformation("productInfo5");
-        when(productService.modify(dto)).thenReturn(1L);
+        when(productService.modify(any())).thenReturn(1L);
 
         //when //then
-        mockMvc.perform(post("/product/update"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/product/{productId}"));
+        mockMvc.perform(post("/products/update"))
+                .andExpect(status().isOk());
+        verify(productService, times(1)).modify(any());
     }
 
     @Test
-    void 물품_탈퇴() throws Exception {
+    void 제품_삭제() throws Exception {
         //when //then
-        mockMvc.perform(post("/product/delete/{productId}", 1))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product"));
+        mockMvc.perform(post("/products/{productId}/delete", 1))
+                .andExpect(status().isOk());
+        verify(productService, times(1)).delete(1L);
     }
 }

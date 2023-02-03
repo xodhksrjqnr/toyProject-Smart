@@ -1,26 +1,34 @@
 package taewan.Smart.product.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import taewan.Smart.product.entity.Product;
 
+import java.util.List;
+
 @Getter
+@Setter
 @ToString
+@NoArgsConstructor
 public class ProductInfoDto {
 
-    private Long productId;
-    private String productImg;
-    private String productName;
+    private Long id;
+    private List<String> imgFiles;
+    private String name;
     private Integer price;
-    private Long category;
-    private String productInformation;
+    private String code;
+    private String size;
+    private String detailInfo;
 
-    public ProductInfoDto(Product product) {
-        this.productId = product.getProductId();
-        this.productImg = product.getProductImg();
-        this.productName = product.getProductName();
+    public ProductInfoDto(Product product, List<String> imgFiles, String host) {
+        this.id = product.getId();
+        this.imgFiles = imgFiles;
+        this.name = product.getName();
         this.price = product.getPrice();
-        this.category = product.getCategory();
-        this.productInformation = product.getProductInformation();
+        this.code = product.getCode();
+        this.size = product.getSize();
+        this.detailInfo = host + product.getDetailInfo();
     }
 }
