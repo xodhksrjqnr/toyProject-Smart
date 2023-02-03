@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    div {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
+<body>
+    <div th:each="member : ${memberList}">
+        <p th:text="'memberId = ' + ${member.memberId}"/>
+        <p th:text="'nickName = ' + ${member.nickName}"/>
+        <p th:text="'email = ' + ${member.email}"/>
+        <p th:text="'password = ' + ${member.password}"/>
+        <p th:text="'phoneNumber = ' + ${member.phoneNumber}"/>
+        <p th:text="'birthday = ' + ${member.birthday}"/>
+    </div>
+</body>
+</html>
