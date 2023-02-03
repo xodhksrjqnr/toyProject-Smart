@@ -1,146 +1,110 @@
-[
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product1",
-    "price": 1000,
-    "code": 6201,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
+{
+  "content": [
+    {
+      "id": 2,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/노란 후드티/view/ea6fabe6-53d5-4e35-8a06-3d806ae494aa.jpeg"
+      ],
+      "name": "노란 후드티",
+      "price": 10000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/노란 후드티/e1e9295e-ab72-4a72-8feb-b154fc193cea.jpeg"
     },
-    "detailInfo": "infoImgPath"
+    {
+      "id": 3,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/레드 후드티/view/c6f9ef05-b9d0-4db2-81f1-46d4081a7fd6.jpeg"
+      ],
+      "name": "레드 후드티",
+      "price": 10000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/레드 후드티/c87dbccf-8577-476f-907b-39bacb425ed4.jpeg"
+    },
+    {
+      "id": 4,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/무지 후드티/view/c52fd612-3b6f-4c06-bf0c-8a6749a3b304.jpeg"
+      ],
+      "name": "무지 후드티",
+      "price": 10000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/무지 후드티/9bb9f25d-8820-45e8-915d-e04764bf3b4a.jpeg"
+    },
+    {
+      "id": 5,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/하얀 후드티/view/95ec785f-724c-4679-8c3e-85371983e9e5.jpeg",
+        "http://43.201.58.65:8080/images/products/A01/하얀 후드티/view/d7c030e7-7ee4-4a6d-be83-d69a0972e1ee.jpeg"
+      ],
+      "name": "하얀 후드티",
+      "price": 10000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/하얀 후드티/34a192b8-39cc-4f0f-8f3a-6e1fc9926df6.jpeg"
+    },
+    {
+      "id": 6,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/회색 후드티/view/01ce4ac3-42ce-4f0b-a05b-98f2e07fae55.jpeg"
+      ],
+      "name": "회색 후드티",
+      "price": 10000,
+      "code": "A01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/회색 후드티/d351eb30-11fd-4deb-947d-ba4a74291099.jpeg"
+    },
+    {
+      "id": 7,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A02/반팔 맨투맨/view/9b35b1e0-c7e5-4492-91b9-99c31a3b79cc.jpeg"
+      ],
+      "name": "반팔 맨투맨",
+      "price": 10000,
+      "code": "A02",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A02/반팔 맨투맨/d463c1f4-82ba-4eec-89b9-3550fd82535f.jpeg"
+    },
+    {
+      "id": 8,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A01/베이지 코트/view/16e9b6de-fcbb-48a7-a5aa-3f44fbb483ec.jpeg"
+      ],
+      "name": "베이지 코트",
+      "price": 10000,
+      "code": "B01",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A01/베이지 코트/39409019-0aab-495d-bd22-5e23b3068035.jpeg"
+    },
+    {
+      "id": 9,
+      "imgFiles": [
+        "http://43.201.58.65:8080/images/products/A02/폴라 맨투맨/view/813d6c21-445e-4862-bd36-a6beb2ec8cbc.jpeg"
+      ],
+      "name": "폴라 맨투맨",
+      "price": 10000,
+      "code": "A02",
+      "size": "s,m,l",
+      "detailInfo": "http://43.201.58.65:8080/images/products/A02/폴라 맨투맨/87f3c61e-5e23-49ae-ab89-771db5ab61c1.jpeg"
+    }
+  ],
+  "pageable": {
+    "sort": { "empty": true, "sorted": false, "unsorted": true },
+    "offset": 0,
+    "pageNumber": 0,
+    "pageSize": 20,
+    "paged": true,
+    "unpaged": false
   },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product2",
-    "price": 1000,
-    "code": 6202,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product3",
-    "price": 1000,
-    "code": 6203,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product4",
-    "price": 1000,
-    "code": 6204,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product5",
-    "price": 1000,
-    "code": 6205,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product6",
-    "price": 1000,
-    "code": 6206,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product7",
-    "price": 1000,
-    "code": 6207,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product8",
-    "price": 1000,
-    "code": 6208,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  },
-  {
-    "id": 1,
-    "imgFiles": ["img1", "img2", "img3"],
-    "name": "product9",
-    "price": 1000,
-    "code": 6209,
-    "gender": 0,
-    "size": {
-      "s": 20,
-      "m": 25,
-      "l": 30,
-      "xl": 35,
-      "xxl": 40
-    },
-    "detailInfo": "infoImgPath"
-  }
-]
+  "totalElements": 8,
+  "totalPages": 1,
+  "last": true,
+  "number": 0,
+  "sort": { "empty": true, "sorted": false, "unsorted": true },
+  "size": 20,
+  "numberOfElements": 8,
+  "first": true,
+  "empty": false
+}

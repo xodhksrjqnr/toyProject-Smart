@@ -4,8 +4,8 @@ import Product from '../api/product';
 
 export const ProductApiContext = createContext();
 
-const product = new FakeProduct();
-// const product = new Product();
+// const product = new FakeProduct();
+const product = new Product();
 
 export function ProductApiProvider({ children }) {
   return (
