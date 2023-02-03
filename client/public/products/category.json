@@ -1,0 +1,30 @@
+[
+  {
+    "category": { "id": 1, "name": "상의", "code": "A" },
+    "categoryItem": [
+      { "id": 1, "name": "후드 티셔츠", "code": "01", "parentCode": "A" },
+      { "id": 2, "name": "맨투맨", "code": "02", "parentCode": "A" }
+    ]
+  },
+  {
+    "category": { "id": 2, "name": "아우터", "code": "B" },
+    "categoryItem": [
+      { "id": 3, "name": "코트", "code": "01", "parentCode": "B" },
+      { "id": 4, "name": "패딩", "code": "02", "parentCode": "B" }
+    ]
+  },
+  {
+    "category": { "id": 3, "name": "하의", "code": "C" },
+    "categoryItem": [
+      { "id": 5, "name": "트레이닝 팬츠", "code": "01", "parentCode": "C" },
+      { "id": 6, "name": "숏 팬츠", "code": "02", "parentCode": "C" }
+    ]
+  },
+  {
+    "category": { "id": 4, "name": "신발", "code": "D" },
+    "categoryItem": [
+      { "id": 7, "name": "구두", "code": "01", "parentCode": "D" },
+      { "id": 8, "name": "운동화", "code": "02", "parentCode": "D" }
+    ]
+  }
+]
