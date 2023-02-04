@@ -21,15 +21,15 @@ import java.time.LocalDate;
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-    private String nickName;
+    private Long id;
+    private String memberId;
     private String email;
     private String password;
     private String phoneNumber;
     private LocalDate birthday;
 
     public Member(MemberSaveDto dto) {
-        this.nickName = dto.getNickName();
+        this.memberId = dto.getMemberId();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();
@@ -38,7 +38,6 @@ public class Member {
 
     public void updateMember(MemberUpdateDto dto) {
         this.memberId = dto.getMemberId();
-        this.nickName = dto.getNickName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();

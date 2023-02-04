@@ -1,6 +1,7 @@
 package taewan.Smart.member.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.member.dto.MemberInfoDto;
@@ -9,8 +10,6 @@ import taewan.Smart.member.dto.MemberUpdateDto;
 import taewan.Smart.member.entity.Member;
 import taewan.Smart.member.repository.MemberRepository;
 
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -23,33 +22,34 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberInfoDto findOne(Long memberId) {
-        return new MemberInfoDto(memberRepository.findById(memberId).orElseThrow());
-    }
-
-    @Override
-    public List<MemberInfoDto> findAll() {
-        return Arrays.asList(memberRepository.findAll()
-                .stream().map(MemberInfoDto::new)
-                .toArray(MemberInfoDto[]::new));
-    }
-
-    @Override
-    public Long save(MemberSaveDto memberSaveDto) {
-        return memberRepository.save(new Member(memberSaveDto)).getMemberId();
+    public MemberInfoDto findOne(Long id) {
+        return new MemberInfoDto(memberRepository.findById(id).orElseThrow());
     }
 
     @Transactional
     @Override
-    public Long modify(MemberUpdateDto memberUpdateDto) {
-        Member found = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow();
+    public Long save(MemberSaveDto memberSaveDto) {
+        if (memberRepository.findByMemberId(memberSaveDto.getMemberId()).isPresent())
+            throw new DuplicateKeyException("[DetailErrorMessage:중복된 회원 아이디입니다.]");
+        return memberRepository.save(new Member(memberSaveDto)).getId();
+    }
 
+    @Transactional
+    @Override
+    public Long modify(MemberUpdateDto memberUpdateDto, Long id) {
+        if (memberRepository.findByMemberId(memberUpdateDto.getMemberId()).isPresent())
+            throw new DuplicateKeyException("[DetailErrorMessage:중복된 회원 아이디입니다.]");
+
+        Member found = memberRepository.findById(id).orElseThrow();
+
+        if (memberUpdateDto.getPassword().equals(found.getPassword()))
+            memberUpdateDto.setPassword(found.getPassword());
         found.updateMember(memberUpdateDto);
-        return found.getMemberId();
+        return found.getId();
     }
 
     @Override
-    public void delete(Long memberId) {
-        memberRepository.deleteById(memberId);
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
     }
 }

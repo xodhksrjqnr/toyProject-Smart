@@ -1,15 +1,20 @@
 package taewan.Smart.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import taewan.Smart.member.dto.MemberInfoDto;
 import taewan.Smart.member.dto.MemberSaveDto;
+import taewan.Smart.member.dto.MemberSimpleDto;
 import taewan.Smart.member.dto.MemberUpdateDto;
 import taewan.Smart.member.service.MemberService;
 
-@Controller
-@RequestMapping("member")
+import javax.security.auth.message.AuthException;
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("members")
 public class MemberController {
 
     private MemberService memberService;
@@ -19,45 +24,33 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/{memberId}")
-    public String searchOne(@PathVariable Long memberId, Model model) {
-        model.addAttribute("member", memberService.findOne(memberId));
-        return "member/view";
-    }
-
     @GetMapping
-    public String searchAll(Model model) {
-        model.addAttribute("memberList", memberService.findAll());
-        return "member/list_view";
-    }
-
-    @GetMapping("/create")
-    public String createForm(Model model) {
-        model.addAttribute("member", new MemberSaveDto());
-        return "member/write";
+    public MemberInfoDto search(@SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
+        if (memberSimpleDto == null)
+            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
+        return memberService.findOne(memberSimpleDto.getId());
     }
 
     @PostMapping
-    public String upload(MemberSaveDto dto) {
-        Long memberId = memberService.save(dto);
-        return "redirect:/member/" + memberId;
-    }
-
-    @GetMapping("/update/{memberId}")
-    public String updateForm(@PathVariable Long memberId, Model model) {
-        model.addAttribute("member", memberService.findOne(memberId));
-        return "member/update";
+    public ResponseEntity join(@Valid MemberSaveDto memberSaveDto) {
+        memberService.save(memberSaveDto);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute MemberUpdateDto dto) {
-        Long memberId = memberService.modify(dto);
-        return "redirect:/member/" + memberId;
+    public ResponseEntity update(@Valid MemberUpdateDto memberUpdateDto,
+                         @SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
+        if (memberSimpleDto == null)
+            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
+        memberService.modify(memberUpdateDto, memberSimpleDto.getId());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/delete/{memberId}")
-    public String delete(@PathVariable Long memberId) {
-        memberService.delete(memberId);
-        return "redirect:/member";
+    @PostMapping("/delete")
+    public ResponseEntity delete(@SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
+        if (memberSimpleDto == null)
+            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
+        memberService.delete(memberSimpleDto.getId());
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

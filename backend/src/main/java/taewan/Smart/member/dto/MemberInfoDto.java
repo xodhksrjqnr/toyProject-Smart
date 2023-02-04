@@ -12,18 +12,14 @@ import java.time.LocalDate;
 @ToString
 public class MemberInfoDto {
 
-    private Long memberId;
-    private String nickName;
+    private String memberId;
     private String email;
-    private String password;
     private String phoneNumber;
     private LocalDate birthday;
 
     public MemberInfoDto(Member member) {
         this.memberId = member.getMemberId();
-        this.nickName = member.getNickName();
         this.email = member.getEmail();
-        this.password = member.getPassword();
         this.phoneNumber = member.getPhoneNumber();
         this.birthday = member.getBirthday();
     }
