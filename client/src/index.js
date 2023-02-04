@@ -13,6 +13,7 @@ import Admin from './pages/Admin';
 import Update from './pages/Update';
 import Search from './pages/Search';
 import Login from './pages/Login';
+import SingUp from './pages/SingUp';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: '/admin', element: <Admin /> },
       { path: '/admin/register', element: <Register /> },
       { path: '/admin/update/:id', element: <Update /> },
+      { path: '/signup', element: <SingUp /> },
     ],
   },
   {
