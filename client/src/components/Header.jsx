@@ -34,11 +34,14 @@ export default function Header() {
             </button>
           </form>
         </div>
-        <div>
+        <div className="flex text-white">
           <button>
             <Link to="/admin">
               <MdAdminPanelSettings className="text-white text-2xl" />
             </Link>
+          </button>
+          <button>
+            <Link to="/login">로그인</Link>
           </button>
         </div>
       </div>

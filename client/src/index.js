@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Admin from './pages/Admin';
 import Update from './pages/Update';
 import Search from './pages/Search';
+import Login from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       { path: '/admin/register', element: <Register /> },
       { path: '/admin/update/:id', element: <Update /> },
     ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
   },
 ]);
 
