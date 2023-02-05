@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
+import { BsCartPlusFill } from 'react-icons/bs';
 
 export default function Header() {
   const [text, setText] = useState('');
@@ -35,6 +36,11 @@ export default function Header() {
           </form>
         </div>
         <div className="flex text-white">
+          <button>
+            <Link to="/carts">
+              <BsCartPlusFill className="text-white text-2xl" />
+            </Link>
+          </button>
           <button>
             <Link to="/admin">
               <MdAdminPanelSettings className="text-white text-2xl" />
