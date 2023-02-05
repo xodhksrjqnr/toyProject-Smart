@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlinePlusSquare, AiOutlineMinusSquare } from 'react-icons/ai';
 
-export default function OrderQuantity({ onPlus, onMinus }) {
+export default function OrderQuantity({
+  onPlus,
+  onMinus,
+  size,
+  onChangeQuantity,
+}) {
   const [count, setCount] = useState(1);
+
   const handleMinus = () => {
     if (count < 2) return;
     setCount((prev) => prev - 1);
@@ -12,6 +18,10 @@ export default function OrderQuantity({ onPlus, onMinus }) {
     setCount((prev) => prev + 1);
     onPlus();
   };
+  useEffect(() => {
+    onChangeQuantity(size, count);
+  }, [count]);
+
   return (
     <>
       <AiOutlineMinusSquare onClick={handleMinus} className="text-red-600" />

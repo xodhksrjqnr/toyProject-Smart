@@ -1,22 +1,55 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { categories } from '../constants/categories';
 import OrderList from './OrderList';
 
 export default function ProductOrderForm({ productDetail }) {
-  const [orderSize, setOrderSize] = useState([]);
-  const { name, price, size, code } = productDetail;
+  const [cart, setCart] = useState({ items: [] });
+  const { id, name, price, size, code, imgFiles } = productDetail;
   const [main, sub] = classification(code);
-  const handleClick = (e) => {
+  const selectOption = useRef();
+
+  const handleOption = (e) => {
     const { value } = e.target;
     if (value === '') return;
-
-    setOrderSize((prev) => {
-      if (orderSize.includes(value)) return [...prev];
-      return [...prev, value];
-    });
+    for (const registerdSize of cart.items) {
+      if (registerdSize.size === value) return;
+    }
+    setCart((prev) => ({
+      ...prev,
+      items: [
+        ...prev.items,
+        { productId: id, size: value, quantity: 1, img: imgFiles[0] },
+      ],
+    }));
   };
+
+  const handleQuantity = (size, quantity) =>
+    setCart((prev) => ({
+      ...prev,
+      items: prev.items.map((item) => {
+        if (item.size === size) return { ...item, quantity: quantity };
+        return { ...item };
+      }),
+    }));
+
   const handleSumbit = (e) => {
     e.preventDefault();
+    if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      setCart({ items: [] });
+      return;
+    }
+    const savedCartItems = JSON.parse(localStorage.getItem('cart'));
+
+    localStorage.setItem(
+      'cart',
+      JSON.stringify({
+        ...cart,
+        items: [...cart.items, ...savedCartItems.items],
+      })
+    );
+    selectOption.current.value = '';
+    setCart({ items: [] });
   };
 
   return (
@@ -38,7 +71,9 @@ export default function ProductOrderForm({ productDetail }) {
             name="size"
             id="size"
             className="w-full border-2 border-black"
-            onClick={handleClick}
+            onChange={handleOption}
+            ref={selectOption}
+            value=""
           >
             <option value="">사이즈 선택</option>
             {size.split(',').map((value) => (
@@ -47,9 +82,15 @@ export default function ProductOrderForm({ productDetail }) {
               </option>
             ))}
           </select>
-          {orderSize && <OrderList orderSize={orderSize} price={price} />}
+          {cart.items.length >= 1 && (
+            <OrderList
+              cart={cart}
+              price={price}
+              onChangeQuantity={handleQuantity}
+            />
+          )}
           <button className="bg-blue-400 p-2 w-full font-bold rounded-md">
-            구매하기
+            장바구니 추가
           </button>
         </form>
       </div>
