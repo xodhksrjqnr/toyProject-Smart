@@ -32,6 +32,13 @@ export default function ProductOrderForm({ productDetail }) {
       }),
     }));
 
+  const handleDelete = (size) => {
+    setCart((prev) => ({
+      ...prev,
+      items: prev.items.filter((item) => item.size !== size),
+    }));
+  };
+
   const handleSumbit = (e) => {
     e.preventDefault();
     if (!localStorage.getItem('cart')) {
@@ -87,6 +94,7 @@ export default function ProductOrderForm({ productDetail }) {
               cart={cart}
               price={price}
               onChangeQuantity={handleQuantity}
+              onDelete={handleDelete}
             />
           )}
           <button className="bg-blue-400 p-2 w-full font-bold rounded-md">

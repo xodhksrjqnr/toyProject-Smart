@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import OrderQuantity from './OrderQuantity';
+import { IoMdTrash } from 'react-icons/io';
 
-export default function OrderList({ cart, price, onChangeQuantity }) {
+export default function OrderList({ cart, price, onChangeQuantity, onDelete }) {
   const [total, setTotal] = useState(1);
 
   const handleMinus = () => {
@@ -19,7 +20,13 @@ export default function OrderList({ cart, price, onChangeQuantity }) {
           key={item.size}
           className="border-b-2 px-2 py-1 flex justify-between"
         >
-          <span className="text-slate-600">{item.size}</span>
+          <div className="flex items-center hover:text-red-500">
+            <IoMdTrash
+              className="mr-1 cursor-pointer"
+              onClick={() => onDelete(item.size)}
+            />
+            <span className="text-slate-600">{item.size}</span>
+          </div>
           <div className="flex">
             <div className="flex items-center mr-2">
               <OrderQuantity
