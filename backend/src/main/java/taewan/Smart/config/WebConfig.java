@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import taewan.Smart.login.interceptor.LoginInterceptor;
+import taewan.Smart.login.interceptor.RefreshInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -31,8 +32,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
+        registry.addInterceptor(new RefreshInterceptor())
+                .order(1)
                 .addPathPatterns("/logout", "/members/**")
-                .excludePathPatterns("/members/create");
+                .excludePathPatterns("members/create");
+
+        registry.addInterceptor(new LoginInterceptor())
+                .order(2)
+                .addPathPatterns("/logout", "/members/**")
+                .excludePathPatterns("/members/create", "members/refresh");
     }
 }

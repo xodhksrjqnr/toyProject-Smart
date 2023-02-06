@@ -25,6 +25,6 @@ public class LoginExController {
     @ExceptionHandler({AuthException.class, ExpiredJwtException.class})
     public ErrorResult AuthExHandle(Exception e) {
         log.error("[LoginErrorHandle]", e);
-        return new ErrorResult("401", "자동 로그아웃되었습니다.", "[DetailErrorMessage:loginToken이 만료되었습니다.]");
+        return new ErrorResult("401", "토큰이 만료되었습니다.", e.getMessage());
     }
 }

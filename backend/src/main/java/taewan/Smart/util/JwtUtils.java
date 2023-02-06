@@ -1,9 +1,6 @@
 package taewan.Smart.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import taewan.Smart.member.dto.MemberInfoDto;
 
 import java.time.Duration;
@@ -25,6 +22,18 @@ public class JwtUtils {
                 .claim("email", dto.getEmail())
                 .claim("phoneNumber", dto.getPhoneNumber())
                 .claim("birthday", dto.getBirthday())
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public static String createRefreshJwt(Long id) {
+        Date now = new Date();
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setIssuer("smart")
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + Duration.ofHours(2).toMillis()))
+                .claim("id", id)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }

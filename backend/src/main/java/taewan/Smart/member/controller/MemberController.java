@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import static taewan.Smart.util.CookieUtils.expireCookie;
-import static taewan.Smart.util.JwtUtils.createJwt;
-import static taewan.Smart.util.JwtUtils.parseJwt;
+import static taewan.Smart.util.JwtUtils.*;
 
 @RestController
 @RequestMapping("members")
@@ -42,14 +41,14 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    @ResponseStatus(value = HttpStatus.OK)
     public LoginInfoDto update(@CookieValue String loginToken, @Valid MemberUpdateDto memberUpdateDto,
                                HttpServletRequest request, HttpServletResponse response) {
         Claims memberInfo = parseJwt(loginToken);
         Long id = (Long)memberInfo.get("id");
         memberService.modify(memberUpdateDto, id);
         expireCookie(request, response, "loginToken");
-        return new LoginInfoDto((String)memberInfo.get("memberId"), createJwt(memberService.findOne(id)));
+        return new LoginInfoDto((String)memberInfo.get("memberId"), createJwt(memberService.findOne(id)),
+                createRefreshJwt(id));
     }
 
     @PostMapping("/delete")
@@ -57,5 +56,13 @@ public class MemberController {
     public void delete(@CookieValue String loginToken) {
         Long id = (Long)parseJwt(loginToken).get("id");
         memberService.delete(id);
+    }
+
+    @PostMapping("/refresh")
+    public LoginInfoDto refresh(@CookieValue String refreshToken, HttpServletRequest request, HttpServletResponse response) {
+        Long id = (Long)parseJwt(refreshToken).get("id");
+        MemberInfoDto dto = memberService.findOne(id);
+        expireCookie(request, response, "refreshToken");
+        return new LoginInfoDto(dto.getId().toString(), createJwt(dto), createRefreshJwt(id));
     }
 }

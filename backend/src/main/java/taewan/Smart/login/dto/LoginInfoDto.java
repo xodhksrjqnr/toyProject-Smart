@@ -11,4 +11,5 @@ public class LoginInfoDto {
 
     private String memberId;
     private String loginToken;
+    private String refreshToken;
 }

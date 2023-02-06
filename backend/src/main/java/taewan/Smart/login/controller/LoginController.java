@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static taewan.Smart.util.CookieUtils.expireCookie;
 import static taewan.Smart.util.JwtUtils.createJwt;
+import static taewan.Smart.util.JwtUtils.createRefreshJwt;
 
 @RestController
 public class LoginController {
@@ -26,12 +27,13 @@ public class LoginController {
     @PostMapping("/login")
     public LoginInfoDto login(@RequestParam String memberId, @RequestParam String password) {
         MemberInfoDto dto = memberService.findOne(memberId, password);
-        return new LoginInfoDto(dto.getMemberId(), createJwt(dto));
+        return new LoginInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(dto.getId()));
     }
 
     @PostMapping("/logout")
     @ResponseStatus(value = HttpStatus.OK)
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         expireCookie(request, response, "loginToken");
+        expireCookie(request, response, "refreshToken");
     }
 }
