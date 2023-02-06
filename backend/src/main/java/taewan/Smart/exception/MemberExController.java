@@ -34,6 +34,6 @@ public class MemberExController {
     @ExceptionHandler(AuthException.class)
     public ErrorResult AuthExHandle(AuthException e) {
         log.error("[MemberErrorHandle]", e);
-        return new ErrorResult("401", "세션이 만료되었습니다.", "");
+        return new ErrorResult("401", "자동 로그아웃되었습니다.", "[DetailErrorMessage:loginToken이 만료되었습니다.]");
     }
 }
