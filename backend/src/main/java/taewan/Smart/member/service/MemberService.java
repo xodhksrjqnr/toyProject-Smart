@@ -9,6 +9,7 @@ import java.util.List;
 public interface MemberService {
 
     MemberInfoDto findOne(Long id);
+    MemberInfoDto findOne(String memberId, String password);
     Long save(MemberSaveDto memberSaveDto);
     Long modify(MemberUpdateDto memberUpdateDto, Long id);
     void delete(Long id);

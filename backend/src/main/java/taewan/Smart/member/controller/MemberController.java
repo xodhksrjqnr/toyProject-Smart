@@ -1,17 +1,22 @@
 package taewan.Smart.member.controller;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import taewan.Smart.login.dto.LoginInfoDto;
 import taewan.Smart.member.dto.MemberInfoDto;
 import taewan.Smart.member.dto.MemberSaveDto;
-import taewan.Smart.member.dto.MemberSimpleDto;
 import taewan.Smart.member.dto.MemberUpdateDto;
 import taewan.Smart.member.service.MemberService;
 
-import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import static taewan.Smart.util.CookieUtils.expireCookie;
+import static taewan.Smart.util.JwtUtils.createJwt;
+import static taewan.Smart.util.JwtUtils.parseJwt;
 
 @RestController
 @RequestMapping("members")
@@ -25,32 +30,32 @@ public class MemberController {
     }
 
     @GetMapping
-    public MemberInfoDto search(@SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
-        if (memberSimpleDto == null)
-            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
-        return memberService.findOne(memberSimpleDto.getId());
+    public MemberInfoDto search(@CookieValue String loginToken) {
+        Long id = (Long)parseJwt(loginToken).get("id");
+        return memberService.findOne(id);
     }
 
-    @PostMapping
-    public ResponseEntity join(@Valid MemberSaveDto memberSaveDto) {
+    @PostMapping("/create")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void join(@Valid MemberSaveDto memberSaveDto) {
         memberService.save(memberSaveDto);
-        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PostMapping("/update")
-    public ResponseEntity update(@Valid MemberUpdateDto memberUpdateDto,
-                         @SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
-        if (memberSimpleDto == null)
-            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
-        memberService.modify(memberUpdateDto, memberSimpleDto.getId());
-        return new ResponseEntity(HttpStatus.OK);
+    @ResponseStatus(value = HttpStatus.OK)
+    public LoginInfoDto update(@CookieValue String loginToken, @Valid MemberUpdateDto memberUpdateDto,
+                               HttpServletRequest request, HttpServletResponse response) {
+        Claims memberInfo = parseJwt(loginToken);
+        Long id = (Long)memberInfo.get("id");
+        memberService.modify(memberUpdateDto, id);
+        expireCookie(request, response, "loginToken");
+        return new LoginInfoDto((String)memberInfo.get("memberId"), createJwt(memberService.findOne(id)));
     }
 
     @PostMapping("/delete")
-    public ResponseEntity delete(@SessionAttribute("memberSession") MemberSimpleDto memberSimpleDto) throws AuthException {
-        if (memberSimpleDto == null)
-            throw new AuthException("[DetailErrorMessage:세션이 만료되었습니다.]");
-        memberService.delete(memberSimpleDto.getId());
-        return new ResponseEntity(HttpStatus.OK);
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@CookieValue String loginToken) {
+        Long id = (Long)parseJwt(loginToken).get("id");
+        memberService.delete(id);
     }
 }

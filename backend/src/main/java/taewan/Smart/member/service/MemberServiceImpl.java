@@ -26,6 +26,10 @@ public class MemberServiceImpl implements MemberService {
         return new MemberInfoDto(memberRepository.findById(id).orElseThrow());
     }
 
+    public MemberInfoDto findOne(String memberId, String password) {
+        return new MemberInfoDto(memberRepository.findByMemberIdAndPassword(memberId, password).orElseThrow());
+    }
+
     @Transactional
     @Override
     public Long save(MemberSaveDto memberSaveDto) {
