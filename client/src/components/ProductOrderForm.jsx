@@ -18,7 +18,14 @@ export default function ProductOrderForm({ productDetail }) {
       ...prev,
       items: [
         ...prev.items,
-        { productId: id, size: value, quantity: 1, img: imgFiles[0] },
+        {
+          productId: id,
+          size: value,
+          quantity: 1,
+          img: imgFiles[0],
+          price,
+          name,
+        },
       ],
     }));
   };
@@ -41,6 +48,8 @@ export default function ProductOrderForm({ productDetail }) {
 
   const handleSumbit = (e) => {
     e.preventDefault();
+
+    if (cart.items.length === 0) return;
     if (!localStorage.getItem('cart')) {
       localStorage.setItem('cart', JSON.stringify(cart));
       setCart({ items: [] });
