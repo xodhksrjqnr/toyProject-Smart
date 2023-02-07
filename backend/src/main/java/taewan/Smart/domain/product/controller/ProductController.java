@@ -3,13 +3,11 @@ package taewan.Smart.domain.product.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import taewan.Smart.domain.product.dto.ProductUpdateDto;
-import taewan.Smart.domain.product.service.ProductService;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
+import taewan.Smart.domain.product.dto.ProductUpdateDto;
+import taewan.Smart.domain.product.service.ProductService;
 
 import javax.validation.Valid;
 
@@ -47,13 +45,12 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public Long update(ProductUpdateDto dto) {
+    public Long update(@Valid ProductUpdateDto dto) {
         return productService.modify(dto);
     }
 
     @PostMapping("/{productId}/delete")
-    public ResponseEntity remove(@PathVariable Long productId) {
+    public void remove(@PathVariable Long productId) {
         productService.delete(productId);
-        return new ResponseEntity(HttpStatus.OK);
     }
 }

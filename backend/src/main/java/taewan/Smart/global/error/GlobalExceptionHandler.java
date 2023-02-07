@@ -5,6 +5,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import taewan.Smart.domain.member.exception.ExpiredTokenException;
@@ -39,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         log.error("BindException", e);
-        String message = e.getMessage().substring(e.getMessage().lastIndexOf("[DetailErrorMessage"));
+        String message = e.getAllErrors().get(0).getDefaultMessage();
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, message);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -48,6 +49,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateKeyException(DuplicateKeyException e) {
         log.error("DuplicateKeyException", e);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException", e);
+        String message = e.getAllErrors().get(0).getDefaultMessage();
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, message);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

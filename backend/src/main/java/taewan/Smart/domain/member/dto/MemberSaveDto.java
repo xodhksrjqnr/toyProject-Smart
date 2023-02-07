@@ -14,14 +14,14 @@ import java.time.LocalDate;
 @Setter
 public class MemberSaveDto {
 
-    @NotEmpty(message = "[DetailErrorMessage:아이디를 입력해야합니다.]")
+    @NotEmpty(message = "아이디를 입력해야합니다.")
     private String memberId;
-    @Email(message = "[DetailErrorMessage:이메일 형식이 잘못되었습니다.]")
+    @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;
-    @NotEmpty(message = "[DetailErrorMessage:패스워드를 입력해야합니다.]")
+    @NotEmpty(message = "패스워드를 입력해야합니다.")
     private String password;
     @Nullable
-    @Pattern(regexp = "^010-[0-9]{4}-[0-9]{4}$", message = "[DetailErrorMessage:핸드폰 번호 형식이 잘못되었습니다.]")
+    @Pattern(regexp = "^010-[0-9]{4}-[0-9]{4}$", message = "핸드폰 번호 형식이 잘못되었습니다.")
     private String phoneNumber;
     @Nullable
     @DateTimeFormat(pattern = "yyyy-MM-dd")
