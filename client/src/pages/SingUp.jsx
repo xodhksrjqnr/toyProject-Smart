@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/signup';
 
 export default function SingUp() {
@@ -11,13 +12,14 @@ export default function SingUp() {
     phoneNumber: '',
   });
   const [password, setPassword] = useState({ length: false, available: false });
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInfo((prev) => ({ ...prev, [name]: value }));
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup(info).then((data) => console.log(data));
+    signup(info).then(() => navigate('/'));
   };
   const checkPasswordLength = (e) => {
     e.target.value.length >= 1
@@ -31,7 +33,7 @@ export default function SingUp() {
   };
   return (
     <div className="w-full flex justify-center p-12">
-      <form onSubmit={handleSubmit} className="w-96 flex flex-col mb-2">
+      <form className="w-96 flex flex-col mb-2" onSubmit={handleSubmit}>
         <label htmlFor="id">
           <span className="text-red-600">*</span>아이디
         </label>

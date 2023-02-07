@@ -15,6 +15,7 @@ import Search from './pages/Search';
 import Login from './pages/Login';
 import SingUp from './pages/SingUp';
 import Carts from './pages/Carts';
+import { UserProvider } from './context/UserContext';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider>
   </React.StrictMode>
 );
 
