@@ -29,7 +29,8 @@ public class MemberController {
 
     @GetMapping
     public MemberInfoDto search(HttpServletRequest request) {
-        Long id = (Long)parseJwt(getJwt(request, "loginToken")).get("id");
+        Claims loginToken = parseJwt(getJwt(request, "loginToken"));
+        Long id = Long.parseLong((String)loginToken.get("id"));
         return memberService.findOne(id);
     }
 
@@ -42,24 +43,26 @@ public class MemberController {
     @PostMapping("/update")
     public AuthInfoDto update(HttpServletRequest request, HttpServletResponse response,
                               @Valid MemberUpdateDto memberUpdateDto) {
-        Claims memberInfo = parseJwt(getJwt(request, "loginToken"));
-        Long id = (Long)memberInfo.get("id");
+        Claims loginToken = parseJwt(getJwt(request, "loginToken"));
+        Long id = Long.parseLong((String)loginToken.get("id"));
         memberService.modify(memberUpdateDto, id);
-        return new AuthInfoDto((String)memberInfo.get("memberId"), createJwt(memberService.findOne(id)),
+        return new AuthInfoDto((String)loginToken.get("memberId"), createJwt(memberService.findOne(id)),
                 createRefreshJwt(id));
     }
 
     @PostMapping("/delete")
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(HttpServletRequest request) {
-        Long id = (Long)parseJwt(getJwt(request, "loginToken")).get("id");
+        Claims loginToken = parseJwt(getJwt(request, "loginToken"));
+        Long id = Long.parseLong((String)loginToken.get("id"));
         memberService.delete(id);
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(HttpServletRequest request, HttpServletResponse response) {
-        Long id = (Long)parseJwt(getJwt(request, "refreshToken")).get("id");
+        Claims refreshToken = parseJwt(getJwt(request, "refreshToken"));
+        Long id = Long.parseLong((String)refreshToken.get("id"));
         MemberInfoDto dto = memberService.findOne(id);
-        return new AuthInfoDto(dto.getId().toString(), createJwt(dto), createRefreshJwt(id));
+        return new AuthInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(id));
     }
 }
