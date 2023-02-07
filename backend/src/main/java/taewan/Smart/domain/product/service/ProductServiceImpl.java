@@ -101,6 +101,7 @@ public class ProductServiceImpl implements ProductService {
         return paths;
     }
 
+    @Transactional
     @Override
     public void delete(Long productId) {
         Product found = productRepository.findById(productId)
