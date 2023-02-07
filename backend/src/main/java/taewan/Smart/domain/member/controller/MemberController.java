@@ -51,7 +51,6 @@ public class MemberController {
     }
 
     @PostMapping("/delete")
-    @ResponseStatus(value = HttpStatus.OK)
     public void delete(HttpServletRequest request) {
         Claims loginToken = parseJwt(getJwt(request, "loginToken"));
         Long id = Long.parseLong((String)loginToken.get("id"));

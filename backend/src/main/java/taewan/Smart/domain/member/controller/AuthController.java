@@ -1,7 +1,6 @@
 package taewan.Smart.domain.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.service.MemberService;
@@ -28,7 +27,6 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    @ResponseStatus(value = HttpStatus.OK)
     public void logout() {
     }
 }
