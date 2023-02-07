@@ -2,19 +2,20 @@ package taewan.Smart.domain.product.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
+import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
 
 import java.util.Optional;
 
+import static taewan.Smart.global.error.ExceptionStatus.DUPLICATE_PRODUCT_NAME;
+import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
 import static taewan.Smart.global.util.FileUtils.*;
 
 @Transactional(readOnly = true)
@@ -61,8 +62,9 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        if (!productRepository.findByName(productSaveDto.getName()).isEmpty())
-            throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
+        if (!productRepository.findByName(productSaveDto.getName()).isEmpty()) {
+            throw DUPLICATE_PRODUCT_NAME.exception();
+        }
 
         String[] paths = saveImgFile(productSaveDto);
 
@@ -75,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
 
         if (equalNameProduct.isPresent() && !equalNameProduct.get().getId().equals(productUpdateDto.getId())) {
-            throw new DuplicateKeyException("[DetailErrorMessage:중복된 제품 이름입니다.]");
+            throw DUPLICATE_PRODUCT_NAME.exception();
         }
 
         Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
@@ -101,7 +103,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long productId) {
-        Product found = productRepository.findById(productId).orElseThrow();
+        Product found = productRepository.findById(productId)
+                .orElseThrow(PRODUCT_NOT_FOUND::exception);
         String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
         deleteDirectory(directoryPath);
