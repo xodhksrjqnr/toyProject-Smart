@@ -38,11 +38,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new AuthRefreshInterceptor())
                 .order(1)
                 .addPathPatterns("/members/**")
-                .excludePathPatterns("/members/create");
+                .excludePathPatterns("/members/create", "/members/login");
 
         registry.addInterceptor(new AuthInterceptor())
                 .order(2)
                 .addPathPatterns("/members/**")
-                .excludePathPatterns("/members/create", "/members/refresh");
+                .excludePathPatterns("/members/create", "/members/refresh", "/members/login");
     }
 }

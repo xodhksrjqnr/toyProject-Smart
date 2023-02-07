@@ -4,10 +4,10 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static taewan.Smart.global.error.ExceptionStatus.EXPIRED_LOGIN_JWT;
 import static taewan.Smart.global.util.JwtUtils.getJwt;
 import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
@@ -22,11 +22,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         String loginToken = getJwt(request, "loginToken");
 
         if (loginToken == null)
-            throw new AuthException("[DetailErrorMessage:loginToken이 만료되었습니다.]");
+            throw EXPIRED_LOGIN_JWT.exception();
         try {
             parseJwt(loginToken);
         } catch (ExpiredJwtException e) {
-            throw new AuthException("[DetailErrorMessage:loginToken이 만료되었습니다.]");
+            throw EXPIRED_LOGIN_JWT.exception();
         }
         return true;
     }

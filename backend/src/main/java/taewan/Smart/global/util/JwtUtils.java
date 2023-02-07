@@ -1,6 +1,7 @@
 package taewan.Smart.global.util;
 
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 
+@Slf4j
 public class JwtUtils {
 
     private static final String SECRET_KEY = "smartSecretKey";
@@ -19,7 +21,7 @@ public class JwtUtils {
                 .setIssuer("smart")
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(30).toMillis()))
-                .claim("id", dto.getId())
+                .claim("id", Long.toString(dto.getId()))
                 .claim("memberId", dto.getMemberId())
                 .claim("email", dto.getEmail())
                 .claim("phoneNumber", dto.getPhoneNumber())
@@ -35,7 +37,7 @@ public class JwtUtils {
                 .setIssuer("smart")
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofHours(2).toMillis()))
-                .claim("id", id)
+                .claim("id", Long.toString(id))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
