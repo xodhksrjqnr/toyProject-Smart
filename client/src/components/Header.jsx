@@ -41,7 +41,7 @@ export default function Header() {
           </form>
         </div>
         <div className="flex text-white">
-          {user.state && <CartButton />}
+          <CartButton />
           <AdminButton />
           {user.state && <Avatar user={user} />}
           {user.state && <LogoutButton onClickLogout={setLogout} />}

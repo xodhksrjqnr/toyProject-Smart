@@ -6,6 +6,7 @@ export default function Carts() {
   const [cartList, setCartList] = useState(
     JSON.parse(localStorage.getItem('cart'))
   );
+
   const totalPrice =
     cartList &&
     cartList.items.reduce(
@@ -39,14 +40,15 @@ export default function Carts() {
           <span className="w-1/5">수량</span>
         </header>
         <ul className="w-2/3 max-w-96">
-          {cartList.items.map((item) => (
-            <CartItem key={uuidv4()} item={item} onDelete={handleDelete} />
-          ))}
+          {cartList &&
+            cartList.items.map((item) => (
+              <CartItem key={uuidv4()} item={item} onDelete={handleDelete} />
+            ))}
         </ul>
       </div>
       <div className="w-2/3 flex flex-col my-0 mx-auto items-end">
         <strong className="mb-2 text-2xl">
-          총 금액: {totalPrice.toLocaleString()}원
+          총 금액: {totalPrice && totalPrice.toLocaleString()}원
         </strong>
         <button className="bg-blue-600 py-2 px-8 text-white text-xl rounded-lg">
           결제

@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import SingUp from './pages/SingUp';
 import Carts from './pages/Carts';
 import { UserProvider } from './context/UserContext';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,14 @@ const router = createBrowserRouter([
       { path: '/admin/register', element: <Register /> },
       { path: '/admin/update/:id', element: <Update /> },
       { path: '/signup', element: <SingUp /> },
-      { path: '/carts', element: <Carts /> },
+      {
+        path: '/carts',
+        element: (
+          <ProtectedRoute>
+            <Carts />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
