@@ -1,8 +1,10 @@
 package taewan.Smart.util;
 
 import io.jsonwebtoken.*;
+import org.springframework.http.HttpHeaders;
 import taewan.Smart.member.dto.MemberInfoDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 
@@ -43,5 +45,16 @@ public class JwtUtils {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public static String getJwt(HttpServletRequest request, String tokenName) {
+        String[] tokens = request.getHeader(HttpHeaders.AUTHORIZATION).split(";");
+
+        for (String token : tokens) {
+            if (token.contains(tokenName)) {
+                return token.split("=")[1];
+            }
+        }
+        return null;
     }
 }

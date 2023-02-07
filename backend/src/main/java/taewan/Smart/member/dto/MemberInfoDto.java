@@ -3,6 +3,7 @@ package taewan.Smart.member.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 import taewan.Smart.member.entity.Member;
 
 import java.time.LocalDate;

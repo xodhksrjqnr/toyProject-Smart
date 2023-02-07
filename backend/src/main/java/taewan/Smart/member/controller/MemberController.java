@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static taewan.Smart.util.CookieUtils.expireCookie;
 import static taewan.Smart.util.JwtUtils.*;
 
 @RestController
@@ -29,8 +28,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public MemberInfoDto search(@CookieValue String loginToken) {
-        Long id = (Long)parseJwt(loginToken).get("id");
+    public MemberInfoDto search(HttpServletRequest request) {
+        Long id = (Long)parseJwt(getJwt(request, "loginToken")).get("id");
         return memberService.findOne(id);
     }
 
@@ -41,28 +40,26 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public LoginInfoDto update(@CookieValue String loginToken, @Valid MemberUpdateDto memberUpdateDto,
-                               HttpServletRequest request, HttpServletResponse response) {
-        Claims memberInfo = parseJwt(loginToken);
+    public LoginInfoDto update(HttpServletRequest request, HttpServletResponse response,
+                               @Valid MemberUpdateDto memberUpdateDto) {
+        Claims memberInfo = parseJwt(getJwt(request, "loginToken"));
         Long id = (Long)memberInfo.get("id");
         memberService.modify(memberUpdateDto, id);
-        expireCookie(request, response, "loginToken");
         return new LoginInfoDto((String)memberInfo.get("memberId"), createJwt(memberService.findOne(id)),
                 createRefreshJwt(id));
     }
 
     @PostMapping("/delete")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@CookieValue String loginToken) {
-        Long id = (Long)parseJwt(loginToken).get("id");
+    public void delete(HttpServletRequest request) {
+        Long id = (Long)parseJwt(getJwt(request, "loginToken")).get("id");
         memberService.delete(id);
     }
 
     @PostMapping("/refresh")
-    public LoginInfoDto refresh(@CookieValue String refreshToken, HttpServletRequest request, HttpServletResponse response) {
-        Long id = (Long)parseJwt(refreshToken).get("id");
+    public LoginInfoDto refresh(HttpServletRequest request, HttpServletResponse response) {
+        Long id = (Long)parseJwt(getJwt(request, "refreshToken")).get("id");
         MemberInfoDto dto = memberService.findOne(id);
-        expireCookie(request, response, "refreshToken");
         return new LoginInfoDto(dto.getId().toString(), createJwt(dto), createRefreshJwt(id));
     }
 }

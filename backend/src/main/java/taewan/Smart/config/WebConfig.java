@@ -18,6 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${access.path}")
     private String accessPath;
 
+    @Value("${client.address}")
+    private String clientAddress;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(accessPath)
@@ -27,7 +30,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*");
+                .allowedOrigins(clientAddress)
+                .allowedMethods("GET", "POST", "OPTIONS")
+                .allowCredentials(true).maxAge(5);
     }
 
     @Override
@@ -35,11 +40,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new RefreshInterceptor())
                 .order(1)
                 .addPathPatterns("/logout", "/members/**")
-                .excludePathPatterns("members/create");
+                .excludePathPatterns("/members/create");
 
         registry.addInterceptor(new LoginInterceptor())
                 .order(2)
                 .addPathPatterns("/logout", "/members/**")
-                .excludePathPatterns("/members/create", "members/refresh");
+                .excludePathPatterns("/members/create", "/members/refresh");
     }
 }

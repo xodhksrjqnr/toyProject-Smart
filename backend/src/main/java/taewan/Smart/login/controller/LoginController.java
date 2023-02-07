@@ -7,10 +7,6 @@ import taewan.Smart.login.dto.LoginInfoDto;
 import taewan.Smart.member.dto.MemberInfoDto;
 import taewan.Smart.member.service.MemberService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static taewan.Smart.util.CookieUtils.expireCookie;
 import static taewan.Smart.util.JwtUtils.createJwt;
 import static taewan.Smart.util.JwtUtils.createRefreshJwt;
 
@@ -32,8 +28,6 @@ public class LoginController {
 
     @PostMapping("/logout")
     @ResponseStatus(value = HttpStatus.OK)
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        expireCookie(request, response, "loginToken");
-        expireCookie(request, response, "refreshToken");
+    public void logout() {
     }
 }

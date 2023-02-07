@@ -21,7 +21,5 @@ public class MemberSaveDto {
     private String password;
     @Nullable
     private String phoneNumber;
-    @Nullable
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 }
