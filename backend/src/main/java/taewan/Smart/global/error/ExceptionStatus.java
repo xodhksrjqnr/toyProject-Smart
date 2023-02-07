@@ -15,6 +15,8 @@ public enum ExceptionStatus {
     PRODUCT_NAME_DUPLICATE(new DuplicateKeyException("중복된 제품 이름입니다.")),
 
     PRODUCT_IMAGE_EMPTY(new IllegalArgumentException("등록할 이미지가 필요합니다.")),
+    
+    PRODUCT_IMG_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 이미지입니다.")),
 
     LOGIN_JWT_EXPIRED(new ExpiredTokenException("LoginToken이 만료되었습니다.")),
 

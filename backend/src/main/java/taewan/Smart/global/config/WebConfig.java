@@ -37,8 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthRefreshInterceptor())
                 .order(1)
-                .addPathPatterns("/members/**")
-                .excludePathPatterns("/members/create", "/members/login");
+                .addPathPatterns("/members/refresh");
 
         registry.addInterceptor(new AuthInterceptor())
                 .order(2)
