@@ -7,7 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static taewan.Smart.global.error.ExceptionStatus.EXPIRED_REFRESH_JWT;
+import static taewan.Smart.global.error.ExceptionStatus.REFRESH_JWT_EXPIRED;
 import static taewan.Smart.global.util.JwtUtils.getJwt;
 import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
@@ -23,11 +23,11 @@ public class AuthRefreshInterceptor implements HandlerInterceptor {
         String refreshToken = getJwt(request, "refreshToken");
 
         if (refreshToken == null)
-            throw EXPIRED_REFRESH_JWT.exception();
+            throw REFRESH_JWT_EXPIRED.exception();
         try {
             parseJwt(refreshToken);
         } catch (ExpiredJwtException e) {
-            throw EXPIRED_REFRESH_JWT.exception();
+            throw REFRESH_JWT_EXPIRED.exception();
         }
         return true;
     }

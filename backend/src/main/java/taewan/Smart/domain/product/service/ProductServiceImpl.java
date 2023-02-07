@@ -14,7 +14,7 @@ import taewan.Smart.domain.product.repository.ProductRepository;
 
 import java.util.Optional;
 
-import static taewan.Smart.global.error.ExceptionStatus.DUPLICATE_PRODUCT_NAME;
+import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NAME_DUPLICATE;
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
 import static taewan.Smart.global.util.FileUtils.*;
 
@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long save(ProductSaveDto productSaveDto) {
         if (!productRepository.findByName(productSaveDto.getName()).isEmpty()) {
-            throw DUPLICATE_PRODUCT_NAME.exception();
+            throw PRODUCT_NAME_DUPLICATE.exception();
         }
 
         String[] paths = saveImgFile(productSaveDto);
@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
 
         if (equalNameProduct.isPresent() && !equalNameProduct.get().getId().equals(productUpdateDto.getId())) {
-            throw DUPLICATE_PRODUCT_NAME.exception();
+            throw PRODUCT_NAME_DUPLICATE.exception();
         }
 
         Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();

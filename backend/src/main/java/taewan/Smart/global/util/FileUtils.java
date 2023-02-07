@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMAGE_EMPTY;
+
 public class FileUtils {
 
     public static List<String> findFiles(String directoryPath, String root, String address) {
@@ -31,7 +33,7 @@ public class FileUtils {
 
     public static String saveFile(MultipartFile file, String path) {
         if (file.isEmpty()) {
-            throw new IllegalArgumentException("[DetailErrorMessage:등록할 이미지가 없습니다.]");
+            throw PRODUCT_IMAGE_EMPTY.exception();
         }
 
         String extension = file.getContentType().replaceFirst(".*/", ".");

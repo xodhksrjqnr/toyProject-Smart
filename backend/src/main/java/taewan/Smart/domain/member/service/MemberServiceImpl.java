@@ -9,7 +9,7 @@ import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.repository.MemberRepository;
 
-import static taewan.Smart.global.error.ExceptionStatus.DUPLICATE_MEMBER_ID;
+import static taewan.Smart.global.error.ExceptionStatus.MEMBER_ID_DUPLICATE;
 import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
 
 
@@ -38,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long save(MemberSaveDto memberSaveDto) {
         if (memberRepository.findByMemberId(memberSaveDto.getMemberId()).isPresent()) {
-            throw DUPLICATE_MEMBER_ID.exception();
+            throw MEMBER_ID_DUPLICATE.exception();
         }
         return memberRepository.save(new Member(memberSaveDto)).getId();
     }
@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long modify(MemberUpdateDto memberUpdateDto, Long id) {
         if (memberRepository.findByMemberId(memberUpdateDto.getMemberId()).isPresent()) {
-            throw DUPLICATE_MEMBER_ID.exception();
+            throw MEMBER_ID_DUPLICATE.exception();
         }
 
         Member found = memberRepository.findById(id).orElseThrow();

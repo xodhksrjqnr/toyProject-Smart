@@ -7,7 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static taewan.Smart.global.error.ExceptionStatus.EXPIRED_LOGIN_JWT;
+import static taewan.Smart.global.error.ExceptionStatus.LOGIN_JWT_EXPIRED;
 import static taewan.Smart.global.util.JwtUtils.getJwt;
 import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
@@ -22,11 +22,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         String loginToken = getJwt(request, "loginToken");
 
         if (loginToken == null)
-            throw EXPIRED_LOGIN_JWT.exception();
+            throw LOGIN_JWT_EXPIRED.exception();
         try {
             parseJwt(loginToken);
         } catch (ExpiredJwtException e) {
-            throw EXPIRED_LOGIN_JWT.exception();
+            throw LOGIN_JWT_EXPIRED.exception();
         }
         return true;
     }
