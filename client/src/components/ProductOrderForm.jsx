@@ -55,7 +55,20 @@ export default function ProductOrderForm({ productDetail }) {
       setCart({ items: [] });
       return;
     }
+
     const savedCartItems = JSON.parse(localStorage.getItem('cart'));
+
+    for (const savedItems of savedCartItems.items) {
+      for (const cartItem of cart.items) {
+        if (
+          cartItem.productId === savedItems.productId &&
+          cartItem.size === savedItems.size
+        ) {
+          alert('해당 상품이 장바구니에 존재합니다.');
+          return;
+        }
+      }
+    }
 
     localStorage.setItem(
       'cart',

@@ -24,7 +24,7 @@ export default function CartItem({ item, onDelete }) {
       <span className="w-1/5">{price.toLocaleString()}</span>
       <span className="w-1/5">{quantity}</span>
       <button
-        onClick={() => onDelete(productId, size, quantity)}
+        onClick={() => onDelete(productId, size)}
         className="absolute -left-12 p-4 hover:text-red-600"
       >
         <IoMdTrash />

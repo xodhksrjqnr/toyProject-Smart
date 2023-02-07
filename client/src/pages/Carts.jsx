@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
 import { v4 as uuidv4 } from 'uuid';
+import { payment } from '../api/payment';
 
 export default function Carts() {
   const [cartList, setCartList] = useState(
@@ -14,20 +15,24 @@ export default function Carts() {
       0
     );
 
-  const handleDelete = (id, size, quantity) => {
+  const handleDelete = (id, size) => {
     setCartList((prev) => ({
       ...prev,
-      items: prev.items.filter(
-        (item) =>
-          item.productId !== id ||
-          (item.size !== size && item.quantity !== quantity)
-      ),
+      items: prev.items.filter((item) => {
+        console.log(item.productId, id, item.size, size);
+        return item.productId !== id || item.size !== size;
+      }),
     }));
   };
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartList));
   }, [cartList]);
+
+  const handlePayment = () => {
+    payment(cartList.items) //
+      .then((res) => console.log(res));
+  };
 
   return (
     <div className="w-full py-8">
@@ -50,7 +55,10 @@ export default function Carts() {
         <strong className="mb-2 text-2xl">
           총 금액: {totalPrice && totalPrice.toLocaleString()}원
         </strong>
-        <button className="bg-blue-600 py-2 px-8 text-white text-xl rounded-lg">
+        <button
+          className="bg-blue-600 py-2 px-8 text-white text-xl rounded-lg"
+          onClick={handlePayment}
+        >
           결제
         </button>
       </div>
