@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import { MdAdminPanelSettings } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
-import { BsCartPlusFill } from 'react-icons/bs';
 import { UserContext } from '../context/UserContext';
-import { logout } from '../api/user';
+import CartButton from './ui/CartButton';
+import AdminButton from './ui/AdminButton';
+import Avatar from './Avatar';
+import LoginButton from './ui/LoginButton';
+import LogoutButton from './ui/LogoutButton';
 
 export default function Header() {
   const [text, setText] = useState('');
@@ -14,9 +16,6 @@ export default function Header() {
     e.preventDefault();
     if (text.trim().length === 0) return;
     navigate({ pathname: '/search', search: `?keyword=${text}` });
-  };
-  const handleLogout = () => {
-    logout().then(() => setLogout());
   };
   return (
     <header className="w-full flex justify-center bg-blue-800 drop-shadow-md">
@@ -42,21 +41,11 @@ export default function Header() {
           </form>
         </div>
         <div className="flex text-white">
-          <button>
-            <Link to="/carts">
-              <BsCartPlusFill className="text-white text-2xl" />
-            </Link>
-          </button>
-          <button>
-            <Link to="/admin">
-              <MdAdminPanelSettings className="text-white text-2xl" />
-            </Link>
-          </button>
-          {user.state && <p>{user.id}님</p>}
-          <button>
-            {user.state && <p onClick={handleLogout}>로그아웃</p>}
-            {!user.state && <Link to="/login">로그인</Link>}
-          </button>
+          {user.state && <CartButton />}
+          <AdminButton />
+          {user.state && <Avatar user={user} />}
+          {user.state && <LogoutButton onClickLogout={setLogout} />}
+          {!user.state && <LoginButton />}
         </div>
       </div>
     </header>
