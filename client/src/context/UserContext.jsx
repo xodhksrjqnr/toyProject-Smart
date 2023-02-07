@@ -9,12 +9,16 @@ export function UserProvider({ children }) {
   const setLogout = () => setUser({ state: false, id: '' });
 
   useEffect(() => {
-    const id = checkToken();
-
-    if (id) {
-      setUser((prev) => ({ ...prev, state: true, id: id }));
-    }
-  }, [user.id]);
+    console.log('실행');
+    checkToken().then((res) => {
+      if (!res) return;
+      setUser((prev) => ({
+        ...prev,
+        state: true,
+        id: res.data.memberId,
+      }));
+    });
+  }, [user.state]);
 
   return (
     <UserContext.Provider value={{ user, setUserId, setLogout }}>
