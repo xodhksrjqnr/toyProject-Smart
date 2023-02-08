@@ -2,15 +2,24 @@ package taewan.Smart.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+import static taewan.Smart.global.error.ExceptionStatus.MAIL_INVALID;
+
 @Slf4j
 @Component
 public class Mail {
+
+    @Value("${client.address}")
+    private String clientAddress;
 
     private final JavaMailSender javaMailSender;
 
@@ -22,13 +31,10 @@ public class Mail {
     public void sendMail(String email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
-        try{
-            simpleMailMessage.setTo(email);
-            simpleMailMessage.setSubject("[Smart] 회원가입 이메일 인증 안내 메일입니다.");
-            simpleMailMessage.setText("http://121.180.239.248:3000/signup");
-            javaMailSender.send(simpleMailMessage);
-        } catch(Exception e){
-            log.info("[회원 가입 이메일 인증 메일 전송] : {}", email + " " + LocalDateTime.now());
-        }
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("[Smart] 회원가입 이메일 인증 안내 메일입니다.");
+        simpleMailMessage.setText(clientAddress + "/signup");
+        javaMailSender.send(simpleMailMessage);
+        log.info("[회원 가입 인증 메일 전송 성공] : {}", email + " " + LocalDateTime.now());
     }
 }
