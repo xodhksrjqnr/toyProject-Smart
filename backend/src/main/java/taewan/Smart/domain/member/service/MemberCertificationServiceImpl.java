@@ -10,8 +10,7 @@ import taewan.Smart.domain.member.repository.MemberRepository;
 
 import java.util.UUID;
 
-import static taewan.Smart.global.error.ExceptionStatus.MAIL_INVALID;
-import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
+import static taewan.Smart.global.error.ExceptionStatus.*;
 
 @Service
 public class MemberCertificationServiceImpl implements MemberCertificationService {
@@ -28,8 +27,9 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
 
     @Override
     public MemberCertificateDto findEmail(String email) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(MAIL_INVALID::exception);
+        memberRepository.findByEmail(email)
+                .ifPresent(m -> {throw MEMBER_EMAIL_DUPLICATE.exception();});
+
         String message = "[Smart] 회원가입 이메일 인증 안내 메일입니다.";
         String text = clientAddress + "signup";
 
