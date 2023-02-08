@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailAuthenticationException;
-import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,10 +30,15 @@ public class Mail {
     public void sendMail(String email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
-        simpleMailMessage.setTo(email);
-        simpleMailMessage.setSubject("[Smart] 회원가입 이메일 인증 안내 메일입니다.");
-        simpleMailMessage.setText(clientAddress + "/signup");
-        javaMailSender.send(simpleMailMessage);
+        try {
+            simpleMailMessage.setTo(email);
+            simpleMailMessage.setSubject("[Smart] 회원가입 이메일 인증 안내 메일입니다.");
+            simpleMailMessage.setText(clientAddress + "/signup");
+            javaMailSender.send(simpleMailMessage);
+        } catch (MailAuthenticationException | MailSendException e) {
+            log.info("[회원 가입 인증 메일 전송 실패] : {}", email + " " + LocalDateTime.now());
+            throw MAIL_INVALID.exception();
+        }
         log.info("[회원 가입 인증 메일 전송 성공] : {}", email + " " + LocalDateTime.now());
     }
 }
