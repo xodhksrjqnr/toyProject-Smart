@@ -25,4 +25,12 @@ public class MemberInfoDto {
         this.phoneNumber = member.getPhoneNumber();
         this.birthday = member.getBirthday();
     }
+
+    public MemberInfoDto(MemberUpdateDto dto) {
+        this.id = dto.getId();
+        this.memberId = dto.getMemberId();
+        this.email = dto.getEmail();
+        this.phoneNumber = dto.getPhoneNumber();
+        this.birthday = dto.getBirthday();
+    }
 }

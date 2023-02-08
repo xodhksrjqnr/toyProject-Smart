@@ -48,11 +48,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public Long update(MemberUpdateDto memberUpdateDto, Long id) {
+    public Long update(MemberUpdateDto memberUpdateDto) {
         memberRepository.findByMemberId(memberUpdateDto.getMemberId())
                 .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
 
-        Member found = memberRepository.findById(id).orElseThrow();
+        Member found = memberRepository.findById(memberUpdateDto.getId()).orElseThrow();
 
         if (memberUpdateDto.getPassword().equals(found.getPassword()))
             memberUpdateDto.setPassword(found.getPassword());

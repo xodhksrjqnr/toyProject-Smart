@@ -8,4 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MemberUpdateDto extends MemberSaveDto {
+
+    private Long id;
 }
