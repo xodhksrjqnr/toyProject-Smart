@@ -45,8 +45,8 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public Long update(@Valid ProductUpdateDto dto) {
-        return productService.modify(dto);
+    public Long modify(@Valid ProductUpdateDto dto) {
+        return productService.update(dto);
     }
 
     @PostMapping("/{productId}/delete")

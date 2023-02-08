@@ -12,6 +12,6 @@ public interface ProductService {
     Page<ProductInfoDto> findAll(Pageable pageable);
     Page<ProductInfoDto> findAllWithFilter(Pageable pageable, String code, String search);
     Long save(ProductSaveDto productSaveDto);
-    Long modify(ProductUpdateDto productUpdateDto);
+    Long update(ProductUpdateDto productUpdateDto);
     void delete(Long productId);
 }

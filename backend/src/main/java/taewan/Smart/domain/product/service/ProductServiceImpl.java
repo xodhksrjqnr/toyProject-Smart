@@ -62,9 +62,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Long save(ProductSaveDto productSaveDto) {
-        if (!productRepository.findByName(productSaveDto.getName()).isEmpty()) {
-            throw PRODUCT_NAME_DUPLICATE.exception();
-        }
+        productRepository.findByName(productSaveDto.getName())
+                .ifPresent(p -> {throw PRODUCT_NAME_DUPLICATE.exception();});
 
         String[] paths = saveImgFile(productSaveDto);
 
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Long modify(ProductUpdateDto productUpdateDto) {
+    public Long update(ProductUpdateDto productUpdateDto) {
         Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
 
         if (equalNameProduct.isPresent() && !equalNameProduct.get().getId().equals(productUpdateDto.getId())) {
