@@ -33,7 +33,7 @@ public class Mail {
         try {
             simpleMailMessage.setTo(email);
             simpleMailMessage.setSubject("[Smart] 회원가입 이메일 인증 안내 메일입니다.");
-            simpleMailMessage.setText(clientAddress + "/signup");
+            simpleMailMessage.setText(clientAddress + "signup");
             javaMailSender.send(simpleMailMessage);
         } catch (MailAuthenticationException | MailSendException e) {
             log.info("[회원 가입 인증 메일 전송 실패] : {}", email + " " + LocalDateTime.now());
