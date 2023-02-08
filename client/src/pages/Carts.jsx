@@ -18,10 +18,9 @@ export default function Carts() {
   const handleDelete = (id, size) => {
     setCartList((prev) => ({
       ...prev,
-      items: prev.items.filter((item) => {
-        console.log(item.productId, id, item.size, size);
-        return item.productId !== id || item.size !== size;
-      }),
+      items: prev.items.filter(
+        (item) => item.productId !== id || item.size !== size
+      ),
     }));
   };
 

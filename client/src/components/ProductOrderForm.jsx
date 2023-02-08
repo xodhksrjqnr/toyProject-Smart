@@ -50,7 +50,10 @@ export default function ProductOrderForm({ productDetail }) {
     e.preventDefault();
 
     if (cart.items.length === 0) return;
-    if (!localStorage.getItem('cart')) {
+    if (
+      !localStorage.getItem('cart') ||
+      localStorage.getItem('cart') === 'null'
+    ) {
       localStorage.setItem('cart', JSON.stringify(cart));
       setCart({ items: [] });
       return;
