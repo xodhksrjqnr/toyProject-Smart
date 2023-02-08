@@ -5,7 +5,9 @@ import { payment } from '../api/payment';
 
 export default function Carts() {
   const [cartList, setCartList] = useState(
-    JSON.parse(localStorage.getItem('cart'))
+    localStorage.getItem('cart')
+      ? JSON.parse(localStorage.getItem('cart'))
+      : { items: [] }
   );
 
   const totalPrice =
@@ -55,8 +57,13 @@ export default function Carts() {
           총 금액: {totalPrice && totalPrice.toLocaleString()}원
         </strong>
         <button
-          className="bg-blue-600 py-2 px-8 text-white text-xl rounded-lg"
+          className={`${
+            cartList.items.length === 0
+              ? 'bg-gray-400'
+              : 'bg-blue-600 hover:brightness-125'
+          } py-2 px-8 text-white text-xl rounded-lg`}
           onClick={handlePayment}
+          disabled={cartList.items.length === 0}
         >
           결제
         </button>
