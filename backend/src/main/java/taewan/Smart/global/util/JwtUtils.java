@@ -46,7 +46,9 @@ public class JwtUtils {
         return jwt;
     }
 
-    public static Claims parseJwt(String token) {
+    public static Claims parseJwt(String jwt) {
+        String token = jwt.replace("Bearer ", "");
+
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
