@@ -8,6 +8,7 @@ import FindPasswordModal from '../components/FindPasswordModal';
 
 export default function Login() {
   const [privacy, setPrivacy] = useState({ id: '', password: '' });
+  const [isSuccess, setisSuccess] = useState(true);
   const [emailModal, setEmailModal] = useState(false);
   const [findIdModal, setfindIdModal] = useState(false);
   const [findPasswordModal, setFindPasswordModal] = useState(false);
@@ -26,10 +27,10 @@ export default function Login() {
       .then((res) => {
         if (res.status === 200) {
           setUserId(res.data.memberId);
-          alert('로그인에 성공했습니다.');
           navigate(-1);
         } else {
-          alert('로그인에 실패했습니다.');
+          setisSuccess(false);
+          setTimeout(() => setisSuccess(true), 3000);
         }
       });
   };
@@ -74,6 +75,12 @@ export default function Login() {
             </button>
           </div>
         </div>
+        {!isSuccess && (
+          <p className="text-xs text-red-600 mt-4">
+            아이디 또는 비밀번호가 일치하지 않습니다.
+          </p>
+        )}
+
         {emailModal && (
           <OnlyEmailCertificateModal
             closeModal={setEmailModal}

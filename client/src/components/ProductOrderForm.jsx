@@ -4,6 +4,8 @@ import OrderList from './OrderList';
 
 export default function ProductOrderForm({ productDetail }) {
   const [cart, setCart] = useState({ items: [] });
+  const [isAddItem, setIsAddItem] = useState(false);
+  const [isExiste, setExiste] = useState(false);
   const { id, name, price, size, code, imgFiles } = productDetail;
   const [main, sub] = classification(code);
   const selectOption = useRef();
@@ -56,6 +58,8 @@ export default function ProductOrderForm({ productDetail }) {
     ) {
       localStorage.setItem('cart', JSON.stringify(cart));
       setCart({ items: [] });
+      setIsAddItem(true);
+      setTimeout(() => setIsAddItem(false), 2000);
       return;
     }
 
@@ -67,7 +71,8 @@ export default function ProductOrderForm({ productDetail }) {
           cartItem.productId === savedItems.productId &&
           cartItem.size === savedItems.size
         ) {
-          alert('해당 상품이 장바구니에 존재합니다.');
+          setExiste(true);
+          setTimeout(() => setExiste(false), 2000);
           return;
         }
       }
@@ -82,6 +87,8 @@ export default function ProductOrderForm({ productDetail }) {
     );
     selectOption.current.value = '';
     setCart({ items: [] });
+    setIsAddItem(true);
+    setTimeout(() => setIsAddItem(false), 2000);
   };
 
   return (
@@ -122,9 +129,19 @@ export default function ProductOrderForm({ productDetail }) {
               onDelete={handleDelete}
             />
           )}
-          <button className="bg-blue-400 p-2 w-full font-bold rounded-md">
+          <button className="bg-blue-400 mt-2 p-2 w-full font-bold rounded-md">
             장바구니 추가
           </button>
+          {isExiste && (
+            <p className="text-center mt-3 bg-red-300">
+              해당 상품이 장바구니에 존재 합니다.
+            </p>
+          )}
+          {isAddItem && (
+            <p className="text-center mt-3 bg-green-300">
+              장바구니에 추가 되었습니다.
+            </p>
+          )}
         </form>
       </div>
     </section>
