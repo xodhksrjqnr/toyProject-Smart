@@ -9,6 +9,8 @@ import taewan.Smart.domain.category.repository.CategoryRepository;
 import taewan.Smart.domain.category.service.CategoryService;
 import taewan.Smart.domain.category.service.CategoryServiceImpl;
 import taewan.Smart.domain.member.repository.MemberRepository;
+import taewan.Smart.domain.member.service.MemberCertificationService;
+import taewan.Smart.domain.member.service.MemberCertificationServiceImpl;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.domain.member.service.MemberServiceImpl;
 import taewan.Smart.domain.product.repository.ProductRepository;
@@ -21,14 +23,17 @@ public class AppConfig {
 
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
+    private final MemberCertificationService memberCertificationService;
     private final CategoryRepository categoryRepository;
     private final CategoryItemRepository categoryItemRepository;
 
     @Autowired
     public AppConfig(ProductRepository productRepository, MemberRepository memberRepository,
+                     MemberCertificationService memberCertificationService,
                      CategoryRepository categoryRepository, CategoryItemRepository categoryItemRepository) {
         this.productRepository = productRepository;
         this.memberRepository = memberRepository;
+        this.memberCertificationService = memberCertificationService;
         this.categoryRepository = categoryRepository;
         this.categoryItemRepository = categoryItemRepository;
     }
@@ -41,6 +46,11 @@ public class AppConfig {
     @Bean
     public MemberService memberService() {
         return new MemberServiceImpl(this.memberRepository);
+    }
+
+    @Bean
+    public MemberCertificationService memberCertificationService() {
+        return new MemberCertificationServiceImpl(this.memberRepository);
     }
 
     @Bean

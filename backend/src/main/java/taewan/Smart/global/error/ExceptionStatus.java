@@ -10,6 +10,7 @@ public enum ExceptionStatus {
     //Member Domain Status
     MEMBER_NOT_FOUND(new NoSuchElementException("존재하지 않는 회원입니다.")),
     MEMBER_ID_DUPLICATE(new DuplicateKeyException("중복된 회원 아이디입니다.")),
+    MEMBER_EMAIL_NOT_FOUND(new NoSuchElementException("가입되지 않은 이메일입니다.")),
     LOGIN_JWT_EXPIRED(new ExpiredTokenException("LoginToken이 만료되었습니다.")),
     REFRESH_JWT_EXPIRED(new ExpiredTokenException("RefreshToken이 만료되었습니다.")),
 
