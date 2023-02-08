@@ -20,7 +20,7 @@ public class MemberSaveDto {
     private String email;
     @NotEmpty(message = "패스워드를 입력해야합니다.")
     private String password;
-    @Pattern(regexp = "^(010-\\d{4}-\\d{4})$|^$", message = "핸드폰 번호 형식이 잘못되었습니다.")
+    @Pattern(regexp = "^(010-\\d{4}-\\d{4})|()$", message = "핸드폰 번호 형식이 잘못되었습니다.")
     private String phoneNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;

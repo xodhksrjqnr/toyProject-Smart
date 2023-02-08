@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
+import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.member.entity.Member;
-import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.repository.MemberRepository;
 
-import static taewan.Smart.global.error.ExceptionStatus.MEMBER_ID_DUPLICATE;
-import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
+import static taewan.Smart.global.error.ExceptionStatus.*;
 
 
 @Service
@@ -29,6 +28,11 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(MEMBER_NOT_FOUND::exception));
     }
 
+    public MemberInfoDto findOne(String email) {
+        return new MemberInfoDto(memberRepository.findByEmail(email)
+                .orElseThrow(MEMBER_EMAIL_NOT_FOUND::exception));
+    }
+
     public MemberInfoDto findOne(String memberId, String password) {
         return new MemberInfoDto(memberRepository.findByMemberIdAndPassword(memberId, password)
                 .orElseThrow(MEMBER_NOT_FOUND::exception));
@@ -37,18 +41,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public Long save(MemberSaveDto memberSaveDto) {
-        if (memberRepository.findByMemberId(memberSaveDto.getMemberId()).isPresent()) {
-            throw MEMBER_ID_DUPLICATE.exception();
-        }
+        memberRepository.findByMemberId(memberSaveDto.getMemberId())
+                .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
         return memberRepository.save(new Member(memberSaveDto)).getId();
     }
 
     @Transactional
     @Override
-    public Long modify(MemberUpdateDto memberUpdateDto, Long id) {
-        if (memberRepository.findByMemberId(memberUpdateDto.getMemberId()).isPresent()) {
-            throw MEMBER_ID_DUPLICATE.exception();
-        }
+    public Long update(MemberUpdateDto memberUpdateDto, Long id) {
+        memberRepository.findByMemberId(memberUpdateDto.getMemberId())
+                .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
 
         Member found = memberRepository.findById(id).orElseThrow();
 

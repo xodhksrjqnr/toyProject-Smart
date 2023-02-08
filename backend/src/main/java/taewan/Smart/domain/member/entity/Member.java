@@ -43,4 +43,8 @@ public class Member {
         this.phoneNumber = dto.getPhoneNumber();
         this.birthday = dto.getBirthday();
     }
+
+    public void updateMemberPassword(String password) {
+        this.password = password;
+    }
 }

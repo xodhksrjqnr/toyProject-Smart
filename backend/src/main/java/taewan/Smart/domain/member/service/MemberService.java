@@ -7,8 +7,9 @@ import taewan.Smart.domain.member.dto.MemberUpdateDto;
 public interface MemberService {
 
     MemberInfoDto findOne(Long id);
+    MemberInfoDto findOne(String email);
     MemberInfoDto findOne(String memberId, String password);
     Long save(MemberSaveDto memberSaveDto);
-    Long modify(MemberUpdateDto memberUpdateDto, Long id);
+    Long update(MemberUpdateDto memberUpdateDto, Long id);
     void delete(Long id);
 }

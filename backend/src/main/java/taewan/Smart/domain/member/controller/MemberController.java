@@ -41,17 +41,17 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public AuthInfoDto update(HttpServletRequest request, HttpServletResponse response,
+    public AuthInfoDto modify(HttpServletRequest request, HttpServletResponse response,
                               @Valid MemberUpdateDto memberUpdateDto) {
         Claims loginToken = parseJwt(getJwt(request, "loginToken"));
         Long id = Long.parseLong((String)loginToken.get("id"));
-        memberService.modify(memberUpdateDto, id);
+        memberService.update(memberUpdateDto, id);
         return new AuthInfoDto((String)loginToken.get("memberId"), createJwt(memberService.findOne(id)),
                 createRefreshJwt(id));
     }
 
     @PostMapping("/delete")
-    public void delete(HttpServletRequest request) {
+    public void remove(HttpServletRequest request) {
         Claims loginToken = parseJwt(getJwt(request, "loginToken"));
         Long id = Long.parseLong((String)loginToken.get("id"));
         memberService.delete(id);
