@@ -40,7 +40,7 @@ export default function Header() {
             </button>
           </form>
         </div>
-        <div className="flex text-white">
+        <div className="flex justify-around text-white w-40">
           <CartButton />
           <AdminButton />
           {user.state && <Avatar user={user} />}
