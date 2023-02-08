@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { emailCertification } from '../api/emailCertification';
 
-export default function EmailCertificateModal({ closeModal }) {
+export default function OnlyEmailCertificateModal({
+  closeModal,
+  onEmailCertication,
+  findId,
+}) {
   const [text, setText] = useState('');
   const [validEmail, setvalidEmail] = useState(false);
   const handleEmailcertification = () => {
     if (!text.includes('@')) return setvalidEmail(false);
-    emailCertification(text).then((res) => {
+    onEmailCertication(text, findId).then((res) => {
       if (res.status === 200) setvalidEmail(true);
     });
   };
   const handleChange = (e) => setText(e.target.value);
   return (
-    <div className="fixed w-96 h-36 bg-blue-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-xl rounded-lg">
+    <div className="fixed w-96 h-36 bg-blue-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-xl rounded-lg border-2 border-blue-800">
       <form className="flex flex-col text-black pt-8">
         <div className="flex justify-center items-center mb-3">
           <label htmlFor="email">이메일</label>

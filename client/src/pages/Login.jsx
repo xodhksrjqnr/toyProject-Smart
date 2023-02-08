@@ -1,12 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { login, setToken } from '../api/user';
-import EmailCertificateModal from '../components/EmailCertificateModal';
+import { login } from '../api/user';
 import { UserContext } from '../context/UserContext';
+import { emailCertification } from '../api/emailCertification';
+import OnlyEmailCertificateModal from '../components/OnlyEmailCertificateModal';
+import FindPasswordModal from '../components/FindPasswordModal';
 
 export default function Login() {
   const [privacy, setPrivacy] = useState({ id: '', password: '' });
   const [emailModal, setEmailModal] = useState(false);
+  const [findIdModal, setfindIdModal] = useState(false);
+  const [findPasswordModal, setFindPasswordModal] = useState(false);
   const { setUserId } = useContext(UserContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -14,6 +18,8 @@ export default function Login() {
     setPrivacy((prev) => ({ ...prev, [name]: value }));
   };
   const openEmailModal = () => setEmailModal(true);
+  const openfindIdModal = () => setfindIdModal(true);
+  const openFindPasswordModal = () => setFindPasswordModal(true);
   const handleSubmit = (e) => {
     e.preventDefault();
     login(privacy) //
@@ -58,14 +64,32 @@ export default function Login() {
           <button type="button" onClick={openEmailModal}>
             회원가입
           </button>
-          {emailModal && <EmailCertificateModal closeModal={setEmailModal} />}
+
           <div>
-            <Link to="" className="mr-2">
+            <button type="button" onClick={openfindIdModal} className="mr-2">
               ID찾기
-            </Link>
-            <Link to="">비밀번호찾기</Link>
+            </button>
+            <button type="button" onClick={openFindPasswordModal}>
+              비밀번호찾기
+            </button>
           </div>
         </div>
+        {emailModal && (
+          <OnlyEmailCertificateModal
+            closeModal={setEmailModal}
+            onEmailCertication={emailCertification}
+          />
+        )}
+        {findIdModal && (
+          <OnlyEmailCertificateModal
+            closeModal={setfindIdModal}
+            onEmailCertication={emailCertification}
+            findId={true}
+          />
+        )}
+        {findPasswordModal && (
+          <FindPasswordModal closeModal={setFindPasswordModal} />
+        )}
       </div>
     </main>
   );
