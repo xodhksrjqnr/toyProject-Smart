@@ -2,13 +2,13 @@ package taewan.Smart.global.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static taewan.Smart.global.error.ExceptionStatus.REFRESH_JWT_EXPIRED;
-import static taewan.Smart.global.util.JwtUtils.getJwt;
 import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class AuthRefreshInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String refreshToken = getJwt(request, "refreshToken");
+        String refreshToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (refreshToken == null)
             throw REFRESH_JWT_EXPIRED.exception();

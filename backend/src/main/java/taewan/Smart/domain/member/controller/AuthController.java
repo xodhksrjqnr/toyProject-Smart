@@ -31,7 +31,7 @@ public class AuthController {
     @PostMapping("/login")
     public AuthInfoDto login(@RequestParam String memberId, @RequestParam String password) {
         MemberInfoDto dto = memberService.findOne(memberId, password);
-        return new AuthInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(dto.getId()));
+        return new AuthInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(dto));
     }
 
     @PostMapping("/logout")
