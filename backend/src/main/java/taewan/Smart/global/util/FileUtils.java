@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMAGE_EMPTY;
+import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMG_NOT_FOUND;
 
 public class FileUtils {
 
@@ -19,6 +20,8 @@ public class FileUtils {
         File dir = new File(root + directoryPath);
         File[] files = dir.listFiles();
 
+        if (files == null)
+            throw PRODUCT_IMG_NOT_FOUND.exception();
         for (File f : files)
             if (f.isFile())
                 found.add(address + directoryPath + "/" + f.getName());

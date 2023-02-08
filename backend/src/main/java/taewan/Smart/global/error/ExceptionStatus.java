@@ -6,21 +6,21 @@ import taewan.Smart.domain.member.exception.ExpiredTokenException;
 import java.util.NoSuchElementException;
 
 public enum ExceptionStatus {
+
+    //Member Domain Status
     MEMBER_NOT_FOUND(new NoSuchElementException("존재하지 않는 회원입니다.")),
-
     MEMBER_ID_DUPLICATE(new DuplicateKeyException("중복된 회원 아이디입니다.")),
+    LOGIN_JWT_EXPIRED(new ExpiredTokenException("LoginToken이 만료되었습니다.")),
+    REFRESH_JWT_EXPIRED(new ExpiredTokenException("RefreshToken이 만료되었습니다.")),
 
+    //Product Domain Status
     PRODUCT_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 제품입니다.")),
-
     PRODUCT_NAME_DUPLICATE(new DuplicateKeyException("중복된 제품 이름입니다.")),
-
     PRODUCT_IMAGE_EMPTY(new IllegalArgumentException("등록할 이미지가 필요합니다.")),
-    
     PRODUCT_IMG_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 이미지입니다.")),
 
-    LOGIN_JWT_EXPIRED(new ExpiredTokenException("LoginToken이 만료되었습니다.")),
-
-    REFRESH_JWT_EXPIRED(new ExpiredTokenException("RefreshToken이 만료되었습니다."));
+    //Global Status
+    MAIL_INVALID(new IllegalArgumentException("유효하지 않은 이메일입니다."));
 
     private final RuntimeException exception;
 
