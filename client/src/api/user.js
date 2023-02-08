@@ -27,9 +27,7 @@ export async function logout() {
   return axios
     .post(process.env.REACT_APP_LOGOUT_URL, data, {
       headers: {
-        Authorization: `loginToken=${cookies.get(
-          'loginToken'
-        )}; refreshToken=${cookies.get('refreshToken')}`,
+        Authorization: `Bearer ${cookies.get('loginToken')}`,
       },
       withCredentials: true,
     })
@@ -60,7 +58,7 @@ export async function checkToken() {
   return axios
     .post(process.env.REACT_APP_TOKEN_URL, data, {
       headers: {
-        Authorization: `refreshToken=${refreshToken}`,
+        Authorization: `Bearer ${refreshToken}`,
       },
       withCredentials: true,
     })
