@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Loading from './ui/Loading';
 
 export default function OnlyEmailCertificateModal({
   closeModal,
@@ -6,18 +7,22 @@ export default function OnlyEmailCertificateModal({
   findId,
 }) {
   const [text, setText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [validEmail, setvalidEmail] = useState(false);
   const handleEmailcertification = () => {
     if (!text.includes('@')) return setvalidEmail(false);
-    onEmailCertication(text, findId).then((res) => {
-      if (res.status === 200) setvalidEmail(true);
-    });
+    setIsLoading(true);
+    onEmailCertication(text, findId)
+      .then((res) => {
+        if (res.status === 200) setvalidEmail(true);
+      })
+      .finally(() => setIsLoading(false));
   };
   const handleChange = (e) => setText(e.target.value);
   return (
     <div className="fixed w-96 h-36 bg-blue-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-xl rounded-lg border-2 border-blue-800">
       <form className="flex flex-col text-black pt-8">
-        <div className="flex justify-center items-center mb-3">
+        <div className="flex justify-center items-center mb-2">
           <label htmlFor="email">이메일</label>
           <input
             id="email"
@@ -37,7 +42,8 @@ export default function OnlyEmailCertificateModal({
             인증
           </button>
         </div>
-        <div className="flex justify-center items-center text-lg mb-1">
+        <div className="flex justify-center items-center text-md mb-1">
+          {isLoading && <Loading />}
           {validEmail && text.length >= 1 && <p>이메일을 확인해 주세요.</p>}
         </div>
         <button

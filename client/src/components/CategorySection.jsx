@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useProductApi } from '../context/ProductApiContext';
 import ProductCard from './ProductCard';
+import Loading from './ui/Loading';
 
 export default function CategorySection({ category }) {
   const { code } = category;
@@ -20,7 +21,7 @@ export default function CategorySection({ category }) {
       <h2 className="bg-slate-200 px-2 py-1 mb-2 font-bold rounded-xl">
         {category.main}
       </h2>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loading />}
       {error && <p>Something is wrong</p>}
       {products && (
         <ul className="main-card w-full flex justify-center">
