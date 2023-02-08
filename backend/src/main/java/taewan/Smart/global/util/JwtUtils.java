@@ -1,22 +1,21 @@
 package taewan.Smart.global.util;
 
-import io.jsonwebtoken.*;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 
-@Slf4j
 public class JwtUtils {
 
     private static final String SECRET_KEY = "smartSecretKey";
 
     public static String createJwt(MemberInfoDto dto) {
         Date now = new Date();
-        return Jwts.builder()
+        String jwt = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer("smart")
                 .setIssuedAt(now)
@@ -28,18 +27,23 @@ public class JwtUtils {
                 .claim("birthday", dto.getBirthday())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+
+        return jwt;
     }
 
-    public static String createRefreshJwt(Long id) {
+    public static String createRefreshJwt(MemberInfoDto dto) {
         Date now = new Date();
-        return Jwts.builder()
+        String id = Long.toString(dto.getId());
+        String jwt = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer("smart")
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofHours(2).toMillis()))
-                .claim("id", Long.toString(id))
+                .claim("id", id)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+
+        return jwt;
     }
 
     public static Claims parseJwt(String token) {
@@ -47,16 +51,5 @@ public class JwtUtils {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    public static String getJwt(HttpServletRequest request, String tokenName) {
-        String[] tokens = request.getHeader(HttpHeaders.AUTHORIZATION).split(";");
-
-        for (String token : tokens) {
-            if (token.contains(tokenName)) {
-                return token.split("=")[1];
-            }
-        }
-        return null;
     }
 }
