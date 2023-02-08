@@ -43,9 +43,9 @@ export async function logout() {
 
 export function setToken(id, loginToken, refreshToken) {
   const cookies = new Cookies();
-  cookies.set('id', id);
-  cookies.set('loginToken', loginToken);
-  cookies.set('refreshToken', refreshToken);
+  cookies.set('id', id, { maxAge: 60 * 30 });
+  cookies.set('loginToken', loginToken, { maxAge: 60 * 30 });
+  cookies.set('refreshToken', refreshToken, { maxAge: 60 * 120 });
 }
 
 export async function checkToken() {
@@ -65,9 +65,13 @@ export async function checkToken() {
       withCredentials: true,
     })
     .then((res) => {
-      cookies.set('id', res.data.memberId);
-      cookies.set('loginToken', res.data.loginToken);
-      cookies.set('refreshToken', res.data.refreshToken);
+      cookies.set('id', res.data.memberId, { maxAge: 60 * 30 });
+      cookies.set('loginToken', res.data.loginToken, {
+        maxAge: 60 * 30,
+      });
+      cookies.set('refreshToken', res.data.refreshToken, {
+        maxAge: 60 * 120,
+      });
       return res;
     })
     .catch((error) => error.response);
