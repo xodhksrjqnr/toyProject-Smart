@@ -1,16 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login, setToken } from '../api/user';
+import EmailCertificateModal from '../components/EmailCertificateModal';
 import { UserContext } from '../context/UserContext';
 
 export default function Login() {
   const [privacy, setPrivacy] = useState({ id: '', password: '' });
+  const [emailModal, setEmailModal] = useState(false);
   const { setUserId } = useContext(UserContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPrivacy((prev) => ({ ...prev, [name]: value }));
   };
+  const openEmailModal = () => setEmailModal(true);
   const handleSubmit = (e) => {
     e.preventDefault();
     login(privacy) //
@@ -52,7 +55,10 @@ export default function Login() {
           <button className="bg-blue-600 text-white p-1">로그인</button>
         </form>
         <div className="text-xs text-gray-400 flex justify-between w-full">
-          <Link to="/signup">회원가입</Link>
+          <button type="button" onClick={openEmailModal}>
+            회원가입
+          </button>
+          {emailModal && <EmailCertificateModal closeModal={setEmailModal} />}
           <div>
             <Link to="" className="mr-2">
               ID찾기
