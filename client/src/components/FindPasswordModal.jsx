@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { findPassword } from '../api/findPassword';
 import Loading from './ui/Loading';
+import emailRegexCheck from '../util/emailRegexCheck';
 
 export default function FindPasswordModal({ closeModal }) {
   const [text, setText] = useState({});
@@ -56,7 +57,13 @@ export default function FindPasswordModal({ closeModal }) {
           </div>
         </div>
         <div>
-          <button className="bg-white p-1 px-3 rounded-md mr-2" type="submit">
+          <button
+            className={`${
+              !emailRegexCheck(text) && 'cursor-not-allowed'
+            } bg-white p-1 px-3 rounded-md mr-2`}
+            type="submit"
+            disabled={!emailRegexCheck(text)}
+          >
             인증
           </button>
         </div>

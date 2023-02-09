@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Loading from './ui/Loading';
+import emailRegexCheck from '../util/emailRegexCheck';
 
 export default function OnlyEmailCertificateModal({
   closeModal,
@@ -35,9 +36,12 @@ export default function OnlyEmailCertificateModal({
             required
           />
           <button
-            className="bg-white p-1 px-3 rounded-md mr-2"
+            className={`${
+              !emailRegexCheck(text) && 'cursor-not-allowed'
+            } bg-white p-1 px-3 rounded-md mr-2`}
             type="button"
             onClick={handleEmailcertification}
+            disabled={!emailRegexCheck(text)}
           >
             인증
           </button>

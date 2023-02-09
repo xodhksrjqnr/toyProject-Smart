@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/signup';
+import emailRegexCheck from '../util/emailRegexCheck';
+import phoneRegexCheck from '../util/phoneRegexCheck';
 
 export default function SingUp() {
   const [info, setInfo] = useState({
@@ -120,15 +122,24 @@ export default function SingUp() {
           type="tel"
           name="phoneNumber"
           value={info.phone}
-          placeholder="휴대전화"
+          placeholder="010-1234-5678"
           onChange={handleChange}
           className="border mb-2 border-blue-800 p-1"
         />
+
         <button
           className={`${
-            !password.available ? 'bg-red-600' : 'bg-blue-600'
+            !password.available ||
+            !emailRegexCheck(info.email) ||
+            !phoneRegexCheck(info.phoneNumber)
+              ? 'bg-red-600'
+              : 'bg-blue-600'
           }  text-white p-1`}
-          disabled={!password.available}
+          disabled={
+            !password.available ||
+            !emailRegexCheck(info.email) ||
+            !phoneRegexCheck(info.phoneNumber)
+          }
         >
           회원가입
         </button>
