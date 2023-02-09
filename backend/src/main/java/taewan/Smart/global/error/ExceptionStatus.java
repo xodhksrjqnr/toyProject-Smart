@@ -21,6 +21,9 @@ public enum ExceptionStatus {
     PRODUCT_IMAGE_EMPTY(new IllegalArgumentException("등록할 이미지가 필요합니다.")),
     PRODUCT_IMG_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 이미지입니다.")),
 
+    //Order Domain Status
+    ORDER_NOT_FOUND(new NoSuchElementException("존재하지 않는 주문입니다.")),
+
     //Global Status
     MAIL_INVALID(new IllegalArgumentException("유효하지 않은 이메일입니다."));
 

@@ -43,7 +43,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(2)
                 .addPathPatterns("/members/**")
                 .excludePathPatterns(
-                        "/members/create", "/members/refresh", "/members/login", "/members/certificate/*"
+                        "/members/create", "/members/refresh", "/members/login", "/members/certificate/*",
+                        "/orders/*"
                 );
     }
 }

@@ -15,6 +15,24 @@ import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMG_NOT_FOUND;
 
 public class FileUtils {
 
+    public static String findFile(String directoryPath, String root, String address) {
+        File dir = new File(root + directoryPath);
+        File[] files = dir.listFiles();
+
+        if (files == null)
+            throw PRODUCT_IMG_NOT_FOUND.exception();
+
+        String path = null;
+
+        for (File f : files) {
+            if (f.isFile()) {
+                path = address + directoryPath + "/" + f.getName();
+                break;
+            }
+        }
+        return path;
+    }
+
     public static List<String> findFiles(String directoryPath, String root, String address) {
         List<String> found = new ArrayList<>();
         File dir = new File(root + directoryPath);

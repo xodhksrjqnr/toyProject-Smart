@@ -13,6 +13,10 @@ import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberCertificationServiceImpl;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.domain.member.service.MemberServiceImpl;
+import taewan.Smart.domain.order.repository.OrderItemRepository;
+import taewan.Smart.domain.order.repository.OrderRepository;
+import taewan.Smart.domain.order.service.OrderService;
+import taewan.Smart.domain.order.service.OrderServiceImpl;
 import taewan.Smart.domain.product.repository.ProductRepository;
 import taewan.Smart.domain.product.service.ProductService;
 import taewan.Smart.domain.product.service.ProductServiceImpl;
@@ -23,19 +27,21 @@ public class AppConfig {
 
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
-    private final MemberCertificationService memberCertificationService;
     private final CategoryRepository categoryRepository;
     private final CategoryItemRepository categoryItemRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
     public AppConfig(ProductRepository productRepository, MemberRepository memberRepository,
-                     MemberCertificationService memberCertificationService,
-                     CategoryRepository categoryRepository, CategoryItemRepository categoryItemRepository) {
+                     CategoryRepository categoryRepository, CategoryItemRepository categoryItemRepository,
+                     OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.memberRepository = memberRepository;
-        this.memberCertificationService = memberCertificationService;
         this.categoryRepository = categoryRepository;
         this.categoryItemRepository = categoryItemRepository;
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Bean
@@ -56,5 +62,12 @@ public class AppConfig {
     @Bean
     public CategoryService categoryService() {
         return new CategoryServiceImpl(this.categoryRepository, this.categoryItemRepository);
+    }
+
+    @Bean
+    public OrderService orderService() {
+        return new OrderServiceImpl(
+                this.orderRepository, this.orderItemRepository, this.memberRepository, this.productRepository
+        );
     }
 }

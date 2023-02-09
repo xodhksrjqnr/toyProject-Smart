@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
+import taewan.Smart.domain.order.entity.Order;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +26,9 @@ public class Member {
     private String password;
     private String phoneNumber;
     private LocalDate birthday;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private List<Order> orders;
 
     public Member(MemberSaveDto dto) {
         this.memberId = dto.getMemberId();
@@ -46,5 +48,9 @@ public class Member {
 
     public void updateMemberPassword(String password) {
         this.password = password;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
     }
 }

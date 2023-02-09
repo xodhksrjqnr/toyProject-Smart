@@ -1,6 +1,5 @@
 package taewan.Smart.domain.member.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.member.dto.AuthInfoDto;
@@ -12,7 +11,6 @@ import taewan.Smart.infra.Mail;
 import static taewan.Smart.global.util.JwtUtils.createJwt;
 import static taewan.Smart.global.util.JwtUtils.createRefreshJwt;
 
-@Slf4j
 @RestController
 @RequestMapping("members")
 public class AuthController {
