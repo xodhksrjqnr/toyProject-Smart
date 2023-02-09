@@ -3,10 +3,7 @@ package taewan.Smart.domain.order.controller;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.order.dto.OrderCancelDto;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderSaveDto;
@@ -37,7 +34,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public void upload(HttpServletRequest request, OrderSaveDto orderSaveDto) {
+    public void upload(HttpServletRequest request, @RequestBody OrderSaveDto orderSaveDto) {
         Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
 
