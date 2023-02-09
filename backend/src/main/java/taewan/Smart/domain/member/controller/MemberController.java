@@ -2,7 +2,6 @@ package taewan.Smart.domain.member.controller;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.member.dto.AuthInfoDto;
@@ -29,7 +28,7 @@ public class MemberController {
 
     @GetMapping
     public MemberInfoDto search(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
         return memberService.findOne(id);
     }
@@ -42,7 +41,7 @@ public class MemberController {
 
     @PostMapping("/update")
     public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto memberUpdateDto) {
-        Claims loginToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
         memberService.update(memberUpdateDto);
 
@@ -52,14 +51,14 @@ public class MemberController {
 
     @PostMapping("/delete")
     public void remove(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
         memberService.delete(id);
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(HttpServletRequest request) {
-        Claims refreshToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims refreshToken = parseJwt(request);
         Long id = Long.parseLong((String)refreshToken.get("id"));
         MemberInfoDto dto = memberService.findOne(id);
 

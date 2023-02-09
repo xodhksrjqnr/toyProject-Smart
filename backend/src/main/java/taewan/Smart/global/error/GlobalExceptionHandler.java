@@ -1,5 +1,6 @@
 package taewan.Smart.global.error;
 
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import taewan.Smart.domain.member.exception.ExpiredTokenException;
 
 import java.util.NoSuchElementException;
 
@@ -23,9 +23,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ExpiredTokenException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredTokenException(ExpiredTokenException e) {
-        log.error("ExpiredTokenException", e);
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtExceptionException(JwtException e) {
+        log.error("JwtException", e);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }

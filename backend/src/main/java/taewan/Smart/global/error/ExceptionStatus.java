@@ -1,5 +1,6 @@
 package taewan.Smart.global.error;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DuplicateKeyException;
 import taewan.Smart.domain.member.exception.ExpiredTokenException;
 
@@ -12,8 +13,10 @@ public enum ExceptionStatus {
     MEMBER_ID_DUPLICATE(new DuplicateKeyException("중복된 회원 아이디입니다.")),
     MEMBER_EMAIL_NOT_FOUND(new NoSuchElementException("가입되지 않은 이메일입니다.")),
     MEMBER_EMAIL_DUPLICATE(new DuplicateKeyException("이미 가입된 이메일입니다.")),
-    LOGIN_JWT_EXPIRED(new ExpiredTokenException("LoginToken이 만료되었습니다.")),
-    REFRESH_JWT_EXPIRED(new ExpiredTokenException("RefreshToken이 만료되었습니다.")),
+
+    //JWT
+    JWT_EXPIRED(new ExpiredTokenException("JWT가 만료되었습니다.")),
+    JWT_INVALID(new JwtException("JWT의 내용이 잘못되었습니다.")),
 
     //Product Domain Status
     PRODUCT_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 제품입니다.")),

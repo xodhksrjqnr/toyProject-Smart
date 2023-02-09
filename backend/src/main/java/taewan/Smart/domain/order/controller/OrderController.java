@@ -30,7 +30,7 @@ public class OrderController {
 
     @GetMapping
     public List<OrderInfoDto> search(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
 
         return orderService.findAll(id);
@@ -38,7 +38,7 @@ public class OrderController {
 
     @PostMapping
     public void upload(HttpServletRequest request, OrderSaveDto orderSaveDto) {
-        Claims loginToken = parseJwt(request.getHeader(HttpHeaders.AUTHORIZATION));
+        Claims loginToken = parseJwt(request);
         Long id = Long.parseLong((String)loginToken.get("id"));
 
         orderService.save(id, orderSaveDto);

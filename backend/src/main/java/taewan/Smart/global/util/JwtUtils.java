@@ -1,17 +1,25 @@
 package taewan.Smart.global.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 
+import static taewan.Smart.global.error.ExceptionStatus.JWT_EXPIRED;
+import static taewan.Smart.global.error.ExceptionStatus.JWT_INVALID;
+
 public class JwtUtils {
 
-    private static final String SECRET_KEY = "smartSecretKey";
+    private static String SECRET_KEY;
+
+    @Value("${jwt.secret.key}")
+    public void setSecretKey(String secretKey) {
+        this.SECRET_KEY =secretKey;
+    }
 
     public static String createJwt(MemberInfoDto dto) {
         Date now = new Date();
@@ -46,12 +54,19 @@ public class JwtUtils {
         return jwt;
     }
 
-    public static Claims parseJwt(String jwt) {
-        String token = jwt.replace("Bearer ", "");
+    public static Claims parseJwt(HttpServletRequest request) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION)
+                .replace("Bearer ", "");
 
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e1) {
+            throw JWT_EXPIRED.exception();
+        } catch (JwtException | IllegalArgumentException e2) {
+            throw JWT_INVALID.exception();
+        }
     }
 }

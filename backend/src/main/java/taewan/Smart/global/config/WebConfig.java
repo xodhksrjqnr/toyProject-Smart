@@ -35,16 +35,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthRefreshInterceptor())
-                .order(1)
-                .addPathPatterns("/members/refresh");
-
         registry.addInterceptor(new AuthInterceptor())
-                .order(2)
-                .addPathPatterns("/members/**")
+                .addPathPatterns("/members/**", "/orders/**")
                 .excludePathPatterns(
-                        "/members/create", "/members/refresh", "/members/login", "/members/certificate/*",
-                        "/orders/*"
+                        "/members/create", "/members/login", "/members/certificate/*"
                 );
     }
 }
