@@ -46,7 +46,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderInfoDto> findAll(Long memberId) {
-        List<Order> orders = orderRepository.findAllByMemberId(memberId);
+        List<Order> orders = memberRepository.findById(memberId)
+                .orElseThrow(MEMBER_NOT_FOUND::exception).getOrders();
         List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
 
         for (Order order : orders) {
