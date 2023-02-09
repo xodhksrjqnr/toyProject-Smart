@@ -55,17 +55,17 @@ public class JwtUtils {
     }
 
     public static Claims parseJwt(HttpServletRequest request) {
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION)
-                .replace("Bearer ", "");
-
         try {
+            String token = request.getHeader(HttpHeaders.AUTHORIZATION)
+                    .replace("Bearer ", "");
+
             return Jwts.parser()
                     .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e1) {
             throw JWT_EXPIRED.exception();
-        } catch (JwtException | IllegalArgumentException e2) {
+        } catch (JwtException | IllegalArgumentException | NullPointerException e2) {
             throw JWT_INVALID.exception();
         }
     }
