@@ -14,12 +14,7 @@ import static taewan.Smart.global.error.ExceptionStatus.JWT_INVALID;
 
 public class JwtUtils {
 
-    private static String SECRET_KEY;
-
-    @Value("${jwt.secret.key}")
-    public void setSecretKey(String secretKey) {
-        this.SECRET_KEY =secretKey;
-    }
+    private static String SECRET_KEY = "smartSecretKey";
 
     public static String createJwt(MemberInfoDto dto) {
         Date now = new Date();
