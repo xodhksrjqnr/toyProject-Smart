@@ -21,7 +21,9 @@ export default function SingUp() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup(info).then(() => navigate('/'));
+    signup(info).then((res) => {
+      if (res.status === 201) navigate('/');
+    });
   };
   const checkPasswordLength = (e) => {
     e.target.value.length >= 1
