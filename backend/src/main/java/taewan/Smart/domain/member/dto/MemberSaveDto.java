@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class MemberSaveDto {
 
     @NotEmpty(message = "아이디를 입력해야합니다.")
-    private String memberId;
+    private String nickName;
     @NotEmpty(message = "이메일을 입력해야합니다.")
     @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;

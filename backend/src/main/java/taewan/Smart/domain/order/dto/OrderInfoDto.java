@@ -9,11 +9,11 @@ import java.util.List;
 @Setter
 public class OrderInfoDto {
 
-    private Long id;
+    private Long orderId;
     private List<OrderItemInfoDto> orderItemInfoDtoList;
 
-    public OrderInfoDto(Long id, List<OrderItemInfoDto> dtos) {
-        this.id = id;
+    public OrderInfoDto(Long orderId, List<OrderItemInfoDto> dtos) {
+        this.orderId = orderId;
         this.orderItemInfoDtoList = dtos;
     }
 }

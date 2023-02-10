@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductInfoDto {
 
-    private Long id;
+    private Long productId;
     private List<String> imgFiles;
     private String name;
     private Integer price;
@@ -23,7 +23,7 @@ public class ProductInfoDto {
     private String detailInfo;
 
     public ProductInfoDto(Product product, List<String> imgFiles, String host) {
-        this.id = product.getId();
+        this.productId = product.getProductId();
         this.imgFiles = imgFiles;
         this.name = product.getName();
         this.price = product.getPrice();

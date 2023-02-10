@@ -12,23 +12,23 @@ import java.time.LocalDate;
 @ToString
 public class MemberInfoDto {
 
-    private Long id;
-    private String memberId;
+    private Long memberId;
+    private String nickName;
     private String email;
     private String phoneNumber;
     private LocalDate birthday;
 
     public MemberInfoDto(Member member) {
-        this.id = member.getId();
         this.memberId = member.getMemberId();
+        this.nickName = member.getNickName();
         this.email = member.getEmail();
         this.phoneNumber = member.getPhoneNumber();
         this.birthday = member.getBirthday();
     }
 
     public MemberInfoDto(MemberUpdateDto dto) {
-        this.id = dto.getId();
         this.memberId = dto.getMemberId();
+        this.nickName = dto.getNickName();
         this.email = dto.getEmail();
         this.phoneNumber = dto.getPhoneNumber();
         this.birthday = dto.getBirthday();

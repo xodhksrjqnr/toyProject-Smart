@@ -17,6 +17,7 @@ public enum ExceptionStatus {
     //JWT
     JWT_EXPIRED(new ExpiredTokenException("JWT가 만료되었습니다.")),
     JWT_INVALID(new JwtException("JWT의 내용이 잘못되었습니다.")),
+    JWT_ISNULL(new JwtException("JWT가 존재하지 않습니다.")),
 
     //Product Domain Status
     PRODUCT_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 제품입니다.")),

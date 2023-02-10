@@ -48,8 +48,8 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
 
     @Transactional
     @Override
-    public MemberCertificateDto findMember(String email, String memberId) {
-        Member member = memberRepository.findByMemberIdAndEmail(memberId, email)
+    public MemberCertificateDto findMember(String email, String nickName) {
+        Member member = memberRepository.findByNickNameAndEmail(nickName, email)
                 .orElseThrow(MEMBER_NOT_FOUND::exception);
 
         member.updateMemberPassword(UUID.randomUUID().toString().substring(0, 8));

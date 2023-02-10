@@ -2,7 +2,6 @@ package taewan.Smart.domain.order.controller;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.order.dto.OrderCancelDto;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
@@ -28,7 +27,7 @@ public class OrderController {
     @GetMapping
     public List<OrderInfoDto> search(HttpServletRequest request) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("id"));
+        Long id = Long.parseLong((String)loginToken.get("memberId"));
 
         return orderService.findAll(id);
     }
@@ -36,7 +35,7 @@ public class OrderController {
     @PostMapping
     public void upload(HttpServletRequest request, @RequestBody OrderSaveDto orderSaveDto) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("id"));
+        Long id = Long.parseLong((String)loginToken.get("memberId"));
 
         orderService.save(id, orderSaveDto);
     }

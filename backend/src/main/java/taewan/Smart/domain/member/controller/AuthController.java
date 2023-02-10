@@ -27,9 +27,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthInfoDto login(@RequestParam String memberId, @RequestParam String password) {
-        MemberInfoDto dto = memberService.findOne(memberId, password);
-        return new AuthInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(dto));
+    public AuthInfoDto login(@RequestParam String nickName, @RequestParam String password) {
+        MemberInfoDto dto = memberService.findOne(nickName, password);
+        return new AuthInfoDto(dto.getNickName(), createJwt(dto), createRefreshJwt(dto));
     }
 
     @PostMapping("/logout")
@@ -47,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/certificate/password")
-    public void certificatePassword(@ModelAttribute("email") String email, @ModelAttribute("memberId") String memberId) {
-        mail.sendMail(memberCertificationService.findMember(email, memberId));
+    public void certificatePassword(@ModelAttribute("email") String email, @ModelAttribute("nickName") String nickName) {
+        mail.sendMail(memberCertificationService.findMember(email, nickName));
     }
 }

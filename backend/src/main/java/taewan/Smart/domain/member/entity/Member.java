@@ -10,6 +10,7 @@ import taewan.Smart.domain.order.entity.Order;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,18 +21,17 @@ import java.util.List;
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String memberId;
+    private Long memberId;
+    private String nickName;
     private String email;
     private String password;
     private String phoneNumber;
     private LocalDate birthday;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private List<Order> orders;
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
 
     public Member(MemberSaveDto dto) {
-        this.memberId = dto.getMemberId();
+        this.nickName = dto.getNickName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();
@@ -39,7 +39,7 @@ public class Member {
     }
 
     public void updateMember(MemberUpdateDto dto) {
-        this.memberId = dto.getMemberId();
+        this.nickName = dto.getNickName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();

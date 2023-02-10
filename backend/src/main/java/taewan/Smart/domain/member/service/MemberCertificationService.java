@@ -6,5 +6,5 @@ public interface MemberCertificationService {
 
     MemberCertificateDto findEmail(String email);
     MemberCertificateDto findMember(String email);
-    MemberCertificateDto findMember(String email, String memberId);
+    MemberCertificateDto findMember(String email, String nickName);
 }

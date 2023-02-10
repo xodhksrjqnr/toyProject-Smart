@@ -61,26 +61,23 @@ public class OrderServiceImpl implements OrderService {
     public Long save(Long memberId, OrderSaveDto orderSaveDto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MEMBER_NOT_FOUND::exception);
-        List<OrderItem> orderItemList = new ArrayList<>();
+        Order order = new Order();
 
         for (OrderItemSaveDto dto : orderSaveDto.getOrderItemSaveDtoList()) {
-            orderItemList.add(
+            order.add(
                     orderItemRepository.save(
                             new OrderItem(dto, productRepository.findById(dto.getProductId())
                     .orElseThrow(PRODUCT_NOT_FOUND::exception)))
             );
         }
-
-        Order order = new Order(orderItemList);
-
         member.addOrder(order);
-        return orderRepository.save(order).getId();
+        return orderRepository.save(order).getOrderId();
     }
 
     @Transactional
     @Override
     public void cancel(OrderCancelDto orderCancelDto) {
-        orderRepository.findAllById(orderCancelDto.getId())
+        orderRepository.findById(orderCancelDto.getOrderId())
                 .orElseThrow(ORDER_NOT_FOUND::exception)
                 .cancel("취소");
     }
@@ -88,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void refund(OrderCancelDto orderCancelDto) {
-        orderRepository.findAllById(orderCancelDto.getId())
+        orderRepository.findById(orderCancelDto.getOrderId())
                 .orElseThrow(ORDER_NOT_FOUND::exception)
                 .cancel("환불");
     }

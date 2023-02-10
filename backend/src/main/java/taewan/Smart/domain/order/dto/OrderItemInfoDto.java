@@ -19,7 +19,7 @@ public class OrderItemInfoDto {
     private String deliveryStatus;
 
     public OrderItemInfoDto(OrderItem orderItem, String root, String address) {
-        this.productId = orderItem.getProduct().getId();
+        this.productId = orderItem.getProduct().getProductId();
         this.thumbnail = findFile(orderItem.getProduct().getImgFolderPath(), root, address);
         this.name = orderItem.getProduct().getName();
         this.size = orderItem.getSize();

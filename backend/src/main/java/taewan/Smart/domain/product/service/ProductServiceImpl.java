@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
         String[] paths = saveImgFile(productSaveDto);
 
-        return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getId();
+        return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getProductId();
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductService {
     public Long update(ProductUpdateDto productUpdateDto) {
         Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
 
-        if (equalNameProduct.isPresent() && !equalNameProduct.get().getId().equals(productUpdateDto.getId())) {
+        if (equalNameProduct.isPresent() && !equalNameProduct.get().getProductId().equals(productUpdateDto.getId())) {
             throw PRODUCT_NAME_DUPLICATE.exception();
         }
 
@@ -87,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         String[] paths = saveImgFile(productUpdateDto);
 
         found.updateProduct(productUpdateDto, paths[0], paths[1]);
-        return found.getId();
+        return found.getProductId();
     }
 
     private String[] saveImgFile(ProductSaveDto dto) {

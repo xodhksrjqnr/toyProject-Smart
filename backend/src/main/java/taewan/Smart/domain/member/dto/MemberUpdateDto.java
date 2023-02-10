@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString
 public class MemberUpdateDto extends MemberSaveDto {
 
-    private Long id;
+    private Long memberId;
 }

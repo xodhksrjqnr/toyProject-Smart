@@ -34,30 +34,30 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public MemberInfoDto findOne(String memberId, String password) {
-        return new MemberInfoDto(memberRepository.findByMemberIdAndPassword(memberId, password)
+        return new MemberInfoDto(memberRepository.findByNickNameAndPassword(memberId, password)
                 .orElseThrow(MEMBER_NOT_FOUND::exception));
     }
 
     @Transactional
     @Override
     public Long save(MemberSaveDto memberSaveDto) {
-        memberRepository.findByMemberId(memberSaveDto.getMemberId())
+        memberRepository.findByNickName(memberSaveDto.getNickName())
                 .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
-        return memberRepository.save(new Member(memberSaveDto)).getId();
+        return memberRepository.save(new Member(memberSaveDto)).getMemberId();
     }
 
     @Transactional
     @Override
     public Long update(MemberUpdateDto memberUpdateDto) {
-        memberRepository.findByMemberId(memberUpdateDto.getMemberId())
+        memberRepository.findByNickName(memberUpdateDto.getNickName())
                 .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
 
-        Member found = memberRepository.findById(memberUpdateDto.getId()).orElseThrow();
+        Member found = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow();
 
         if (memberUpdateDto.getPassword().equals(found.getPassword()))
             memberUpdateDto.setPassword(found.getPassword());
         found.updateMember(memberUpdateDto);
-        return found.getId();
+        return found.getMemberId();
     }
 
     @Transactional

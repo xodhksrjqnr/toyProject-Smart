@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class OrderCancelDto {
 
-    private Long id;
+    private Long orderId;
     private String reason;
 }

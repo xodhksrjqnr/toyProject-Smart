@@ -29,7 +29,7 @@ public class MemberController {
     @GetMapping
     public MemberInfoDto search(HttpServletRequest request) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("id"));
+        Long id = Long.parseLong((String)loginToken.get("memberId"));
         return memberService.findOne(id);
     }
 
@@ -42,26 +42,26 @@ public class MemberController {
     @PostMapping("/update")
     public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto memberUpdateDto) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("id"));
+        Long id = Long.parseLong((String)loginToken.get("memberId"));
         memberService.update(memberUpdateDto);
 
-        return new AuthInfoDto((String)loginToken.get("memberId"), createJwt(memberService.findOne(id)),
+        return new AuthInfoDto((String)loginToken.get("nickName"), createJwt(memberService.findOne(id)),
                 createRefreshJwt(new MemberInfoDto(memberUpdateDto)));
     }
 
     @PostMapping("/delete")
     public void remove(HttpServletRequest request) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("id"));
+        Long id = Long.parseLong((String)loginToken.get("memberId"));
         memberService.delete(id);
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(HttpServletRequest request) {
         Claims refreshToken = parseJwt(request);
-        Long id = Long.parseLong((String)refreshToken.get("id"));
+        Long id = Long.parseLong((String)refreshToken.get("memberId"));
         MemberInfoDto dto = memberService.findOne(id);
 
-        return new AuthInfoDto(dto.getMemberId(), createJwt(dto), createRefreshJwt(dto));
+        return new AuthInfoDto(dto.getNickName(), createJwt(dto), createRefreshJwt(dto));
     }
 }
