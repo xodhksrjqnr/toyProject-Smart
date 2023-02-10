@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export async function signup(info) {
   const { id, password, email, birthday, phoneNumber } = info;
-  console.log(id, password, email, birthday, phoneNumber);
   const data = new FormData();
 
   data.append('nickName', id);

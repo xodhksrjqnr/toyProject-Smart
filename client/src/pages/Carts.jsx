@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
 import { v4 as uuidv4 } from 'uuid';
 import { payment } from '../api/payment';
+import { useNavigate } from 'react-router-dom';
 
 export default function Carts() {
   const [cartList, setCartList] = useState(
@@ -9,6 +10,7 @@ export default function Carts() {
       ? JSON.parse(localStorage.getItem('cart'))
       : { items: [] }
   );
+  const navigate = useNavigate();
 
   const totalPrice =
     cartList &&
@@ -32,7 +34,9 @@ export default function Carts() {
 
   const handlePayment = () => {
     payment(cartList.items) //
-      .then((res) => console.log(res));
+      .then((res) => {
+        if (res.status === 200) navigate('/myorder');
+      });
   };
 
   return (

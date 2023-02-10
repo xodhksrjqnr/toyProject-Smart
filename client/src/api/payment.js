@@ -17,7 +17,7 @@ export async function payment(cart) {
   }
 
   return axios
-    .post(process.env.REACT_APP_ORDERS_REGISTER_URL, ordersObj, {
+    .post(process.env.REACT_APP_ORDERS_URL, ordersObj, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies.get('loginToken')}`,

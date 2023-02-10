@@ -4,7 +4,7 @@ import { signup } from '../api/signup';
 import emailRegexCheck from '../util/emailRegexCheck';
 import phoneRegexCheck from '../util/phoneRegexCheck';
 
-export default function SingUp() {
+export default function SignUp() {
   const [info, setInfo] = useState({
     id: '',
     password: '',
@@ -131,17 +131,11 @@ export default function SingUp() {
 
         <button
           className={`${
-            !password.available ||
-            !emailRegexCheck(info.email) ||
-            !phoneRegexCheck(info.phoneNumber)
+            !password.available || !emailRegexCheck(info.email)
               ? 'bg-red-600'
               : 'bg-blue-600'
           }  text-white p-1`}
-          disabled={
-            !password.available ||
-            !emailRegexCheck(info.email) ||
-            !phoneRegexCheck(info.phoneNumber)
-          }
+          disabled={!password.available || !emailRegexCheck(info.email)}
         >
           회원가입
         </button>

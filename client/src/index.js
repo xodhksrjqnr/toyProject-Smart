@@ -13,10 +13,11 @@ import Admin from './pages/Admin';
 import Update from './pages/Update';
 import Search from './pages/Search';
 import Login from './pages/Login';
-import SingUp from './pages/SingUp';
 import Carts from './pages/Carts';
 import { UserProvider } from './context/UserContext';
 import ProtectedRoute from './pages/ProtectedRoute';
+import Myorder from './pages/Myorder';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
       { path: '/admin', element: <Admin /> },
       { path: '/admin/register', element: <Register /> },
       { path: '/admin/update/:id', element: <Update /> },
-      { path: '/signup', element: <SingUp /> },
+      { path: '/signup', element: <SignUp /> },
       {
         path: '/carts',
         element: (
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      { path: '/myorder', element: <Myorder /> },
     ],
   },
   {
