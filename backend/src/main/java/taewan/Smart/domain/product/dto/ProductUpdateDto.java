@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ProductUpdateDto extends ProductSaveDto {
 
-    private Long id;
+    private Long productId;
 }

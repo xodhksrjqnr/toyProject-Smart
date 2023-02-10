@@ -20,7 +20,6 @@ public class JwtUtils {
 
     @Value("${jwt.secret.key}")
     public void setSecretKey(String key) {
-        System.out.println(key);
         SECRET_KEY = key;
     }
 

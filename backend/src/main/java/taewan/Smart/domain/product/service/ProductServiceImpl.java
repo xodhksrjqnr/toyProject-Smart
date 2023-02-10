@@ -75,11 +75,11 @@ public class ProductServiceImpl implements ProductService {
     public Long update(ProductUpdateDto productUpdateDto) {
         Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
 
-        if (equalNameProduct.isPresent() && !equalNameProduct.get().getProductId().equals(productUpdateDto.getId())) {
+        if (equalNameProduct.isPresent() && !equalNameProduct.get().getProductId().equals(productUpdateDto.getProductId())) {
             throw PRODUCT_NAME_DUPLICATE.exception();
         }
 
-        Product found = productRepository.findById(productUpdateDto.getId()).orElseThrow();
+        Product found = productRepository.findById(productUpdateDto.getProductId()).orElseThrow();
         String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
         deleteDirectory(directoryPath);
