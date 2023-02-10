@@ -46,7 +46,7 @@ export default function Admin() {
       <section>
         <ul className="w-full flex justify-start flex-wrap">
           {products.content.map((product) => (
-            <ControlCard key={product.id} product={product} />
+            <ControlCard key={product.productId} product={product} />
           ))}
         </ul>
       </section>

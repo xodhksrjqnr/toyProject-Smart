@@ -36,7 +36,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
           <div>상품이 존재 하지 않습니다.</div>
         ) : null}
         {products.content.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.productId} product={product} />
         ))}
       </ul>
       <Pagenation

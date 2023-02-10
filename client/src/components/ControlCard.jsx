@@ -11,7 +11,7 @@ export default function ControlCard({ product }) {
     <div className="mb-8">
       <div className="flex justify-center text-sm relative top-3">
         <button className="w-1/3 bg-blue-300 rounded-xl p-1 mr-2 hover:bg-blue-200">
-          <Link to={`update/${product.id}`}>수정</Link>
+          <Link to={`update/${product.productId}`}>수정</Link>
         </button>
         <button
           className="w-1/3 bg-blue-300 rounded-xl p-1 hover:bg-blue-200"

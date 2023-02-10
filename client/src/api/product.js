@@ -23,7 +23,7 @@ export default class Product {
       .then((res) => res.data);
   }
 
-  async mainProduct(code = null, size = null, sort = 'id,desc') {
+  async mainProduct(code = null, size = null, sort = 'productId,desc') {
     return this.httpClient
       .get('products/filter', {
         params: {
@@ -42,7 +42,7 @@ export default class Product {
       .catch((error) => error.response);
   }
 
-  async search(search, sort = 'id,desc', page) {
+  async search(search, sort = 'productId,desc', page) {
     return this.httpClient
       .get('/products/filter', {
         params: {
@@ -54,7 +54,7 @@ export default class Product {
       .then((res) => res.data);
   }
 
-  async categoryProduct(code, sort = 'id,desc', page) {
+  async categoryProduct(code, sort = 'productId,desc', page) {
     return this.httpClient
       .get('/products/filter', {
         params: {

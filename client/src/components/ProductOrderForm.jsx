@@ -6,7 +6,7 @@ export default function ProductOrderForm({ productDetail }) {
   const [cart, setCart] = useState({ items: [] });
   const [isAddItem, setIsAddItem] = useState(false);
   const [isExiste, setExiste] = useState(false);
-  const { id, name, price, size, code, imgFiles } = productDetail;
+  const { productId, name, price, size, code, imgFiles } = productDetail;
   const [main, sub] = classification(code);
   const selectOption = useRef();
 
@@ -21,7 +21,7 @@ export default function ProductOrderForm({ productDetail }) {
       items: [
         ...prev.items,
         {
-          productId: id,
+          productId: productId,
           size: value,
           quantity: 1,
           img: imgFiles[0],

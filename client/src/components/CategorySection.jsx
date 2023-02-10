@@ -13,7 +13,7 @@ export default function CategorySection({ category }) {
     data: products,
   } = useQuery(
     ['products', code],
-    () => product.mainProduct(code, 5, 'id,DESC'),
+    () => product.mainProduct(code, 5, 'productId,DESC'),
     { staleTime: 1000 * 60 * 5 }
   );
   return (

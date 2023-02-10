@@ -5,7 +5,7 @@ export async function login(privacy) {
   const { id, password } = privacy;
   const data = new FormData();
 
-  data.append('memberId', id);
+  data.append('nickName', id);
   data.append('password', password);
 
   return axios
