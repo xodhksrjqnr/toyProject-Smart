@@ -2,18 +2,25 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 export async function payment(cart) {
-  const data = new FormData();
   const cookies = new Cookies();
-  for (const value of cart) {
-    data.append('productId', value.productId);
-    data.append('quantity', value.quantity);
-    data.append('size', value.size);
+
+  const ordersObj = { orderList: [] };
+
+  for (const item of cart) {
+    const itemObj = {
+      productId: item.productId,
+      size: item.size,
+      quantity: item.quantity,
+    };
+
+    ordersObj.orderList.push(itemObj);
   }
 
   return axios
-    .get(process.env.REACT_APP_ORDERS_REGISTER_URL, data, {
+    .post(process.env.REACT_APP_ORDERS_REGISTER_URL, ordersObj, {
       headers: {
-        Authorization: `loginToken=${cookies.get('loginToken')}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${cookies.get('loginToken')}`,
       },
       withCredentials: true,
     }) //
