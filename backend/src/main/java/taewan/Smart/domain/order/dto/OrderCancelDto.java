@@ -8,5 +8,6 @@ import lombok.Setter;
 public class OrderCancelDto {
 
     private Long orderId;
+    private Long orderItemId;
     private String reason;
 }

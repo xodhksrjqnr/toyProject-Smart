@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
     public void cancel(OrderCancelDto orderCancelDto) {
         orderRepository.findById(orderCancelDto.getOrderId())
                 .orElseThrow(ORDER_NOT_FOUND::exception)
-                .cancel("취소");
+                .cancel(orderCancelDto.getOrderItemId(), "취소");
     }
 
     @Transactional
@@ -86,6 +86,6 @@ public class OrderServiceImpl implements OrderService {
     public void refund(OrderCancelDto orderCancelDto) {
         orderRepository.findById(orderCancelDto.getOrderId())
                 .orElseThrow(ORDER_NOT_FOUND::exception)
-                .cancel("환불");
+                .cancel(orderCancelDto.getOrderItemId(), "환불");
     }
 }
