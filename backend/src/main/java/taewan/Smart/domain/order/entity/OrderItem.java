@@ -2,6 +2,7 @@ package taewan.Smart.domain.order.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.product.entity.Product;
@@ -9,7 +10,7 @@ import taewan.Smart.domain.product.entity.Product;
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class OrderItem {
 
@@ -25,11 +26,14 @@ public class OrderItem {
     private String deliveryStatus;
     private String size;
 
-    public OrderItem(OrderItemSaveDto orderItemSaveDto, Product product) {
-        this.quantity = orderItemSaveDto.getQuantity();
-        this.product = product;
-        this.deliveryStatus = orderItemSaveDto.getDeliveryStatus();
-        this.size = orderItemSaveDto.getSize();
+    public static OrderItem createOrderItem(OrderItemSaveDto orderItemSaveDto, Product product) {
+        OrderItem orderItem = new OrderItem();
+
+        orderItem.setProduct(product);
+        orderItem.setSize(orderItemSaveDto.getSize());
+        orderItem.setQuantity(orderItemSaveDto.getQuantity());
+        orderItem.setDeliveryStatus("대기중");
+        return orderItem;
     }
 
     public void cancel(String stats) {

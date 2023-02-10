@@ -3,6 +3,7 @@ package taewan.Smart.domain.order.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "orders")
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +25,29 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
     @CreatedDate
     private LocalDateTime orderDateTime;
 
-    public void add(OrderItem orderItem) {
+    public static Order createOrder(Member member, OrderItem... orderItems) {
+        Order order = new Order();
+
+        order.setMember(member);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getOrders().add(this);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 
     public void cancel(String status) {

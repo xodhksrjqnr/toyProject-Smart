@@ -14,6 +14,7 @@ import taewan.Smart.domain.order.entity.Order;
 import taewan.Smart.domain.order.entity.OrderItem;
 import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.order.repository.OrderRepository;
+import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderInfoDto> findAll(Long memberId) {
         List<Order> orders = memberRepository.findById(memberId)
                 .orElseThrow(MEMBER_NOT_FOUND::exception).getOrders();
+
         List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
 
         for (Order order : orders) {
@@ -61,16 +63,13 @@ public class OrderServiceImpl implements OrderService {
     public Long save(Long memberId, OrderSaveDto orderSaveDto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MEMBER_NOT_FOUND::exception);
-        Order order = new Order();
+        Order order = Order.createOrder(member);
 
         for (OrderItemSaveDto dto : orderSaveDto.getOrderItemSaveDtoList()) {
-            order.add(
-                    orderItemRepository.save(
-                            new OrderItem(dto, productRepository.findById(dto.getProductId())
-                    .orElseThrow(PRODUCT_NOT_FOUND::exception)))
-            );
+            Product product = productRepository.findById(dto.getProductId())
+                    .orElseThrow(PRODUCT_NOT_FOUND::exception);
+            order.addOrderItem(OrderItem.createOrderItem(dto, product));
         }
-        member.addOrder(order);
         return orderRepository.save(order).getOrderId();
     }
 
