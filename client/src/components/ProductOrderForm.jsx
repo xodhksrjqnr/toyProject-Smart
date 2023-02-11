@@ -165,7 +165,7 @@ function classification(code) {
       main = category.main;
 
       for (const subdivision of category.subdivision) {
-        if (subdivision.code === code) {
+        if (subdivision.code === code.substr(0, 3)) {
           sub = subdivision.title;
         }
       }
