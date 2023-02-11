@@ -11,7 +11,7 @@ export async function login(privacy) {
   return axios
     .post(process.env.REACT_APP_LOGIN_URL, data)
     .then((res) => {
-      setToken(res.data.memberId, res.data.loginToken, res.data.refreshToken);
+      setToken(res.data.nickName, res.data.loginToken, res.data.refreshToken);
       return res;
     })
     .catch((error) => {
@@ -63,7 +63,7 @@ export async function checkToken() {
       withCredentials: true,
     })
     .then((res) => {
-      cookies.set('id', res.data.memberId, { maxAge: 60 * 30 });
+      cookies.set('id', res.data.nickName, { maxAge: 60 * 30 });
       cookies.set('loginToken', res.data.loginToken, {
         maxAge: 60 * 30,
       });

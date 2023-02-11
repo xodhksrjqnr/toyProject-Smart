@@ -26,7 +26,7 @@ export default function Login() {
     login(privacy) //
       .then((res) => {
         if (res.status === 200) {
-          setUserId(res.data.memberId);
+          setUserId(res.data.nickName);
           navigate(-1);
         } else {
           setisSuccess(false);
