@@ -54,7 +54,6 @@ export async function checkToken() {
 
   if (!loginToken && !refreshToken) return;
 
-  console.log('토큰이 있네');
   return axios
     .post(process.env.REACT_APP_TOKEN_URL, data, {
       headers: {
