@@ -5,11 +5,13 @@ import { myorder } from '../api/orders';
 import MyOrderItem from '../components/MyOrderItem';
 
 export default function Myorder() {
-  const { isLoading, data: orderList } = useQuery(['myorders'], () =>
-    myorder()
+  const { isLoading, data: orderList } = useQuery(
+    ['myorders'],
+    () => myorder(),
+    { staleTime: 1000 * 5, refetchOnWindowFocus: false }
   );
+
   if (isLoading) return <Loading />;
-  console.log(orderList);
 
   return (
     <div className="w-full p-8">
