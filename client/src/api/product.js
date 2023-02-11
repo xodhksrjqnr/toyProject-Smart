@@ -13,11 +13,12 @@ export default class Product {
       : this.categoryProduct(value, sort, page);
   }
 
-  async registeredProducts(page) {
+  async registeredProducts(page, sort = 'productId,desc') {
     return this.httpClient
-      .get('products', {
+      .get('products/filter', {
         params: {
           page: page,
+          sort: sort,
         },
       })
       .then((res) => res.data);
