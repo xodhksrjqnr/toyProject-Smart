@@ -28,6 +28,7 @@ public enum ExceptionStatus {
 
     //Order Domain Status
     ORDER_NOT_FOUND(new NoSuchElementException("존재하지 않는 주문입니다.")),
+    ORDER_ITEM_NOT_FOUND(new NoSuchElementException("존재하지 않는 주문 아이템입니다.")),
 
     //Global Status
     MAIL_INVALID(new IllegalArgumentException("유효하지 않은 이메일입니다.")),

@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthInfoDto {
 
-    private String memberId;
+    private String nickName;
     private String loginToken;
     private String refreshToken;
 }

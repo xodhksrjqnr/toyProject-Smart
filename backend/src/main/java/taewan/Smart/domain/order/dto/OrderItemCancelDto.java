@@ -5,9 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderCancelDto {
+public class OrderItemCancelDto {
 
-    private Long orderId;
     private Long orderItemId;
     private String reason;
 }

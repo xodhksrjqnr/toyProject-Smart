@@ -23,8 +23,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberInfoDto findOne(Long id) {
-        return new MemberInfoDto(memberRepository.findById(id)
+    public MemberInfoDto findOne(Long memberId) {
+        return new MemberInfoDto(memberRepository.findById(memberId)
                 .orElseThrow(MEMBER_NOT_FOUND::exception));
     }
 
@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(MEMBER_EMAIL_NOT_FOUND::exception));
     }
 
-    public MemberInfoDto findOne(String memberId, String password) {
-        return new MemberInfoDto(memberRepository.findByNickNameAndPassword(memberId, password)
+    public MemberInfoDto findOne(String nickName, String password) {
+        return new MemberInfoDto(memberRepository.findByNickNameAndPassword(nickName, password)
                 .orElseThrow(MEMBER_NOT_FOUND::exception));
     }
 
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
+    public void delete(Long memberId) {
+        memberRepository.deleteById(memberId);
     }
 }

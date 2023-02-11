@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.member.repository.MemberRepository;
-import taewan.Smart.domain.order.dto.OrderCancelDto;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.order.dto.OrderSaveDto;
 import taewan.Smart.domain.order.entity.Order;
 import taewan.Smart.domain.order.entity.OrderItem;
-import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
@@ -32,15 +30,13 @@ public class OrderServiceImpl implements OrderService {
     private String root;
 
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository,
-                            MemberRepository memberRepository, ProductRepository productRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, MemberRepository memberRepository,
+                            ProductRepository productRepository) {
         this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
     }
@@ -71,21 +67,5 @@ public class OrderServiceImpl implements OrderService {
             order.addOrderItem(OrderItem.createOrderItem(dto, product));
         }
         return orderRepository.save(order).getOrderId();
-    }
-
-    @Transactional
-    @Override
-    public void cancel(OrderCancelDto orderCancelDto) {
-        orderRepository.findById(orderCancelDto.getOrderId())
-                .orElseThrow(ORDER_NOT_FOUND::exception)
-                .cancel(orderCancelDto.getOrderItemId(), "취소");
-    }
-
-    @Transactional
-    @Override
-    public void refund(OrderCancelDto orderCancelDto) {
-        orderRepository.findById(orderCancelDto.getOrderId())
-                .orElseThrow(ORDER_NOT_FOUND::exception)
-                .cancel(orderCancelDto.getOrderItemId(), "환불");
     }
 }

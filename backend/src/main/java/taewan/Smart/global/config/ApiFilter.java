@@ -10,7 +10,6 @@ import java.util.List;
 
 import static taewan.Smart.global.error.ExceptionStatus.PAGE_NOT_FOUND;
 
-@Component
 public class ApiFilter implements Filter {
 
     private static List<String> paths = Arrays.asList("/products", "/members", "/orders", "/category", "/testdata", "/testupload");

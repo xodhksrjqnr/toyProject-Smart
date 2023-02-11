@@ -11,6 +11,7 @@ import static taewan.Smart.global.util.FileUtils.findFile;
 public class OrderItemInfoDto {
 
     private Long productId;
+    private Long orderItemId;
     private String thumbnail;
     private String name;
     private String size;
@@ -20,6 +21,7 @@ public class OrderItemInfoDto {
 
     public OrderItemInfoDto(OrderItem orderItem, String root, String address) {
         this.productId = orderItem.getProduct().getProductId();
+        this.orderItemId = orderItem.getOrderItemId();
         this.thumbnail = findFile(orderItem.getProduct().getImgFolderPath(), root, address);
         this.name = orderItem.getProduct().getName();
         this.size = orderItem.getSize();

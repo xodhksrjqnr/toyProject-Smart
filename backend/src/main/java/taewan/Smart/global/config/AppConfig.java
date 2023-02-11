@@ -15,6 +15,8 @@ import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.domain.member.service.MemberServiceImpl;
 import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.order.repository.OrderRepository;
+import taewan.Smart.domain.order.service.OrderItemService;
+import taewan.Smart.domain.order.service.OrderItemServiceImpl;
 import taewan.Smart.domain.order.service.OrderService;
 import taewan.Smart.domain.order.service.OrderServiceImpl;
 import taewan.Smart.domain.product.repository.ProductRepository;
@@ -67,7 +69,12 @@ public class AppConfig {
     @Bean
     public OrderService orderService() {
         return new OrderServiceImpl(
-                this.orderRepository, this.orderItemRepository, this.memberRepository, this.productRepository
+                this.orderRepository, this.memberRepository, this.productRepository
         );
+    }
+
+    @Bean
+    public OrderItemService orderItemService() {
+        return new OrderItemServiceImpl(this.orderItemRepository);
     }
 }
