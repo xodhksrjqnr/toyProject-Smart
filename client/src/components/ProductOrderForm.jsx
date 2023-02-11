@@ -1,6 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { categories } from '../constants/categories';
+import { UserContext } from '../context/UserContext';
 import OrderList from './OrderList';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductOrderForm({ productDetail }) {
   const [cart, setCart] = useState({ items: [] });
@@ -8,7 +10,9 @@ export default function ProductOrderForm({ productDetail }) {
   const [isExiste, setExiste] = useState(false);
   const { productId, name, price, size, code, imgFiles } = productDetail;
   const [main, sub] = classification(code);
+  const { user } = useContext(UserContext);
   const selectOption = useRef();
+  const navigate = useNavigate();
 
   const handleOption = (e) => {
     const { value } = e.target;
@@ -51,6 +55,10 @@ export default function ProductOrderForm({ productDetail }) {
   const handleSumbit = (e) => {
     e.preventDefault();
 
+    if (!user.state) {
+      navigate('/login');
+      return;
+    }
     if (cart.items.length === 0) return;
     if (
       !localStorage.getItem('cart') ||

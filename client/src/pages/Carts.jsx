@@ -3,6 +3,7 @@ import CartItem from '../components/CartItem';
 import { v4 as uuidv4 } from 'uuid';
 import { payment } from '../api/payment';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Carts() {
   const [cartList, setCartList] = useState(
@@ -11,6 +12,7 @@ export default function Carts() {
       : { items: [] }
   );
   const navigate = useNavigate();
+  const client = useQueryClient();
 
   const totalPrice =
     cartList &&
@@ -35,7 +37,11 @@ export default function Carts() {
   const handlePayment = () => {
     payment(cartList.items) //
       .then((res) => {
-        if (res.status === 200) navigate('/myorder');
+        if (res.status === 200) {
+          localStorage.removeItem('cart');
+          client.invalidateQueries(['myorders']);
+          navigate('/myorder');
+        }
       });
   };
 
