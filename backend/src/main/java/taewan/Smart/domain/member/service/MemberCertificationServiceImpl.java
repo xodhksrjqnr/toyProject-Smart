@@ -41,7 +41,7 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(MAIL_INVALID::exception);
         String message = "[Smart] 회원 아이디 찾기 안내 메일입니다.";
-        String text = "회원님의 아이디는 \"" + member.getMemberId() + "\"입니다.";
+        String text = "회원님의 아이디는 \"" + member.getNickName() + "\"입니다.";
 
         return new MemberCertificateDto(email, message, text);
     }
