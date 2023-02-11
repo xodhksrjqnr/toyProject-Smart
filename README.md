@@ -24,6 +24,24 @@
 3. 물품 등록 및 조회 (완료)
 4. 결제
 
+### 구현 화면
+|카테고리 상품|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262576-8507bfd1-6d2a-4aba-99ef-7dcec374374d.gif">|
+
+|회원 찾기(ID, PW)|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262385-3898a52a-c65a-46e1-835c-1b34c0a9f083.gif">|
+
+|장바구니|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262513-5b21913f-5035-4575-99b8-8a218c935f74.gif">|
+
+|관리자 페이지|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262169-b75d4f93-29b4-4d4c-9b79-187d8a3c2d3d.gif">|
+
+
 ### REST API
 
 #### category
