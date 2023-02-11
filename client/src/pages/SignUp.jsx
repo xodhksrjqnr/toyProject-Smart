@@ -131,11 +131,17 @@ export default function SignUp() {
 
         <button
           className={`${
-            !password.available || !emailRegexCheck(info.email)
+            !password.available ||
+            !emailRegexCheck(info.email) ||
+            (!phoneRegexCheck(info.phoneNumber) && info.phoneNumber.length >= 1)
               ? 'bg-red-600'
               : 'bg-blue-600'
           }  text-white p-1`}
-          disabled={!password.available || !emailRegexCheck(info.email)}
+          disabled={
+            !password.available ||
+            !emailRegexCheck(info.email) ||
+            (!phoneRegexCheck(info.phoneNumber) && info.phoneNumber.length >= 1)
+          }
         >
           회원가입
         </button>
