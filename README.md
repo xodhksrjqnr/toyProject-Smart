@@ -25,9 +25,21 @@
 4. 결제
 
 ### 구현 화면
-|카테고리 상품|
+|메인 페이지, 제품 상세 페이지|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263886-71272601-e45f-4077-b076-fb8a5880cea6.gif">|
+
+|카테고리 제품|
 |:----------|
 |<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262576-8507bfd1-6d2a-4aba-99ef-7dcec374374d.gif">|
+
+|제품 검색|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263799-29d52a9d-27d2-4d0c-b3bd-f3a1a89a37ce.gif">|
+
+|회원가입, 로그인, 로그아웃|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263146-d9569278-1f7a-4e6c-9aaa-1c12fd76f82d.gif">|
 
 |회원 찾기(ID, PW)|
 |:----------|
@@ -36,6 +48,11 @@
 |장바구니|
 |:----------|
 |<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262513-5b21913f-5035-4575-99b8-8a218c935f74.gif">|
+
+|주문 취소, 환불|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263582-a849e9f3-237e-4336-8854-939534fe5a6f.gif">|
+
 
 |관리자 페이지|
 |:----------|
