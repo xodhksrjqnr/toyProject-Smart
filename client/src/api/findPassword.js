@@ -5,7 +5,7 @@ export async function findPassword(info) {
   const data = new FormData();
 
   data.append('email', email);
-  data.append('memberId', id);
+  data.append('nickName', id);
 
   return axios
     .post(process.env.REACT_APP_FIND_PASSWORD_URL, data)
