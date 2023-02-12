@@ -73,4 +73,8 @@ public class JwtUtils {
             throw JWT_ISNULL.exception();
         }
     }
+
+    public static Long getMemberId(HttpServletRequest request) {
+        return Long.parseLong((String)parseJwt(request).get("memberId"));
+    }
 }

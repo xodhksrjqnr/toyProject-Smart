@@ -1,18 +1,16 @@
 package taewan.Smart.domain.order.controller;
 
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import taewan.Smart.domain.order.dto.OrderItemCancelDto;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
+import taewan.Smart.domain.order.dto.OrderItemCancelDto;
 import taewan.Smart.domain.order.dto.OrderSaveDto;
 import taewan.Smart.domain.order.service.OrderItemService;
 import taewan.Smart.domain.order.service.OrderService;
+import taewan.Smart.global.util.JwtUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
-import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
 @RestController
 @RequestMapping("orders")
@@ -29,18 +27,12 @@ public class OrderController {
 
     @GetMapping
     public List<OrderInfoDto> search(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("memberId"));
-
-        return orderService.findAll(id);
+        return orderService.findAll(JwtUtils.getMemberId(request));
     }
 
     @PostMapping
     public void upload(HttpServletRequest request, @RequestBody OrderSaveDto orderSaveDto) {
-        Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("memberId"));
-
-        orderService.save(id, orderSaveDto);
+        orderService.save(JwtUtils.getMemberId(request), orderSaveDto);
     }
 
     @PostMapping("/cancel")

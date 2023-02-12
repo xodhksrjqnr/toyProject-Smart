@@ -41,7 +41,7 @@ public class AuthController {
         mail.sendMail(memberCertificationService.findEmail(email));
     }
 
-    @PostMapping("/certificate/memberId")
+    @PostMapping("/certificate/nickname")
     public void certificateMemberId(@ModelAttribute("email") String email) {
         mail.sendMail(memberCertificationService.findMember(email));
     }

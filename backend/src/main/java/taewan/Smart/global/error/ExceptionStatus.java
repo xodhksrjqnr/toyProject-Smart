@@ -31,7 +31,7 @@ public enum ExceptionStatus {
     ORDER_ITEM_NOT_FOUND(new NoSuchElementException("존재하지 않는 주문 아이템입니다.")),
 
     //Global Status
-    MAIL_INVALID(new IllegalArgumentException("유효하지 않은 이메일입니다.")),
+    MAIL_NOT_FOUND(new NoSuchElementException("등록되지 않은 이메일입니다.")),
     PAGE_NOT_FOUND(new PageNotFoundException("유효하지 않은 api 호출입니다."));
 
     private final RuntimeException exception;

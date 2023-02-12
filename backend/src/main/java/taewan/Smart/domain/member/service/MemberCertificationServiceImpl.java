@@ -39,7 +39,7 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
     @Override
     public MemberCertificateDto findMember(String email) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(MAIL_INVALID::exception);
+                .orElseThrow(MAIL_NOT_FOUND::exception);
         String message = "[Smart] 회원 아이디 찾기 안내 메일입니다.";
         String text = "회원님의 아이디는 \"" + member.getNickName() + "\"입니다.";
 

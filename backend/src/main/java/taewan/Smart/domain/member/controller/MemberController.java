@@ -9,6 +9,7 @@ import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.member.service.MemberService;
+import taewan.Smart.global.util.JwtUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -28,9 +29,7 @@ public class MemberController {
 
     @GetMapping
     public MemberInfoDto search(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("memberId"));
-        return memberService.findOne(id);
+        return memberService.findOne(JwtUtils.getMemberId(request));
     }
 
     @PostMapping("/create")
@@ -42,7 +41,7 @@ public class MemberController {
     @PostMapping("/update")
     public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto memberUpdateDto) {
         Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("memberId"));
+        Long id = Long.parseLong((String)parseJwt(request).get("memberId"));
         memberService.update(memberUpdateDto);
 
         return new AuthInfoDto((String)loginToken.get("nickName"), createJwt(memberService.findOne(id)),
@@ -51,16 +50,12 @@ public class MemberController {
 
     @PostMapping("/delete")
     public void remove(HttpServletRequest request) {
-        Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)loginToken.get("memberId"));
-        memberService.delete(id);
+        memberService.delete(JwtUtils.getMemberId(request));
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(HttpServletRequest request) {
-        Claims refreshToken = parseJwt(request);
-        Long id = Long.parseLong((String)refreshToken.get("memberId"));
-        MemberInfoDto dto = memberService.findOne(id);
+        MemberInfoDto dto = memberService.findOne(JwtUtils.getMemberId(request));
 
         return new AuthInfoDto(dto.getNickName(), createJwt(dto), createRefreshJwt(dto));
     }

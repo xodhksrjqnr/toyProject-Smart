@@ -34,7 +34,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductInfoDto findOne(Long productId) {
-        Product found = productRepository.findById(productId).orElseThrow();
+        Product found = productRepository.findById(productId)
+                .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
         return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), root, address), address);
     }
