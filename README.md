@@ -62,43 +62,43 @@
 
 ### REST API
 
-#### category
-|설명| API            |비고|
-|---|----------------|---|
-|카테고리 전체 조회| Get : category ||
+[API 명세서](https://github.com/xodhksrjqnr/toyProject-Smart/wiki/API-%EB%AA%85%EC%84%B8)
 
-#### products
-| 설명       | API                                                             | 비고                         |
-|----------|-----------------------------------------------------------------|----------------------------|
-| 제품 단일 조회 | Get : products/{productId}                                      ||
-| 제품 전체 조회 | Get : products                                                  ||
-| 제품 필터 조회 | Get : products/filter?code={}&search={}&page={}&size={}&sort={} | code:분류번호, search:검색어(제품명) |
-| 제품 등록    | Post : products                                                 ||
-| 제품 수정    | Post : products/update                                          ||
-| 제품 삭제    | Post : products/{productId}/delete                              ||
+#### Category
+| API               | Descriptions            |
+|-------------------|----------------|
+| **GET** /category |카테고리 전체 조회|
 
-
-#### members
-| 설명       | API           |비고|
-|----------|---------------|---|
-| 회원 단일 조회 | Get : members ||
-| 회원 가입    | Post : members/create ||
-| 회원 수정    | Post : members/update ||
-| 회원 삭제    | Post : members/delete ||
-| 회원 로그인    | Post : members/login ||
-| 회원 로그아웃    | Post : members/logout ||
-| 회원 이메일 인증    | Post : members/certificate/email ||
-| 회원 아이디 찾기    | Post : members/certificate/nickname ||
-| 회원 비번 찾기    | Post : members/certificate/password ||
+#### Products
+| API                                                         | Descriptions            |
+|-------------------------------------------------------------|----------------|
+| **GET** /products/{productId}                               |제품 단일 조회|
+| **GET** /products?page={}&size={}&sort={}                   |제품 전체 조회|
+| **GET** /products?page={}&size={}&sort={}&search={}&code={} |제품 리스트 필터 조회|
+| **POST** /products                                          |제품 등록|
+| **POST** /products                                          |제품 수정|
+| **POST** /products/{productId}/delete                       |제품 삭제|
 
 
-#### orders
-| 설명        | API                  |비고|
-|-----------|----------------------|---|
-| 회원 주문 조회  | Get : orders         ||
-| 주문 등록     | Post : orders        ||
-| 주문 취소     | Post : orders/cancel ||
-| 주문 반품(환불) | Post : orders/refund ||
+#### Members
+| API                                    |Description|
+|----------------------------------------|---|
+| **POST** /members/create               |회원가입|
+| **POST** /members/login                |로그인|
+| **POST** /members/logout               |로그아웃|
+| **POST** /members/certificate/email    |이메일 인증|
+| **POST** /members/certificate/nickname |아이디 찾기|
+| **POST** /members/certificate/password |비밀번호 찾기|
+| **POST** /members/refresh              |토큰 재발행|
+
+
+#### Orders
+|API          | Description |
+|--------------|-------------|
+|**GET** /orders| 주문 목록 조회    |
+|**POST** /orders| 주문 등록       |
+|**POST** /orders/cancel| 주문 취소       |
+|**POST** /orders/refund| 주문 환불       |
 
 ### 구조
 <img width="949" alt="스크린샷 2023-01-13 오후 9 54 06" src="https://user-images.githubusercontent.com/48250370/212324851-7bf4691d-61a6-408a-96ba-4491b5c92928.png">
