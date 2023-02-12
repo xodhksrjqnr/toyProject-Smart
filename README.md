@@ -4,7 +4,7 @@
 간단한 형태의 쇼핑몰 웹 서비스를 구현하며, 구현시 발생한 문제나 고민한 생각에 대해 정리하는 학습형 토이프로젝트를 진행
 
 ### 개발 기간
-2023.01.01 ~ 2023.02.28
+2023.01.01 ~ 2023.02.12
 
 ### 개발 인원
 - Frontend : 1명
@@ -19,10 +19,11 @@
 - ReactJS
 
 ### 구현 기능
-1. 로그인 & 로그아웃
-2. 회원가입 및 탈퇴
-3. 물품 등록 및 조회 (완료)
-4. 결제
+1. 로그인 & 로그아웃 (with JWT)
+2. 회원가입 (+이메일 인증)
+3. 제품 등록 및 조회(+필터)
+4. 장바구니
+5. 제품 주문 취소, 환불
 
 ### 구현 화면
 |메인 페이지, 제품 상세 페이지|
@@ -64,7 +65,7 @@
 #### category
 |설명| API            |비고|
 |---|----------------|---|
-|분류 전체 조회| Get : category ||
+|카테고리 전체 조회| Get : category ||
 
 #### products
 | 설명       | API                                                             | 비고                         |
@@ -81,9 +82,14 @@
 | 설명       | API           |비고|
 |----------|---------------|---|
 | 회원 단일 조회 | Get : members ||
-| 회원 가입    | Post : members ||
+| 회원 가입    | Post : members/create ||
 | 회원 수정    | Post : members/update ||
 | 회원 삭제    | Post : members/delete ||
+| 회원 로그인    | Post : members/login ||
+| 회원 로그아웃    | Post : members/logout ||
+| 회원 이메일 인증    | Post : members/certificate/email ||
+| 회원 아이디 찾기    | Post : members/certificate/nickname ||
+| 회원 비번 찾기    | Post : members/certificate/password ||
 
 
 #### orders
