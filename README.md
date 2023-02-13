@@ -4,7 +4,7 @@
 간단한 형태의 쇼핑몰 웹 서비스를 구현하며, 구현시 발생한 문제나 고민한 생각에 대해 정리하는 학습형 토이프로젝트를 진행
 
 ### 개발 기간
-2023.01.01 ~ 2023.01.31
+2023.01.01 ~ 2023.02.12
 
 ### 개발 인원
 - Frontend : 1명
@@ -19,37 +19,86 @@
 - ReactJS
 
 ### 구현 기능
-1. 로그인 & 로그아웃
-2. 회원가입 및 탈퇴
-3. 물품 등록 및 조회
-4. 결제
+1. 로그인 & 로그아웃 (with JWT)
+2. 회원가입 (+이메일 인증)
+3. 제품 등록 및 조회(+필터)
+4. 장바구니
+5. 제품 주문 취소, 환불
+
+### 구현 화면
+|메인 페이지, 제품 상세 페이지|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263886-71272601-e45f-4077-b076-fb8a5880cea6.gif">|
+
+|카테고리 제품|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262576-8507bfd1-6d2a-4aba-99ef-7dcec374374d.gif">|
+
+|제품 검색|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263799-29d52a9d-27d2-4d0c-b3bd-f3a1a89a37ce.gif">|
+
+|회원가입, 로그인, 로그아웃|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263146-d9569278-1f7a-4e6c-9aaa-1c12fd76f82d.gif">|
+
+|회원 찾기(ID, PW)|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262385-3898a52a-c65a-46e1-835c-1b34c0a9f083.gif">|
+
+|장바구니|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262513-5b21913f-5035-4575-99b8-8a218c935f74.gif">|
+
+|주문 취소, 환불|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218263582-a849e9f3-237e-4336-8854-939534fe5a6f.gif">|
+
+
+|관리자 페이지|
+|:----------|
+|<img width="600px" src="https://user-images.githubusercontent.com/115006670/218262169-b75d4f93-29b4-4d4c-9b79-187d8a3c2d3d.gif">|
+
 
 ### REST API
 
-|설명| API            |비고|
-|---|----------------|---|
-|분류 전체 조회| Get : category ||
+[API 명세서](https://github.com/xodhksrjqnr/toyProject-Smart/wiki/API-%EB%AA%85%EC%84%B8)
 
-|설명| API                                               | 비고                     |
-|---|---------------------------------------------------|------------------------|
-|물품 단일 조회| Get : products/{productId}                        ||
-|물품 전체 조회| Get : products                                    ||
-|물품 등록 양식| Get : products/create                             ||
-|물품 수정 양식| Get : products/{productId}/update                 ||
-|물품 필터 조| Get : products/filter?code={}&option={}&gender={} | code:분류번호, option:필터조건 |
-|물품 등록| Post : products                                   ||
-|물품 수정| Post : products/update                            ||
-|물품 삭제| Delete : products/{productId}                     ||
+#### Category
+| URL               | Descriptions            |
+|-------------------|----------------|
+| **GET** /category |카테고리 전체 조회|
 
-|설명| API                             |비고|
-|---|---------------------------------|---|
-|회원 단일 조회| Get : member/{memberId}         ||
-|회원 전체 조회| Get : member                    ||
-|회원 가입 양식| Get : member/create             ||
-|회원 수정 양식| Get : member/update/{memberId}  ||
-|회원 등록| Post : member                   ||
-|회원 수정| Post : member/update            ||
-|회원 삭제| Post : member/delete/{memberId} ||
+#### Products
+| URL                                                         | Descriptions            |
+|-------------------------------------------------------------|----------------|
+| **GET** /products/{productId}                               |제품 단일 조회|
+| **GET** /products?page={}&size={}&sort={}                   |제품 전체 조회|
+| **GET** /products?page={}&size={}&sort={}&search={}&code={} |제품 리스트 필터 조회|
+| **POST** /products                                          |제품 등록|
+| **POST** /products                                          |제품 수정|
+| **POST** /products/{productId}/delete                       |제품 삭제|
+
+
+#### Members
+| URL                                    |Description|
+|----------------------------------------|---|
+| **POST** /members/create               |회원가입|
+| **POST** /members/login                |로그인|
+| **POST** /members/logout               |로그아웃|
+| **POST** /members/certificate/email    |이메일 인증|
+| **POST** /members/certificate/nickname |아이디 찾기|
+| **POST** /members/certificate/password |비밀번호 찾기|
+| **POST** /members/refresh              |토큰 재발행|
+
+
+#### Orders
+|URL          | Description |
+|--------------|-------------|
+|**GET** /orders| 주문 목록 조회    |
+|**POST** /orders| 주문 등록       |
+|**POST** /orders/cancel| 주문 취소       |
+|**POST** /orders/refund| 주문 환불       |
 
 ### 구조
 <img width="949" alt="스크린샷 2023-01-13 오후 9 54 06" src="https://user-images.githubusercontent.com/48250370/212324851-7bf4691d-61a6-408a-96ba-4491b5c92928.png">
