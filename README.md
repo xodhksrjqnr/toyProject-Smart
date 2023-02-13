@@ -65,12 +65,12 @@
 [API 명세서](https://github.com/xodhksrjqnr/toyProject-Smart/wiki/API-%EB%AA%85%EC%84%B8)
 
 #### Category
-| API               | Descriptions            |
+| URL               | Descriptions            |
 |-------------------|----------------|
 | **GET** /category |카테고리 전체 조회|
 
 #### Products
-| API                                                         | Descriptions            |
+| URL                                                         | Descriptions            |
 |-------------------------------------------------------------|----------------|
 | **GET** /products/{productId}                               |제품 단일 조회|
 | **GET** /products?page={}&size={}&sort={}                   |제품 전체 조회|
@@ -81,7 +81,7 @@
 
 
 #### Members
-| API                                    |Description|
+| URL                                    |Description|
 |----------------------------------------|---|
 | **POST** /members/create               |회원가입|
 | **POST** /members/login                |로그인|
@@ -93,7 +93,7 @@
 
 
 #### Orders
-|API          | Description |
+|URL          | Description |
 |--------------|-------------|
 |**GET** /orders| 주문 목록 조회    |
 |**POST** /orders| 주문 등록       |
