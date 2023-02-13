@@ -19,7 +19,10 @@ export default function Admin() {
     staleTime: 1000 * 60 * 5,
   });
   const handlePage = (num) => setPage((prev) => (prev = num));
-  useEffect(() => setPage((prev) => (prev = queryPageNum - 1)), [queryPageNum]);
+  useEffect(() => {
+    if (!queryPageNum) return;
+    setPage((prev) => (prev = queryPageNum - 1));
+  }, [queryPageNum]);
 
   if (isLoading) return <p className="w-full">Loading...</p>;
   if (error) return <p className="w-full">Something is wrong</p>;
@@ -43,7 +46,7 @@ export default function Admin() {
       <section>
         <ul className="w-full flex justify-start flex-wrap">
           {products.content.map((product) => (
-            <ControlCard key={product.id} product={product} />
+            <ControlCard key={product.productId} product={product} />
           ))}
         </ul>
       </section>

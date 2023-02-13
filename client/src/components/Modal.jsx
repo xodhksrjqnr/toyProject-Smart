@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function Modal({ product, toggleModal }) {
   const client = useQueryClient();
   const handleDelete = () => {
-    remove(product.id) //
+    remove(product.productId) //
       .then(() => client.invalidateQueries(['products']));
     toggleModal();
   };

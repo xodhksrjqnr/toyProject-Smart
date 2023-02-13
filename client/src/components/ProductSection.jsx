@@ -24,7 +24,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
   const handlePage = (num) => setPage((prev) => (prev = num));
   useEffect(() => setPage((prev) => (prev = queryPageNum - 1)), [queryPageNum]);
 
-  if (isLoading) return <p className="w-full">Loading...</p>;
+  if (isLoading) return <p className="w-full"></p>;
   if (error) return <p className="w-full">Something is wrong</p>;
 
   const { totalPages, number, first, last } = products;
@@ -36,7 +36,7 @@ export default function ProductSection({ state, orderFilter, isSearch }) {
           <div>상품이 존재 하지 않습니다.</div>
         ) : null}
         {products.content.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.productId} product={product} />
         ))}
       </ul>
       <Pagenation

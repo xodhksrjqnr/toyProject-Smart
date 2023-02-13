@@ -38,8 +38,15 @@ export default function Update() {
 
   useEffect(() => {
     if (!productInfo) return;
-    const { id, name, price, code, size } = productInfo;
-    setUpdated((updated) => ({ ...updated, id, name, price, code, size }));
+    const { productId, name, price, code, size } = productInfo;
+    setUpdated((updated) => ({
+      ...updated,
+      id: productId,
+      name,
+      price,
+      code,
+      size,
+    }));
   }, [productInfo]);
 
   const handleSubmit = (e) => {

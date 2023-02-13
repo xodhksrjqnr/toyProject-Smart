@@ -7,7 +7,7 @@ export async function update(product, file, detail) {
   for (const value of file) {
     data.append('imgFiles', value);
   }
-  data.append('id', id);
+  data.append('productId', id);
   data.append('name', name);
   data.append('price', price);
   data.append('code', code);
