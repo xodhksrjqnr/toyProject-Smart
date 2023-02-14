@@ -1,7 +1,6 @@
 package taewan.Smart.domain.product.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,25 +10,26 @@ import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
+import taewan.Smart.global.config.properties.AddressProperties;
+import taewan.Smart.global.config.properties.PathProperties;
 
-import java.util.Optional;
-
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NAME_DUPLICATE;
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
+import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.util.FileUtils.*;
 
 @Transactional(readOnly = true)
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    @Value("${root.path}")
-    private String root;
-    @Value("${server.address.basic}")
-    private String address;
+    private final String ADDRESS;
+    private final String ROOT;
+
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, PathProperties pathProperties,
+                              AddressProperties addressProperties) {
         this.productRepository = productRepository;
+        this.ADDRESS = addressProperties.getServer();
+        this.ROOT = pathProperties.getHome();
     }
 
     @Override
@@ -37,13 +37,13 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), root, address), address);
+        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), ROOT, ADDRESS), ADDRESS);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
+                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT, ADDRESS), ADDRESS));
     }
 
     @Override
@@ -57,48 +57,42 @@ public class ProductServiceImpl implements ProductService {
         } else {
             found = productRepository.findAllByNameContains(pageable, search);
         }
-        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
+        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT, ADDRESS), ADDRESS));
     }
 
     @Transactional
     @Override
-    public Long save(ProductSaveDto productSaveDto) {
-        productRepository.findByName(productSaveDto.getName())
+    public Long save(ProductSaveDto dto) {
+        productRepository.findByName(dto.getName())
                 .ifPresent(p -> {throw PRODUCT_NAME_DUPLICATE.exception();});
-
-        String[] paths = saveImgFile(productSaveDto);
-
-        return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getProductId();
+        return productRepository.save(dto.toEntity(dto.getViewPath(), saveImgFile(dto)))
+                .getProductId();
     }
 
     @Transactional
     @Override
-    public Long update(ProductUpdateDto productUpdateDto) {
-        Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
+    public Long update(ProductUpdateDto dto) {
+        Product found = productRepository.findById(dto.getProductId())
+                .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        if (equalNameProduct.isPresent() && !equalNameProduct.get().getProductId().equals(productUpdateDto.getProductId())) {
-            throw PRODUCT_NAME_DUPLICATE.exception();
-        }
-
-        Product found = productRepository.findById(productUpdateDto.getProductId()).orElseThrow();
-        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
-
-        deleteDirectory(directoryPath);
-
-        String[] paths = saveImgFile(productUpdateDto);
-
-        found.updateProduct(productUpdateDto, paths[0], paths[1]);
+        productRepository.findByName(dto.getName())
+                .ifPresent(p -> {
+                    if (!p.getProductId().equals(dto.getProductId())) {
+                        throw PRODUCT_NAME_DUPLICATE.exception();
+                    }
+                });
+        deleteDirectory(ROOT + found.getDirectoryPath());
+        found.updateProduct(dto, dto.getViewPath(), saveImgFile(dto));
         return found.getProductId();
     }
 
-    private String[] saveImgFile(ProductSaveDto dto) {
-        String[] paths = new String[2];
-
-        paths[0] = "images/products/" + dto.getCode() + "/" + dto.getName();
-        paths[1] = paths[0] + "/" + saveFile(dto.getDetailInfo(), root + paths[0]);
-        paths[0] += "/view";
-        saveFiles(dto.getImgFiles(), root + paths[0]);
-        return paths;
+    private String saveImgFile(ProductSaveDto dto) {
+        try {
+            saveFiles(dto.getImgFiles(), ROOT + dto.getViewPath());
+            return saveFile(dto.getDetailInfo(), ROOT + dto.getDirectoryPath());
+        } catch (NullPointerException e) {
+            throw PRODUCT_IMAGE_EMPTY.exception();
+        }
     }
 
     @Transactional
@@ -106,9 +100,8 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId) {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
-        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
-        deleteDirectory(directoryPath);
+        deleteDirectory(ROOT + found.getDirectoryPath());
         productRepository.deleteById(productId);
     }
 }
