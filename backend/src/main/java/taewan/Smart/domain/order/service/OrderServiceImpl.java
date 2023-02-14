@@ -1,7 +1,7 @@
 package taewan.Smart.domain.order.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.entity.Member;
@@ -14,31 +14,32 @@ import taewan.Smart.domain.order.entity.OrderItem;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
+import taewan.Smart.global.config.properties.AddressProperties;
+import taewan.Smart.global.config.properties.PathProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static taewan.Smart.global.error.ExceptionStatus.*;
+import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
+import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
-    @Value("${server.address.basic}")
-    private String address;
-
-    @Value("${root.path}")
-    private String root;
-
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final String ADDRESS;
+    private final String ROOT;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, MemberRepository memberRepository,
-                            ProductRepository productRepository) {
+                            ProductRepository productRepository, PathProperties pathProperties,
+                            AddressProperties addressProperties) {
         this.orderRepository = orderRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
+        this.ADDRESS = addressProperties.getServer();
+        this.ROOT = pathProperties.getHome();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
 
         for (Order order : orders) {
-            orderInfoDtoList.add(order.toInfoDto(root, address));
+            orderInfoDtoList.add(order.toInfoDto(ROOT, ADDRESS));
         }
         return orderInfoDtoList;
     }
