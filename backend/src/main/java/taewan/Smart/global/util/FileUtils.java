@@ -10,39 +10,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMAGE_EMPTY;
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMG_NOT_FOUND;
-
 public class FileUtils {
 
+    private static final String EMPTY = "noimg.jpeg";
+
     public static String findFile(String directoryPath, String root, String address) {
-        File dir = new File(root + directoryPath);
-        File[] files = dir.listFiles();
+        File[] files = new File(root + directoryPath).listFiles();
 
-        if (files == null)
-            throw PRODUCT_IMG_NOT_FOUND.exception();
-
-        String path = null;
-
-        for (File f : files) {
-            if (f.isFile()) {
-                path = address + directoryPath + "/" + f.getName();
-                break;
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    return address + directoryPath + "/" + f.getName();
+                }
             }
         }
-        return path;
+        return address + directoryPath + "/" + EMPTY;
     }
 
     public static List<String> findFiles(String directoryPath, String root, String address) {
         List<String> found = new ArrayList<>();
-        File dir = new File(root + directoryPath);
-        File[] files = dir.listFiles();
+        File[] files = new File(root + directoryPath).listFiles();
 
-        if (files == null)
-            throw PRODUCT_IMG_NOT_FOUND.exception();
-        for (File f : files)
-            if (f.isFile())
-                found.add(address + directoryPath + "/" + f.getName());
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    found.add(address + directoryPath + "/" + f.getName());
+                }
+            }
+        } else {
+            found.add(address + directoryPath + "/" + EMPTY);
+        }
         return found;
     }
 
@@ -53,10 +50,6 @@ public class FileUtils {
     }
 
     public static String saveFile(MultipartFile file, String path) {
-        if (file.isEmpty()) {
-            throw PRODUCT_IMAGE_EMPTY.exception();
-        }
-
         String extension = file.getContentType().replaceFirst(".*/", ".");
         String uploadName = UUID.randomUUID() + extension;
 
