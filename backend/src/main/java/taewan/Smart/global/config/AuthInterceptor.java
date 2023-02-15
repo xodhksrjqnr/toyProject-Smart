@@ -1,11 +1,13 @@
 package taewan.Smart.global.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static taewan.Smart.global.util.JwtUtils.parseJwt;
+import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -14,6 +16,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
+
         parseJwt(request);
         return true;
     }

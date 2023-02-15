@@ -1,36 +1,25 @@
 package taewan.Smart.global.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import taewan.Smart.global.config.properties.AddressProperties;
-import taewan.Smart.global.config.properties.PathProperties;
+
+import static taewan.Smart.global.utils.PropertyUtil.*;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
-    private final PathProperties pathProperties;
-    private final AddressProperties clientProperties;
-
-    @Autowired
-    public WebConfig(PathProperties pathProperties, AddressProperties clientProperties) {
-        this.pathProperties = pathProperties;
-        this.clientProperties = clientProperties;
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(pathProperties.getAccess())
-                .addResourceLocations(pathProperties.getResource());
+        registry.addResourceHandler(ACCESS_PATH)
+                .addResourceLocations(RESOURCE_PATH);
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(clientProperties.getClient())
+                .allowedOrigins(CLIENT_ADDRESS)
                 .allowedMethods("GET", "POST", "OPTIONS")
                 .allowCredentials(true).maxAge(5);
     }
