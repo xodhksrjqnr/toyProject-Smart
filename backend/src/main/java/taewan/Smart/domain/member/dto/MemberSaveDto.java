@@ -3,6 +3,7 @@ package taewan.Smart.domain.member.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import taewan.Smart.domain.member.entity.Member;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -24,4 +25,14 @@ public class MemberSaveDto {
     private String phoneNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+    public Member toEntity() {
+        return Member.builder()
+                .nickName(this.nickName)
+                .password(this.password)
+                .email(this.email)
+                .birthday(this.birthday)
+                .phoneNumber(this.phoneNumber)
+                .build();
+    }
 }

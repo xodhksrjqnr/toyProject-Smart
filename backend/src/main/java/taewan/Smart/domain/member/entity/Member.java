@@ -1,10 +1,9 @@
 package taewan.Smart.domain.member.entity;
 
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.order.entity.Order;
 
@@ -17,7 +16,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,27 +28,25 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
-    public Member(MemberSaveDto dto) {
-        this.nickName = dto.getNickName();
-        this.email = dto.getEmail();
-        this.password = dto.getPassword();
-        this.phoneNumber = dto.getPhoneNumber();
-        this.birthday = dto.getBirthday();
+    @Builder
+    public Member(String nickName, String email, String password, String phoneNumber, LocalDate birthday) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.birthday = birthday;
     }
 
     public void updateMember(MemberUpdateDto dto) {
         this.nickName = dto.getNickName();
         this.email = dto.getEmail();
-        this.password = dto.getPassword();
         this.phoneNumber = dto.getPhoneNumber();
         this.birthday = dto.getBirthday();
+        updateMemberPassword(dto.getPassword());
     }
 
     public void updateMemberPassword(String password) {
-        this.password = password;
-    }
-
-    public void addOrder(Order order) {
-        this.orders.add(order);
+        if (!password.isEmpty())
+            this.password = password;
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import taewan.Smart.domain.order.entity.OrderItem;
 
-import static taewan.Smart.global.util.FileUtils.findFile;
+import static taewan.Smart.global.utils.FileUtil.findFile;
 
 @Getter
 @Setter

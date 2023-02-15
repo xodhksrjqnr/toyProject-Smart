@@ -10,6 +10,6 @@ public interface MemberService {
     MemberInfoDto findOne(String email);
     MemberInfoDto findOne(String nickName, String password);
     Long save(MemberSaveDto memberSaveDto);
-    Long update(MemberUpdateDto memberUpdateDto);
+    MemberInfoDto update(MemberUpdateDto memberUpdateDto);
     void delete(Long memberId);
 }

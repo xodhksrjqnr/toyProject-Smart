@@ -12,6 +12,7 @@ import taewan.Smart.domain.member.repository.MemberRepository;
 import static taewan.Smart.global.error.ExceptionStatus.*;
 
 
+@Transactional(readOnly = true)
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -40,24 +41,22 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public Long save(MemberSaveDto memberSaveDto) {
-        memberRepository.findByNickName(memberSaveDto.getNickName())
-                .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
-        return memberRepository.save(new Member(memberSaveDto)).getMemberId();
+    public Long save(MemberSaveDto dto) {
+        memberRepository.findByNickName(dto.getNickName())
+                .ifPresent(m -> {throw MEMBER_NICKNAME_DUPLICATE.exception();});
+        return memberRepository.save(dto.toEntity()).getMemberId();
     }
 
     @Transactional
     @Override
-    public Long update(MemberUpdateDto memberUpdateDto) {
-        memberRepository.findByNickName(memberUpdateDto.getNickName())
-                .ifPresent(m -> {throw MEMBER_ID_DUPLICATE.exception();});
+    public MemberInfoDto update(MemberUpdateDto dto) {
+        Member found = memberRepository.findById(dto.getMemberId())
+                .orElseThrow(MEMBER_NOT_FOUND::exception);
 
-        Member found = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow();
-
-        if (memberUpdateDto.getPassword().equals(found.getPassword()))
-            memberUpdateDto.setPassword(found.getPassword());
-        found.updateMember(memberUpdateDto);
-        return found.getMemberId();
+        memberRepository.findByNickName(dto.getNickName())
+                .ifPresent(m -> {throw MEMBER_NICKNAME_DUPLICATE.exception();});
+        found.updateMember(dto);
+        return new MemberInfoDto(found);
     }
 
     @Transactional

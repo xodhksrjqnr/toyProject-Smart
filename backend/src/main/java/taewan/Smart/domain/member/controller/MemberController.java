@@ -1,6 +1,5 @@
 package taewan.Smart.domain.member.controller;
 
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,18 +8,18 @@ import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.member.service.MemberService;
-import taewan.Smart.global.util.JwtUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import static taewan.Smart.global.util.JwtUtils.*;
+import static taewan.Smart.global.utils.JwtUtil.createJwt;
+import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
 @RestController
 @RequestMapping("members")
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @Autowired
     public MemberController(MemberService memberService) {
@@ -29,34 +28,36 @@ public class MemberController {
 
     @GetMapping
     public MemberInfoDto search(HttpServletRequest request) {
-        return memberService.findOne(JwtUtils.getMemberId(request));
+        Long memberId = (Long)parseJwt(request).get("memberId");
+
+        return memberService.findOne(memberId);
     }
 
     @PostMapping("/create")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void join(@Valid MemberSaveDto memberSaveDto) {
-        memberService.save(memberSaveDto);
+    public void join(@Valid MemberSaveDto dto) {
+        memberService.save(dto);
     }
 
     @PostMapping("/update")
-    public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto memberUpdateDto) {
-        Claims loginToken = parseJwt(request);
-        Long id = Long.parseLong((String)parseJwt(request).get("memberId"));
-        memberService.update(memberUpdateDto);
+    public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto dto) {
+        MemberInfoDto updated = memberService.update(dto);
 
-        return new AuthInfoDto((String)loginToken.get("nickName"), createJwt(memberService.findOne(id)),
-                createRefreshJwt(new MemberInfoDto(memberUpdateDto)));
+        return new AuthInfoDto(dto.getNickName(), createJwt(updated.toClaimsMap()), createJwt(updated.toClaimMap()));
     }
 
     @PostMapping("/delete")
     public void remove(HttpServletRequest request) {
-        memberService.delete(JwtUtils.getMemberId(request));
+        Long memberId = (Long)parseJwt(request).get("memberId");
+
+        memberService.delete(memberId);
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(HttpServletRequest request) {
-        MemberInfoDto dto = memberService.findOne(JwtUtils.getMemberId(request));
+        Long memberId = (Long)parseJwt(request).get("memberId");
+        MemberInfoDto dto = memberService.findOne(memberId);
 
-        return new AuthInfoDto(dto.getNickName(), createJwt(dto), createRefreshJwt(dto));
+        return new AuthInfoDto(dto.getNickName(), createJwt(dto.toClaimsMap()), createJwt(dto.toClaimMap()));
     }
 }

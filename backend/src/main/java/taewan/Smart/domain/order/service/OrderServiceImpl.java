@@ -1,7 +1,6 @@
 package taewan.Smart.domain.order.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.entity.Member;
@@ -14,32 +13,27 @@ import taewan.Smart.domain.order.entity.OrderItem;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
-import taewan.Smart.global.config.properties.AddressProperties;
-import taewan.Smart.global.config.properties.PathProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
+import static taewan.Smart.global.utils.PropertyUtil.ROOT_PATH;
+import static taewan.Smart.global.utils.PropertyUtil.SERVER_ADDRESS;
 
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final String ADDRESS;
-    private final String ROOT;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, MemberRepository memberRepository,
-                            ProductRepository productRepository, PathProperties pathProperties,
-                            AddressProperties addressProperties) {
+                            ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.memberRepository = memberRepository;
         this.productRepository = productRepository;
-        this.ADDRESS = addressProperties.getServer();
-        this.ROOT = pathProperties.getHome();
     }
 
     @Override
@@ -50,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
 
         for (Order order : orders) {
-            orderInfoDtoList.add(order.toInfoDto(ROOT, ADDRESS));
+            orderInfoDtoList.add(order.toInfoDto(ROOT_PATH, SERVER_ADDRESS));
         }
         return orderInfoDtoList;
     }

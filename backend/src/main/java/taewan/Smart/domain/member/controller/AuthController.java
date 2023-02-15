@@ -8,8 +8,7 @@ import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.infra.Mail;
 
-import static taewan.Smart.global.util.JwtUtils.createJwt;
-import static taewan.Smart.global.util.JwtUtils.createRefreshJwt;
+import static taewan.Smart.global.utils.JwtUtil.createJwt;
 
 @RestController
 @RequestMapping("members")
@@ -20,7 +19,8 @@ public class AuthController {
     private final Mail mail;
 
     @Autowired
-    public AuthController(MemberCertificationService memberCertificationService, MemberService memberService, Mail mail) {
+    public AuthController(MemberCertificationService memberCertificationService, MemberService memberService,
+                          Mail mail) {
         this.memberCertificationService = memberCertificationService;
         this.memberService = memberService;
         this.mail = mail;
@@ -29,7 +29,8 @@ public class AuthController {
     @PostMapping("/login")
     public AuthInfoDto login(@RequestParam String nickName, @RequestParam String password) {
         MemberInfoDto dto = memberService.findOne(nickName, password);
-        return new AuthInfoDto(dto.getNickName(), createJwt(dto), createRefreshJwt(dto));
+
+        return new AuthInfoDto(dto.getNickName(), createJwt(dto.toClaimsMap()), createJwt(dto.toClaimMap()));
     }
 
     @PostMapping("/logout")

@@ -10,26 +10,19 @@ import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
-import taewan.Smart.global.config.properties.AddressProperties;
-import taewan.Smart.global.config.properties.PathProperties;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.util.FileUtils.*;
+import static taewan.Smart.global.utils.FileUtil.*;
+import static taewan.Smart.global.utils.PropertyUtil.*;
 
 @Transactional(readOnly = true)
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final String ADDRESS;
-    private final String ROOT;
-
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, PathProperties pathProperties,
-                              AddressProperties addressProperties) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.ADDRESS = addressProperties.getServer();
-        this.ROOT = pathProperties.getHome();
     }
 
     @Override
@@ -37,13 +30,13 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), ROOT, ADDRESS), ADDRESS);
+        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT, ADDRESS), ADDRESS));
+                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS));
     }
 
     @Override
@@ -57,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         } else {
             found = productRepository.findAllByNameContains(pageable, search);
         }
-        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT, ADDRESS), ADDRESS));
+        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS));
     }
 
     @Transactional
@@ -81,15 +74,15 @@ public class ProductServiceImpl implements ProductService {
                         throw PRODUCT_NAME_DUPLICATE.exception();
                     }
                 });
-        deleteDirectory(ROOT + found.getDirectoryPath());
+        deleteDirectory(ROOT_PATH + found.getDirectoryPath());
         found.updateProduct(dto, dto.getViewPath(), saveImgFile(dto));
         return found.getProductId();
     }
 
     private String saveImgFile(ProductSaveDto dto) {
         try {
-            saveFiles(dto.getImgFiles(), ROOT + dto.getViewPath());
-            return saveFile(dto.getDetailInfo(), ROOT + dto.getDirectoryPath());
+            saveFiles(dto.getImgFiles(), ROOT_PATH + dto.getViewPath());
+            return saveFile(dto.getDetailInfo(), ROOT_PATH + dto.getDirectoryPath());
         } catch (NullPointerException e) {
             throw PRODUCT_IMAGE_EMPTY.exception();
         }
@@ -101,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        deleteDirectory(ROOT + found.getDirectoryPath());
+        deleteDirectory(ROOT_PATH + found.getDirectoryPath());
         productRepository.deleteById(productId);
     }
 }
