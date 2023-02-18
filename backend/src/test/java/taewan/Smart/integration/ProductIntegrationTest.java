@@ -1,4 +1,4 @@
-package taewan.Smart;
+package taewan.Smart.integration;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package taewan.Smart.product;
+package taewan.Smart.unit.product;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,4 @@
-package taewan.Smart.member;
+package taewan.Smart.unit.member;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static taewan.Smart.member.MemberFixture.createMember;
-import static taewan.Smart.member.MemberFixture.createMembers;
+import static taewan.Smart.unit.member.MemberFixture.createMember;
+import static taewan.Smart.unit.member.MemberFixture.createMembers;
 
 @DataJpaTest
 @EnableJpaRepositories(basePackages = "taewan.Smart.domain.member.repository")

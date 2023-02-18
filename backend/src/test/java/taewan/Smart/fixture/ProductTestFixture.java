@@ -1,4 +1,4 @@
-package taewan.Smart.product;
+package taewan.Smart.fixture;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +30,8 @@ public class ProductTestFixture {
     public static String PRODUCT_IMG_PATH;
     public static String DETAIL_INFO_IMG_PATH;
     public static String SERVER_ADDRESS;
+    public static String IMG_FOLDER_PATH;
+    public static String ACCESS_IMG_URL;
 
     private static List<Product> products;
 
@@ -50,14 +52,18 @@ public class ProductTestFixture {
         SERVER_ADDRESS = properties.getProperty("address.server");
         PRODUCT_IMG_PATH = properties.getProperty("path.testImg.product");
         DETAIL_INFO_IMG_PATH = properties.getProperty("path.testImg.detail");
+        IMG_FOLDER_PATH = ROOT + properties.getProperty("path.image");
+        ACCESS_IMG_URL = SERVER_ADDRESS + properties.getProperty("path.image");
         ReflectionTestUtils.setField(PropertyUtil.class, "ROOT_PATH", ROOT);
         ReflectionTestUtils.setField(PropertyUtil.class, "SERVER_ADDRESS", SERVER_ADDRESS);
+        ReflectionTestUtils.setField(PropertyUtil.class, "IMG_FOLDER_PATH", IMG_FOLDER_PATH);
+        ReflectionTestUtils.setField(PropertyUtil.class, "ACCESS_IMG_URL", ACCESS_IMG_URL);
         products = createProducts();
         productSaveDtoList = createProductSaveDtoList();
         createdCodeInfo = getCodeInfo(products);
     }
 
-    private static List<MultipartFile> getImgFiles(int size) {
+    public static List<MultipartFile> getImgFiles(int size) {
         List<MultipartFile> list = new ArrayList<>();
 
         try {
@@ -79,7 +85,7 @@ public class ProductTestFixture {
         return list;
     }
 
-    private static MultipartFile getImgFile() {
+    public static MultipartFile getImgFile() {
         try {
             File file = new File(DETAIL_INFO_IMG_PATH).listFiles()[0];
             String name = file.getName();

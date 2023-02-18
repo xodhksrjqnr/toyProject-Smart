@@ -1,4 +1,4 @@
-package taewan.Smart.member;
+package taewan.Smart.unit.member;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
