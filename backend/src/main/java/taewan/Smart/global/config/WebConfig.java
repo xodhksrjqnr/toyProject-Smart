@@ -12,14 +12,14 @@ import static taewan.Smart.global.utils.PropertyUtil.*;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(ACCESS_PATH)
-                .addResourceLocations(RESOURCE_PATH);
+        registry.addResourceHandler(getAccessPath())
+                .addResourceLocations(getResourcePath());
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(CLIENT_ADDRESS)
+                .allowedOrigins(getClientAddress())
                 .allowedMethods("GET", "POST", "OPTIONS")
                 .allowCredentials(true).maxAge(5);
     }
