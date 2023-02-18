@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static taewan.Smart.fixture.ProductTestFixture.*;
+import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.FileUtil.deleteDirectory;
 import static taewan.Smart.global.utils.FileUtil.findFiles;
 
@@ -66,7 +67,9 @@ class ProductIntegrationTest {
 
 		//when //then
 		productService.save(dto1);
-		assertThrows(DuplicateKeyException.class, () -> productService.save(dto2));
+		DuplicateKeyException ex = assertThrows(DuplicateKeyException.class,
+				() -> productService.save(dto2));
+		assertEquals(ex.getMessage(), PRODUCT_NAME_DUPLICATE.exception().getMessage());
 		assertEquals(findFiles(dto1.getDirectoryPath()).size(), 1);
 		assertEquals(findFiles(dto1.getViewPath()).size(), dto1.getImgFiles().size());
 	}
@@ -84,31 +87,10 @@ class ProductIntegrationTest {
 				.build();
 
 		//when //then
-		assertThrows(IllegalArgumentException.class, () -> productService.save(dto));
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+				() -> productService.save(dto));
+		assertEquals(ex.getMessage(), PRODUCT_IMAGE_EMPTY.exception().getMessage());
 		assertEquals(findFiles(dto.getDirectoryPath()).size(), 0);
-	}
-
-	@Test
-	void 제품_삭제_테스트() {
-		//given
-		ProductSaveDto dto = getProductSaveDtoList().get(0);
-
-		//when
-		Long savedProductId = productService.save(dto);
-		productService.delete(savedProductId);
-
-		//then
-		assertEquals(productRepository.count(), 0);
-		List<String> found = findFiles(dto.getDirectoryPath());
-		assertEquals(found.size(), 1);
-		assertThat(found.get(0)).isNull();
-	}
-
-	@Test
-	void 없는_제품_삭제_테스트() {
-		//when //then
-		assertEquals(productRepository.count(), 0);
-		assertThrows(NoSuchElementException.class, () -> productService.delete(1L));
 	}
 
 	@Test
@@ -136,7 +118,9 @@ class ProductIntegrationTest {
 	@Test
 	void 없는_제품_조회_테스트() {
 		//when //then
-		assertThrows(NoSuchElementException.class, () -> productService.findOne(1L));
+		NoSuchElementException ex = assertThrows(NoSuchElementException.class,
+				() -> productService.findOne(1L));
+		assertEquals(ex.getMessage(), PRODUCT_NOT_FOUND.exception().getMessage());
 	}
 
 	@Test
@@ -380,7 +364,9 @@ class ProductIntegrationTest {
 				.build();
 
 		//when //then
-		assertThrows(NoSuchElementException.class, () -> productService.update(dto));
+		NoSuchElementException ex = assertThrows(NoSuchElementException.class,
+				() -> productService.update(dto));
+		assertEquals(ex.getMessage(), PRODUCT_NOT_FOUND.exception().getMessage());
 	}
 
 	@Test
@@ -429,7 +415,9 @@ class ProductIntegrationTest {
 				.build();
 
 		//when //then
-		assertThrows(DuplicateKeyException.class, () -> productService.update(updateDto));
+		DuplicateKeyException ex = assertThrows(DuplicateKeyException.class,
+				() -> productService.update(updateDto));
+		assertEquals(ex.getMessage(), PRODUCT_NAME_DUPLICATE.exception().getMessage());
 		assertEquals(findFiles(saveDto2.getDirectoryPath()).size(), 1);
 		assertEquals(findFiles(saveDto2.getViewPath()).size(), saveDto2.getImgFiles().size());
 	}
@@ -450,6 +438,33 @@ class ProductIntegrationTest {
 				.build();
 
 		//when //then
-		assertThrows(IllegalArgumentException.class, () -> productService.update(updateDto));
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+				() -> productService.update(updateDto));
+		assertEquals(ex.getMessage(), PRODUCT_IMAGE_EMPTY.exception().getMessage());
+	}
+
+	@Test
+	void 제품_삭제_테스트() {
+		//given
+		ProductSaveDto dto = getProductSaveDtoList().get(0);
+
+		//when
+		Long savedProductId = productService.save(dto);
+		productService.delete(savedProductId);
+
+		//then
+		assertEquals(productRepository.count(), 0);
+		List<String> found = findFiles(dto.getDirectoryPath());
+		assertEquals(found.size(), 1);
+		assertThat(found.get(0)).isNull();
+	}
+
+	@Test
+	void 없는_제품_삭제_테스트() {
+		//when //then
+		assertEquals(productRepository.count(), 0);
+		NoSuchElementException ex = assertThrows(NoSuchElementException.class,
+				() -> productService.delete(1L));
+		assertEquals(ex.getMessage(), PRODUCT_NOT_FOUND.exception().getMessage());
 	}
 }
