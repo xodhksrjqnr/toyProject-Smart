@@ -1,7 +1,6 @@
 package taewan.Smart.domain.member.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import taewan.Smart.domain.member.entity.Member;
 
@@ -11,7 +10,9 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@ToString
 public class MemberSaveDto {
 
     @NotEmpty(message = "아이디를 입력해야합니다.")

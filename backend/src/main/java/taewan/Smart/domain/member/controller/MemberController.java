@@ -9,7 +9,6 @@ import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.member.service.MemberService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static taewan.Smart.global.utils.JwtUtil.createJwt;
@@ -27,8 +26,8 @@ public class MemberController {
     }
 
     @GetMapping
-    public MemberInfoDto search(HttpServletRequest request) {
-        Long memberId = (Long)parseJwt(request).get("memberId");
+    public MemberInfoDto search(@RequestHeader("Authorization") String token) {
+        Long memberId = (Long)parseJwt(token).get("memberId");
 
         return memberService.findOne(memberId);
     }
@@ -40,22 +39,22 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public AuthInfoDto modify(HttpServletRequest request, @Valid MemberUpdateDto dto) {
+    public AuthInfoDto modify(@RequestHeader("Authorization") String token, @Valid MemberUpdateDto dto) {
         MemberInfoDto updated = memberService.update(dto);
 
         return new AuthInfoDto(dto.getNickName(), createJwt(updated.toClaimsMap()), createJwt(updated.toClaimMap()));
     }
 
     @PostMapping("/delete")
-    public void remove(HttpServletRequest request) {
-        Long memberId = (Long)parseJwt(request).get("memberId");
+    public void remove(@RequestHeader("Authorization") String token) {
+        Long memberId = (Long)parseJwt(token).get("memberId");
 
         memberService.delete(memberId);
     }
 
     @PostMapping("/refresh")
-    public AuthInfoDto refresh(HttpServletRequest request) {
-        Long memberId = (Long)parseJwt(request).get("memberId");
+    public AuthInfoDto refresh(@RequestHeader("Authorization") String token) {
+        Long memberId = (Long)parseJwt(token).get("memberId");
         MemberInfoDto dto = memberService.findOne(memberId);
 
         return new AuthInfoDto(dto.getNickName(), createJwt(dto.toClaimsMap()), createJwt(dto.toClaimMap()));

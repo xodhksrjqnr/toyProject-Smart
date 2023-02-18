@@ -10,7 +10,7 @@ import taewan.Smart.domain.member.repository.MemberRepository;
 import java.util.UUID;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.PropertyUtil.CLIENT_ADDRESS;
+import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
 
 @Service
 public class MemberCertificationServiceImpl implements MemberCertificationService {
@@ -27,7 +27,7 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
                 .ifPresent(m -> {throw MEMBER_EMAIL_DUPLICATE.exception();});
 
         String message = "[Smart] 회원가입 이메일 인증 안내 메일입니다.";
-        String text = CLIENT_ADDRESS + "signup";
+        String text = getClientAddress() + "signup";
 
         return new MemberCertificateDto(email, message, text);
     }
