@@ -47,13 +47,13 @@ public class Product {
         this.detailInfo = detailInfo;
     }
 
-    public void updateProduct(ProductUpdateDto dto, String imgFolderPath, String infoPath) {
-        this.imgFolderPath = imgFolderPath;
+    public void updateProduct(ProductUpdateDto dto, String fileName) {
+        this.imgFolderPath = dto.getViewPath();
         this.name = dto.getName();
         this.price = dto.getPrice();
         this.code = dto.getCode();
         this.size = dto.getSize();
-        this.detailInfo = infoPath;
+        this.detailInfo = dto.getDirectoryPath() + fileName;
     }
 
     public String getDirectoryPath() {

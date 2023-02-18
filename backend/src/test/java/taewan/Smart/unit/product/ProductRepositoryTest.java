@@ -1,8 +1,8 @@
 package taewan.Smart.product;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static taewan.Smart.product.ProductFixture.*;
+import static taewan.Smart.fixture.ProductTestFixture.*;
 
 @DataJpaTest
 @EnableJpaRepositories(basePackages = "taewan.Smart.domain.product.repository")
@@ -25,12 +25,18 @@ import static taewan.Smart.product.ProductFixture.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductRepositoryTest {
     @Autowired private ProductRepository productRepository;
-    @Value("${address.server}") private String ROOT;
+
+    private static List<Product> products;
+
+    @BeforeAll
+    static void setup() {
+        products = getProducts();
+    }
 
     @Test
     void 제품_저장() {
         //given
-        Product product = createProduct(ROOT);
+        Product product = products.get(0);
 
         //when
         Product saved = productRepository.save(product);
@@ -47,7 +53,7 @@ class ProductRepositoryTest {
     @Test
     void 제품_단일조회() {
         //given
-        Product product = createProduct(ROOT);
+        Product product = products.get(0);
         Product saved = productRepository.save(product);
 
         //when
@@ -64,9 +70,9 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void 페이지단위_제품_조회() {
+    void 페이지단위_조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = 5;
         int resultSize = Math.min(size, saved.size());
@@ -84,7 +90,7 @@ class ProductRepositoryTest {
     @Test
     void 제품명_조회() {
         //given
-        productRepository.saveAll(createProducts(ROOT));
+        productRepository.saveAll(products);
 
         //when //then
         assertThat(productRepository.findByName("product0")).isEmpty();
@@ -99,9 +105,9 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void 분류번호를_포함한_페이지단위_제품_필터조회() {
+    void 분류번호를_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         Map<String, Integer> createdCodes = getCodeInfo(saved);
         int page = 0;
         int size = saved.size();
@@ -117,7 +123,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void 없는_분류번호를_포함한_페이지단위_제품_필터조회() {
+    void 없는_분류번호를_포함한_페이지단위_필터조회() {
         //given
         int page = 0;
         int size = 20;
@@ -133,7 +139,7 @@ class ProductRepositoryTest {
     @Test
     void 제품명을_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = saved.size();
 
@@ -168,7 +174,7 @@ class ProductRepositoryTest {
     @Test
     void 제품명과_분류번호를_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = saved.size();
         String code = saved.get(0).getCode();
@@ -187,7 +193,7 @@ class ProductRepositoryTest {
     @Test
     void 없는_제품명과_분류번호를_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = saved.size();
         String code = saved.get(0).getCode();
@@ -204,7 +210,7 @@ class ProductRepositoryTest {
     @Test
     void 제품명과_없는_분류번호를_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = saved.size();
         String code = "Y01M";
@@ -221,7 +227,7 @@ class ProductRepositoryTest {
     @Test
     void 없는_제품명과_없는_분류번호를_포함한_페이지단위_필터조회() {
         //given
-        List<Product> saved = productRepository.saveAll(createProducts(ROOT));
+        List<Product> saved = productRepository.saveAll(products);
         int page = 0;
         int size = saved.size();
         String code = "Y01M";
@@ -238,7 +244,7 @@ class ProductRepositoryTest {
     @Test
     void 제품_삭제() {
         //given
-        Product saved = productRepository.save(createProduct(ROOT));
+        Product saved = productRepository.save(products.get(0));
 
         //when
         productRepository.deleteById(saved.getProductId());

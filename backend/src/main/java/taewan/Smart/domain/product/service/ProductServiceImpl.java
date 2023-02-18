@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import taewan.Smart.domain.product.dto.ProductDto;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
@@ -13,7 +14,6 @@ import taewan.Smart.domain.product.repository.ProductRepository;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.FileUtil.*;
-import static taewan.Smart.global.utils.PropertyUtil.*;
 
 @Transactional(readOnly = true)
 @Service
@@ -30,13 +30,12 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS);
+        return convertInfoDto(found);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS));
+        return productRepository.findAll(pageable).map(this::convertInfoDto);
     }
 
     @Override
@@ -45,12 +44,14 @@ public class ProductServiceImpl implements ProductService {
 
         if (!search.isEmpty() && !code.isEmpty()) {
             found = productRepository.findAllByCodeContainsAndNameContains(pageable, code, search);
+        } else if (search.isEmpty() && code.isEmpty()) {
+            found = productRepository.findAll(pageable);
         } else if (search.isEmpty()) {
             found = productRepository.findAllByCodeContains(pageable, code);
         } else {
             found = productRepository.findAllByNameContains(pageable, search);
         }
-        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), ROOT_PATH, SERVER_ADDRESS), SERVER_ADDRESS));
+        return found.map(this::convertInfoDto);
     }
 
     @Transactional
@@ -58,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
     public Long save(ProductSaveDto dto) {
         productRepository.findByName(dto.getName())
                 .ifPresent(p -> {throw PRODUCT_NAME_DUPLICATE.exception();});
-        return productRepository.save(dto.toEntity(dto.getViewPath(), saveImgFile(dto)))
+        return productRepository.save(dto.toEntity(saveImgFile(dto)))
                 .getProductId();
     }
 
@@ -74,18 +75,9 @@ public class ProductServiceImpl implements ProductService {
                         throw PRODUCT_NAME_DUPLICATE.exception();
                     }
                 });
-        deleteDirectory(ROOT_PATH + found.getDirectoryPath());
-        found.updateProduct(dto, dto.getViewPath(), saveImgFile(dto));
+        deleteDirectory(found.getDirectoryPath());
+        found.updateProduct(dto, saveImgFile(dto));
         return found.getProductId();
-    }
-
-    private String saveImgFile(ProductSaveDto dto) {
-        try {
-            saveFiles(dto.getImgFiles(), ROOT_PATH + dto.getViewPath());
-            return saveFile(dto.getDetailInfo(), ROOT_PATH + dto.getDirectoryPath());
-        } catch (NullPointerException e) {
-            throw PRODUCT_IMAGE_EMPTY.exception();
-        }
     }
 
     @Transactional
@@ -94,7 +86,24 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        deleteDirectory(ROOT_PATH + found.getDirectoryPath());
         productRepository.deleteById(productId);
+        deleteDirectory(found.getDirectoryPath());
+    }
+
+    private String saveImgFile(ProductDto dto) {
+        try {
+            saveFiles(dto.getImgFiles(), dto.getViewPath());
+            return saveFile(dto.getDetailInfo(), dto.getDirectoryPath());
+        } catch (NullPointerException e) {
+            throw PRODUCT_IMAGE_EMPTY.exception();
+        }
+    }
+
+    private ProductInfoDto convertInfoDto(Product product) {
+        return new ProductInfoDto(
+                product,
+                getAccessUrls(product.getImgFolderPath()),
+                getAccessUrl(product.getDetailInfo())
+        );
     }
 }

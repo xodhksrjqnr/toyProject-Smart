@@ -7,12 +7,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import taewan.Smart.member.controller.MemberController;
-import taewan.Smart.member.dto.MemberInfoDto;
-import taewan.Smart.member.dto.MemberSaveDto;
-import taewan.Smart.member.dto.MemberUpdateDto;
-import taewan.Smart.member.entity.Member;
-import taewan.Smart.member.service.MemberServiceImpl;
+import taewan.Smart.domain.member.controller.MemberController;
+import taewan.Smart.domain.member.dto.MemberInfoDto;
+import taewan.Smart.domain.member.dto.MemberSaveDto;
+import taewan.Smart.domain.member.dto.MemberUpdateDto;
+import taewan.Smart.domain.member.entity.Member;
+import taewan.Smart.domain.member.service.MemberServiceImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @MockBean MemberServiceImpl memberService;
+    @MockBean
+    MemberServiceImpl memberService;
     static List<MemberSaveDto> dtos = new ArrayList<>();
     static List<Member> entities = new ArrayList<>();
 
@@ -85,22 +86,6 @@ class MemberControllerTest {
 //    }
 //
 //    @Test
-//    void 회원_전체조회() throws Exception {
-//        //given
-//        List<MemberInfoDto> infoDtos = new ArrayList<>();
-//        for (Member m : entities)
-//            infoDtos.add(new MemberInfoDto(m));
-//        when(memberService.findAll()).thenReturn(infoDtos);
-//
-//        //when //then
-//        mockMvc.perform(get("/member"))
-//                .andExpect(status().isOk())
-//                .andExpect(model().attributeExists("memberList"))
-//                .andExpect(content().contentType(MediaType.valueOf("text/html;charset=UTF-8")))
-//                .andExpect(view().name("member/list_view"));
-//    }
-//
-//    @Test
 //    void 회원_가입양식() throws Exception {
 //        //when //then
 //        mockMvc.perform(get("/member/create"))
@@ -145,7 +130,7 @@ class MemberControllerTest {
 //        dto.setPassword("test12345");
 //        dto.setPhoneNumber("01012341235");
 //        dto.setBirthday(LocalDate.now().plusDays(5));
-//        when(memberService.modify(dto)).thenReturn(1L);
+//        when(memberService.update(dto)).thenReturn(1L);
 //
 //        //when //then
 //        mockMvc.perform(post("/member/update"))

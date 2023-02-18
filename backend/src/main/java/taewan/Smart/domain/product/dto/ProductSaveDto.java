@@ -1,7 +1,8 @@
 package taewan.Smart.domain.product.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 import taewan.Smart.domain.product.entity.Product;
@@ -11,9 +12,10 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
 @ToString
-public class ProductSaveDto {
+public class ProductSaveDto implements ProductDto {
 
     private List<MultipartFile> imgFiles;
     @NotBlank(message = "제품 이름이 필요합니다.")
@@ -26,22 +28,22 @@ public class ProductSaveDto {
     private String size;
     private MultipartFile detailInfo;
 
-    public Product toEntity(String imgFolderPath, String detailInfoPath) {
+    public Product toEntity(String imgFileName) {
         return Product.builder()
-                .imgFolderPath(imgFolderPath)
+                .imgFolderPath(getViewPath())
                 .name(this.name)
                 .price(this.price)
                 .code(this.code)
                 .size(this.size)
-                .detailInfo(detailInfoPath)
+                .detailInfo(getDirectoryPath() + imgFileName)
                 .build();
     }
 
     public String getDirectoryPath() {
-        return "images/products/" + this.code + "/" + this.name;
+        return "products/" + this.code + "/" + this.name + "/";
     }
 
     public String getViewPath() {
-        return getDirectoryPath() + "/view";
+        return getDirectoryPath() + "view";
     }
 }

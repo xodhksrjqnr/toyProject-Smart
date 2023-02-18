@@ -40,12 +40,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Long upload(@Valid ProductSaveDto dto) {
+    public Long upload(@Valid @ModelAttribute ProductSaveDto dto) {
         return productService.save(dto);
     }
 
     @PostMapping("/update")
-    public Long modify(@Valid ProductUpdateDto dto) {
+    public Long modify(@Valid @ModelAttribute ProductUpdateDto dto) {
         return productService.update(dto);
     }
 
