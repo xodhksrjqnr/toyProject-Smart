@@ -20,9 +20,12 @@ public enum ExceptionStatus {
     JWT_INVALID(new JwtException("JWT의 내용이 잘못되었습니다.")),
     JWT_ISNULL(new JwtException("JWT가 존재하지 않습니다.")),
 
+    //Category Domain Status
+    CATEGORY_NAME_DUPLICATE(new DuplicateKeyException("중복된 카테고리명입니다.")),
+
     //Product Domain Status
     PRODUCT_NOT_FOUND(new NoSuchElementException("존재하지 않거나 삭제된 제품입니다.")),
-    PRODUCT_NAME_DUPLICATE(new DuplicateKeyException("중복된 제품 이름입니다.")),
+    PRODUCT_NAME_DUPLICATE(new DuplicateKeyException("중복된 제품명입니다.")),
     PRODUCT_IMAGE_EMPTY(new IllegalArgumentException("등록할 이미지가 필요합니다.")),
 
     //Order Domain Status
