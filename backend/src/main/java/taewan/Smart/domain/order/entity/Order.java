@@ -40,15 +40,6 @@ public class Order {
         return order;
     }
 
-    public void cancel(Long orderItemId, String reason) {
-        for (OrderItem orderItem : orderItems) {
-            if (orderItem.getOrderItemId().equals(orderItemId)) {
-                orderItem.cancel(reason);
-                break;
-            }
-        }
-    }
-
     public void setMember(Member member) {
         this.member = member;
         member.getOrders().add(this);
@@ -59,11 +50,11 @@ public class Order {
         orderItem.setOrder(this);
     }
 
-    public OrderInfoDto toInfoDto(String root, String address) {
+    public OrderInfoDto toInfoDto() {
         List<OrderItemInfoDto> orderItemInfoDtoList = new ArrayList<>();
 
         for (OrderItem orderItem : orderItems)
-            orderItemInfoDtoList.add(orderItem.toInfoDto(root, address));
+            orderItemInfoDtoList.add(orderItem.toInfoDto());
         return new OrderInfoDto(this.orderId, orderItemInfoDtoList);
     }
 }

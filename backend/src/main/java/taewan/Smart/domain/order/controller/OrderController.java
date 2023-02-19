@@ -26,26 +26,26 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderInfoDto> search(HttpServletRequest request) {
-        Long memberId = (Long)JwtUtil.parseJwt(request).get("memberId");
+    public List<OrderInfoDto> search(@RequestHeader("Authorization") String token) {
+        Long memberId = (Long)JwtUtil.parseJwt(token).get("memberId");
 
         return orderService.findAll(memberId);
     }
 
     @PostMapping
-    public void upload(HttpServletRequest request, @RequestBody OrderSaveDto dto) {
-        Long memberId = (Long)JwtUtil.parseJwt(request).get("memberId");
+    public void upload(@RequestHeader("Authorization") String token, @RequestBody OrderSaveDto dto) {
+        Long memberId = (Long)JwtUtil.parseJwt(token).get("memberId");
 
         orderService.save(memberId, dto);
     }
 
     @PostMapping("/cancel")
-    public void cancel(OrderItemCancelDto dto) {
+    public void cancel(@ModelAttribute OrderItemCancelDto dto) {
         orderItemService.cancel(dto);
     }
 
     @PostMapping("/refund")
-    public void refund(OrderItemCancelDto dto) {
+    public void refund(@ModelAttribute OrderItemCancelDto dto) {
         orderItemService.refund(dto);
     }
 }

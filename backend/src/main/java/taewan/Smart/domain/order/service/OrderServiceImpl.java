@@ -19,8 +19,6 @@ import java.util.List;
 
 import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
-import static taewan.Smart.global.utils.PropertyUtil.ROOT_PATH;
-import static taewan.Smart.global.utils.PropertyUtil.SERVER_ADDRESS;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -44,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
 
         for (Order order : orders) {
-            orderInfoDtoList.add(order.toInfoDto(ROOT_PATH, SERVER_ADDRESS));
+            orderInfoDtoList.add(order.toInfoDto());
         }
         return orderInfoDtoList;
     }

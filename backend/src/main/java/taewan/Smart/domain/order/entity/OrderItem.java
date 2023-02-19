@@ -3,6 +3,7 @@ package taewan.Smart.domain.order.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.product.entity.Product;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@ToString
 public class OrderItem {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +42,7 @@ public class OrderItem {
         this.deliveryStatus = stats;
     }
 
-    public OrderItemInfoDto toInfoDto(String root, String address) {
-        return new OrderItemInfoDto(this, root, address);
+    public OrderItemInfoDto toInfoDto() {
+        return new OrderItemInfoDto(this);
     }
 }
