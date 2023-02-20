@@ -28,13 +28,15 @@ public class AuthFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         try {
-            boolean flag = false;
+            if (!(httpServletRequest.getMethod().equals("OPTIONS"))) {
+                boolean flag = false;
 
-            for (String exclude : excludeUrl) {
-                flag = httpServletRequest.getRequestURI().contains(exclude) || flag;
-            }
-            if (!flag) {
-                parseJwt(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
+                for (String exclude : excludeUrl) {
+                    flag = httpServletRequest.getRequestURI().contains(exclude) || flag;
+                }
+                if (!flag) {
+                    parseJwt(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION));
+                }
             }
             chain.doFilter(request, response);
         } catch (JwtException ex) {
