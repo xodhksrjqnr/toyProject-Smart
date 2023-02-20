@@ -44,6 +44,6 @@ public class ProductSaveDto implements ProductDto {
     }
 
     public String getViewPath() {
-        return getDirectoryPath() + "view";
+        return getDirectoryPath() + "view/";
     }
 }

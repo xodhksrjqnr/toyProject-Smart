@@ -92,9 +92,10 @@ public class FileUtil {
 
         try {
             for (File f : files) {
-                String target = directoryPath + "/" + f.getName();
+                String target = directoryPath + f.getName();
+                log.info(target);
                 if (f.isDirectory())
-                    deleteAllFiles(target);
+                    deleteAllFiles(target + "/");
                 Files.deleteIfExists(Paths.get(target));
                 log.info("[파일을 삭제했습니다.] : {}", "삭제 파일 : " + target);
             }

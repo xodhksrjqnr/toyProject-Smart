@@ -42,7 +42,7 @@ class ProductIntegrationTest {
 
 	@AfterEach
 	void destroy() {
-		deleteDirectory("products");
+		deleteDirectory("products/");
 	}
 
 	@Test

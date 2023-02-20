@@ -30,7 +30,7 @@ public class AuthFilter implements Filter {
         try {
             if (!(httpServletRequest.getMethod().equals("OPTIONS"))) {
                 boolean flag = false;
-
+    
                 for (String exclude : excludeUrl) {
                     flag = httpServletRequest.getRequestURI().contains(exclude) || flag;
                 }

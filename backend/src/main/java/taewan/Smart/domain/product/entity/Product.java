@@ -57,6 +57,6 @@ public class Product {
     }
 
     public String getDirectoryPath() {
-        return this.imgFolderPath.replaceFirst("view", "");
+        return this.imgFolderPath.replaceFirst("view/", "");
     }
 }

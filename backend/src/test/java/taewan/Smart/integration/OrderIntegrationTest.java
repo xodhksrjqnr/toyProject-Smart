@@ -60,7 +60,7 @@ public class OrderIntegrationTest {
     @AfterAll
     void AfterAllDestroy() throws SQLException {
         init();
-        deleteDirectory("products");
+        deleteDirectory("products/");
     }
 
     private void init() throws SQLException {

@@ -33,6 +33,6 @@ public class ProductUpdateDto implements ProductDto {
     }
 
     public String getViewPath() {
-        return getDirectoryPath() + "view";
+        return getDirectoryPath() + "view/";
     }
 }
