@@ -27,7 +27,7 @@ public class MemberController {
 
     @GetMapping
     public MemberInfoDto search(@RequestHeader("Authorization") String token) {
-        Long memberId = (Long)parseJwt(token).get("memberId");
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
 
         return memberService.findOne(memberId);
     }
@@ -47,14 +47,14 @@ public class MemberController {
 
     @PostMapping("/delete")
     public void remove(@RequestHeader("Authorization") String token) {
-        Long memberId = (Long)parseJwt(token).get("memberId");
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
 
         memberService.delete(memberId);
     }
 
     @PostMapping("/refresh")
     public AuthInfoDto refresh(@RequestHeader("Authorization") String token) {
-        Long memberId = (Long)parseJwt(token).get("memberId");
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
         MemberInfoDto dto = memberService.findOne(memberId);
 
         return new AuthInfoDto(dto.getNickName(), createJwt(dto.toClaimsMap()), createJwt(dto.toClaimMap()));
