@@ -12,11 +12,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import taewan.Smart.domain.order.dto.OrderItemSaveDto;
+import taewan.Smart.domain.order.entity.OrderItem;
+import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.repository.ProductRepository;
 import taewan.Smart.domain.product.service.ProductService;
+import taewan.Smart.global.exception.ForeignKeyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,8 @@ class ProductIntegrationTest {
 	private ProductService productService;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@AfterEach
 	void destroy() {
@@ -466,5 +472,25 @@ class ProductIntegrationTest {
 		NoSuchElementException ex = assertThrows(NoSuchElementException.class,
 				() -> productService.delete(1L));
 		assertEquals(ex.getMessage(), PRODUCT_NOT_FOUND.exception().getMessage());
+	}
+
+	@Test
+	void 주문된_제품_삭제_테스트() {
+		//given
+		ProductSaveDto dto = getProductSaveDtoList().get(0);
+		Long savedProductId = productService.save(dto);
+		OrderItemSaveDto dto2 = new OrderItemSaveDto();
+
+		dto2.setProductId(savedProductId);
+		dto2.setSize("s");
+		dto2.setQuantity(2);
+
+		//when
+		orderItemRepository.save(OrderItem.createOrderItem(dto2, productRepository.findById(savedProductId).get()));
+
+		//then
+		ForeignKeyException ex = assertThrows(ForeignKeyException.class,
+				() -> productService.delete(savedProductId));
+		assertEquals(ex.getMessage(), PRODUCT_REFERRED.exception().getMessage());
 	}
 }

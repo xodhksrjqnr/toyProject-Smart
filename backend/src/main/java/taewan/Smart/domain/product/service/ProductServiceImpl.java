@@ -2,15 +2,19 @@ package taewan.Smart.domain.product.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.product.dto.ProductDto;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
+
+import java.util.List;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.FileUtil.*;
@@ -19,10 +23,12 @@ import static taewan.Smart.global.utils.FileUtil.*;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -86,6 +92,8 @@ public class ProductServiceImpl implements ProductService {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
+        if (orderItemRepository.existsByProductId(productId))
+            throw PRODUCT_REFERRED.exception();
         productRepository.deleteById(productId);
         deleteDirectory(found.getDirectoryPath());
     }
