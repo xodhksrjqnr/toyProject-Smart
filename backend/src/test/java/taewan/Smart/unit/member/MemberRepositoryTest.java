@@ -19,7 +19,7 @@ import static taewan.Smart.unit.member.MemberFixture.createMembers;
 
 @DataJpaTest
 @EnableJpaRepositories(basePackages = "taewan.Smart.domain.member.repository")
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest {
 

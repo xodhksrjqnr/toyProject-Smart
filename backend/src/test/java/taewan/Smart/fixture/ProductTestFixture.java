@@ -41,7 +41,7 @@ public class ProductTestFixture {
     static {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties properties = new Properties();
-        InputStream resourceStream = loader.getResourceAsStream("application-test.properties");
+        InputStream resourceStream = loader.getResourceAsStream("application.properties");
 
         try {
             properties.load(resourceStream);

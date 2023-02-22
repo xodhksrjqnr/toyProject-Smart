@@ -21,7 +21,7 @@ import static taewan.Smart.fixture.ProductTestFixture.*;
 
 @DataJpaTest
 @EnableJpaRepositories(basePackages = "taewan.Smart.domain.product.repository")
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductRepositoryTest {
     @Autowired private ProductRepository productRepository;

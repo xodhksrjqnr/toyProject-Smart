@@ -31,7 +31,6 @@ import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.FileUtil.deleteDirectory;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OrderIntegrationTest {

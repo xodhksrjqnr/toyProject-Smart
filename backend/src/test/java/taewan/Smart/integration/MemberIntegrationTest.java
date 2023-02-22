@@ -28,7 +28,6 @@ import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 public class MemberIntegrationTest {
 

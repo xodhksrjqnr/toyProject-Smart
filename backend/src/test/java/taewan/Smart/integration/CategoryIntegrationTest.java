@@ -20,7 +20,6 @@ import static taewan.Smart.fixture.CategoryTestFixture.getCategorySaveDtoList;
 import static taewan.Smart.global.error.ExceptionStatus.CATEGORY_NAME_DUPLICATE;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 public class CategoryIntegrationTest {
 

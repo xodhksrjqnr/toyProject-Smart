@@ -35,7 +35,6 @@ import static taewan.Smart.global.utils.FileUtil.deleteDirectory;
 import static taewan.Smart.global.utils.FileUtil.findFiles;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
 class ProductIntegrationTest {
 
