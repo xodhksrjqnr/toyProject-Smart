@@ -11,6 +11,7 @@ import taewan.Smart.domain.member.service.MemberService;
 
 import javax.validation.Valid;
 
+import static taewan.Smart.global.error.ExceptionStatus.DATA_FALSIFICATION;
 import static taewan.Smart.global.utils.JwtUtil.createJwt;
 import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
@@ -37,6 +38,10 @@ public class MemberController {
     @PostMapping("/update")
     public AuthInfoDto modify(@RequestHeader("Authorization") String token, @Valid MemberUpdateDto dto) {
         MemberInfoDto updated = memberService.update(dto);
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
+
+        if (!updated.getMemberId().equals(memberId))
+            throw DATA_FALSIFICATION.exception();
 
         return new AuthInfoDto(dto.getNickName(), createJwt(updated.toClaimsMap()), createJwt(updated.toClaimMap()));
     }
