@@ -3,9 +3,11 @@ package taewan.Smart.global.error;
 import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DuplicateKeyException;
 import taewan.Smart.domain.member.exception.ExpiredTokenException;
+import taewan.Smart.global.exception.AuthAccessException;
 import taewan.Smart.global.exception.ForeignKeyException;
 import taewan.Smart.global.exception.PageNotFoundException;
 
+import javax.security.auth.message.AuthException;
 import java.util.NoSuchElementException;
 
 public enum ExceptionStatus {
@@ -16,10 +18,11 @@ public enum ExceptionStatus {
     MEMBER_EMAIL_NOT_FOUND(new NoSuchElementException("가입되지 않은 이메일입니다.")),
     MEMBER_EMAIL_DUPLICATE(new DuplicateKeyException("이미 가입된 이메일입니다.")),
 
-    //JWT
+    //Auth Status
     JWT_EXPIRED(new ExpiredTokenException("JWT가 만료되었습니다.")),
     JWT_INVALID(new JwtException("JWT의 내용이 잘못되었습니다.")),
     JWT_ISNULL(new JwtException("JWT가 존재하지 않습니다.")),
+    DATA_FALSIFICATION(new AuthAccessException("권한이 없는 데이터를 수정하려고 합니다.")),
 
     //Category Domain Status
     CATEGORY_NAME_DUPLICATE(new DuplicateKeyException("중복된 카테고리명입니다.")),
