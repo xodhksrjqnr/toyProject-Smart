@@ -1,6 +1,6 @@
 package taewan.Smart.domain.member.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,21 +9,16 @@ import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.member.repository.MemberRepository;
-import taewan.Smart.global.error.ExceptionStatus;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
 
 
-@Transactional(readOnly = true)
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private MemberRepository memberRepository;
-
-    @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+    private final MemberRepository memberRepository;
 
     @Override
     public MemberInfoDto findOne(Long memberId) {

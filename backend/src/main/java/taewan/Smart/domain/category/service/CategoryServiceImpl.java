@@ -1,6 +1,6 @@
 package taewan.Smart.domain.category.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +17,12 @@ import java.util.stream.Collectors;
 import static taewan.Smart.global.error.ExceptionStatus.CATEGORY_NAME_DUPLICATE;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
-    private CategoryItemRepository categoryItemRepository;
-
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryItemRepository categoryItemRepository) {
-        this.categoryRepository = categoryRepository;
-        this.categoryItemRepository = categoryItemRepository;
-    }
+    private final CategoryRepository categoryRepository;
+    private final CategoryItemRepository categoryItemRepository;
 
     @Transactional
     public Long save(CategorySaveDto dto) {

@@ -17,7 +17,7 @@ public class Category {
     private Long categoryId;
     private String name;
     private String code;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<CategoryItem> categoryItems = new ArrayList<>();
 
     @Builder

@@ -1,6 +1,6 @@
 package taewan.Smart.domain.member.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.dto.MemberCertificateDto;
@@ -13,13 +13,10 @@ import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberCertificationServiceImpl implements MemberCertificationService {
     private final MemberRepository memberRepository;
-
-    @Autowired
-    public MemberCertificationServiceImpl(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     @Override
     public MemberCertificateDto findEmail(String email) {

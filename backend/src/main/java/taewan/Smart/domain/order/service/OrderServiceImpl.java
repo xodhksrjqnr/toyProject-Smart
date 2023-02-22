@@ -1,6 +1,6 @@
 package taewan.Smart.domain.order.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.entity.Member;
@@ -21,18 +21,12 @@ import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-
-    @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, MemberRepository memberRepository,
-                            ProductRepository productRepository) {
-        this.orderRepository = orderRepository;
-        this.memberRepository = memberRepository;
-        this.productRepository = productRepository;
-    }
 
     @Override
     public List<OrderInfoDto> findAll(Long memberId) {
