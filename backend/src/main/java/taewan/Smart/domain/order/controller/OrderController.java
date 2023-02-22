@@ -1,6 +1,6 @@
 package taewan.Smart.domain.order.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemCancelDto;
@@ -14,16 +14,11 @@ import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
 @RestController
 @RequestMapping("orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
     private final OrderItemService orderItemService;
-
-    @Autowired
-    public OrderController(OrderService orderService, OrderItemService orderItemService) {
-        this.orderService = orderService;
-        this.orderItemService = orderItemService;
-    }
 
     @GetMapping
     public List<OrderInfoDto> search(@RequestHeader("Authorization") String token) {

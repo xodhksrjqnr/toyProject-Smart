@@ -1,6 +1,6 @@
 package taewan.Smart.domain.category.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.category.dto.CategoryInfoDto;
 import taewan.Smart.domain.category.dto.CategorySaveDto;
@@ -10,15 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("category")
+@RequiredArgsConstructor
 public class CategoryController {
 
-    private CategoryService categoryService;
-
-    @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
+    private final CategoryService categoryService;
 
     @GetMapping
     public List<CategoryInfoDto> searchAll() {

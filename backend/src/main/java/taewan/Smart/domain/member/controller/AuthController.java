@@ -1,6 +1,6 @@
 package taewan.Smart.domain.member.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.member.dto.AuthInfoDto;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
@@ -12,19 +12,12 @@ import static taewan.Smart.global.utils.JwtUtil.createJwt;
 
 @RestController
 @RequestMapping("members")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final MemberCertificationService memberCertificationService;
     private final MemberService memberService;
     private final Mail mail;
-
-    @Autowired
-    public AuthController(MemberCertificationService memberCertificationService, MemberService memberService,
-                          Mail mail) {
-        this.memberCertificationService = memberCertificationService;
-        this.memberService = memberService;
-        this.mail = mail;
-    }
 
     @PostMapping("/login")
     public AuthInfoDto login(@RequestParam String nickName, @RequestParam String password) {

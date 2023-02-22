@@ -1,6 +1,6 @@
 package taewan.Smart.domain.member.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.member.dto.AuthInfoDto;
@@ -16,14 +16,10 @@ import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
 @RestController
 @RequestMapping("members")
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
-    @Autowired
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @GetMapping
     public MemberInfoDto search(@RequestHeader("Authorization") String token) {
