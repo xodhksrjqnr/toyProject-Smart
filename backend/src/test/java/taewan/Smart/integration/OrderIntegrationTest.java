@@ -1,9 +1,11 @@
 package taewan.Smart.integration;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.domain.order.dto.*;
@@ -11,7 +13,8 @@ import taewan.Smart.domain.order.repository.OrderItemRepository;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.order.service.OrderItemService;
 import taewan.Smart.domain.order.service.OrderService;
-import taewan.Smart.domain.product.service.ProductService;
+import taewan.Smart.domain.product.entity.Product;
+import taewan.Smart.domain.product.repository.ProductRepository;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -27,6 +30,7 @@ import static taewan.Smart.fixture.MemberTestFixture.getMemberSaveDtoList;
 import static taewan.Smart.fixture.OrderTestFixture.createOrderItemSaveDtoList;
 import static taewan.Smart.fixture.OrderTestFixture.getOrderSaveDto;
 import static taewan.Smart.fixture.ProductTestFixture.getProductSaveDtoList;
+import static taewan.Smart.fixture.ProductTestFixture.saveImgFile;
 import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.utils.FileUtil.deleteDirectory;
 
@@ -44,16 +48,17 @@ public class OrderIntegrationTest {
     @Autowired
     private OrderItemRepository orderItemRepository;
     @Autowired private MemberService memberService;
-    @Autowired private ProductService productService;
+    @Autowired private ProductRepository productRepository;
     @Autowired private DataSource dataSource;
     private Long validMemberId;
-    private List<Long> validProductIds = new ArrayList<>();
 
     @BeforeAll
     void beforeAllSetup() throws SQLException {
         init();
         validMemberId = memberService.save(getMemberSaveDtoList().get(0));
-        getProductSaveDtoList().forEach(p -> validProductIds.add(productService.save(p)));
+        List<Product> products = new ArrayList<>();
+        getProductSaveDtoList().forEach(p -> products.add(p.toEntity(saveImgFile(p))));
+        productRepository.saveAll(products);
     }
 
     @AfterAll
@@ -84,7 +89,7 @@ public class OrderIntegrationTest {
         //when
         orderService.save(memberId, dto);
 
-        assertEquals(orderRepository.count(), 1L);
+        assertEquals(orderRepository.count(), validMemberId);
         assertEquals(orderItemRepository.count(), dto.getOrderItemSaveDtoList().size());
     }
 
@@ -186,7 +191,7 @@ public class OrderIntegrationTest {
         OrderItemInfoDto cancel = orderService.findAll(memberId).get(0).getOrderItemInfoDtoList().get(0);
 
         //then
-        assertEquals(cancel.getDeliveryStatus(), "취소");
+        assertEquals(cancel.getDeliveryStatus(), "CANCEL");
     }
 
     @Test
@@ -221,7 +226,7 @@ public class OrderIntegrationTest {
         OrderItemInfoDto refund = orderService.findAll(memberId).get(0).getOrderItemInfoDtoList().get(0);
 
         //then
-        assertEquals(refund.getDeliveryStatus(), "환불");
+        assertEquals(refund.getDeliveryStatus(), "REFUND");
     }
 
     @Test
