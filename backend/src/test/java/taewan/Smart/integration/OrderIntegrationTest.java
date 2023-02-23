@@ -89,7 +89,7 @@ public class OrderIntegrationTest {
         //when
         orderService.save(memberId, dto);
 
-        assertEquals(orderRepository.count(), validMemberId);
+        assertEquals(orderRepository.count(), 1L);
         assertEquals(orderItemRepository.count(), dto.getOrderItemSaveDtoList().size());
     }
 

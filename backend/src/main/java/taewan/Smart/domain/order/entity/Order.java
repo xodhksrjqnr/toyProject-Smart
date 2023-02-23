@@ -22,20 +22,30 @@ public class Order {
 
     @Id @GeneratedValue
     private Long orderId;
+    private Long memberId;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
     @CreatedDate
     private LocalDateTime orderDateTime;
 
-    private Order(List<OrderItem> orderItems) {
+    private Order(Long memberId, List<OrderItem> orderItems) {
+        this.memberId = memberId;
         for (OrderItem orderItem : orderItems) {
             this.orderItems.add(orderItem);
             orderItem.setOrder(this);
         }
     }
 
-    public static Order createOrder(List<OrderItem> orderItems) {
-        return new Order(orderItems);
+    public static Order createOrder(Long memberId, List<OrderItem> orderItems) {
+        return new Order(memberId, orderItems);
+    }
+
+    private int totalPrice() {
+        int price = 0;
+
+        for (OrderItem orderItem : orderItems)
+            price += orderItem.getQuantity() * orderItem.getProduct().getPrice();
+        return price;
     }
 
     public OrderInfoDto toInfoDto() {
