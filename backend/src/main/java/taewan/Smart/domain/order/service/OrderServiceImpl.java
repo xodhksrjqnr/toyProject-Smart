@@ -3,10 +3,8 @@ package taewan.Smart.domain.order.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.member.repository.MemberRepository;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
-import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.order.dto.OrderSaveDto;
 import taewan.Smart.domain.order.entity.Order;
 import taewan.Smart.domain.order.entity.OrderItem;
@@ -41,16 +39,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Long save(Long memberId, OrderSaveDto orderSaveDto) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MEMBER_NOT_FOUND::exception);
-        Order order = Order.createOrder(member);
+    public Long save(Long memberId, OrderSaveDto dto) {
+        memberRepository.findById(memberId).orElseThrow(MEMBER_NOT_FOUND::exception);
 
-        for (OrderItemSaveDto dto : orderSaveDto.getOrderItemSaveDtoList()) {
-            Product product = productRepository.findById(dto.getProductId())
-                    .orElseThrow(PRODUCT_NOT_FOUND::exception);
-            order.addOrderItem(OrderItem.createOrderItem(dto, product));
-        }
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        dto.getOrderItemSaveDtoList()
+                .forEach(oi -> {
+                    Product product = productRepository.findById(oi.getProductId())
+                            .orElseThrow(PRODUCT_NOT_FOUND::exception);
+                    orderItems.add(OrderItem.createOrderItem(oi, product));
+                });
+
+        Order order = Order.createOrder(orderItems);
+
         return orderRepository.save(order).getOrderId();
     }
 }

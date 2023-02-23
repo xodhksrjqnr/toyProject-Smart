@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.order.dto.OrderItemCancelDto;
-import taewan.Smart.domain.order.entity.OrderItem;
 import taewan.Smart.domain.order.repository.OrderItemRepository;
 
 import static taewan.Smart.global.error.ExceptionStatus.ORDER_ITEM_NOT_FOUND;
@@ -18,19 +17,19 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Transactional
     @Override
-    public void cancel(OrderItemCancelDto orderItemCancelDto) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemCancelDto.getOrderItemId())
-                .orElseThrow(ORDER_ITEM_NOT_FOUND::exception);
-
-        orderItem.cancel();
+    public void cancel(OrderItemCancelDto dto) {
+        orderItemRepository
+                .findById(dto.getOrderItemId())
+                .orElseThrow(ORDER_ITEM_NOT_FOUND::exception)
+                .cancel();
     }
 
     @Transactional
     @Override
-    public void refund(OrderItemCancelDto orderItemCancelDto) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemCancelDto.getOrderItemId())
-                .orElseThrow(ORDER_ITEM_NOT_FOUND::exception);
-
-        orderItem.refund();
+    public void refund(OrderItemCancelDto dto) {
+        orderItemRepository
+                .findById(dto.getOrderItemId())
+                .orElseThrow(ORDER_ITEM_NOT_FOUND::exception)
+                .refund();
     }
 }

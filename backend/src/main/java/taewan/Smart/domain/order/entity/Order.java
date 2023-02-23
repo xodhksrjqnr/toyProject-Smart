@@ -1,10 +1,10 @@
 package taewan.Smart.domain.order.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
 
@@ -15,39 +15,27 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long orderId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
     @CreatedDate
     private LocalDateTime orderDateTime;
 
-    public static Order createOrder(Member member, OrderItem... orderItems) {
-        Order order = new Order();
-
-        order.setMember(member);
+    private Order(List<OrderItem> orderItems) {
         for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
+            this.orderItems.add(orderItem);
+            orderItem.setOrder(this);
         }
-        return order;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getOrders().add(this);
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-        this.orderItems.add(orderItem);
-        orderItem.setOrder(this);
+    public static Order createOrder(List<OrderItem> orderItems) {
+        return new Order(orderItems);
     }
 
     public OrderInfoDto toInfoDto() {
