@@ -22,7 +22,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem orderItem = orderItemRepository.findById(orderItemCancelDto.getOrderItemId())
                 .orElseThrow(ORDER_ITEM_NOT_FOUND::exception);
 
-        orderItem.setDeliveryStatus("취소");
+        orderItem.cancel();
     }
 
     @Transactional
@@ -31,6 +31,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem orderItem = orderItemRepository.findById(orderItemCancelDto.getOrderItemId())
                 .orElseThrow(ORDER_ITEM_NOT_FOUND::exception);
 
-        orderItem.setDeliveryStatus("환불");
+        orderItem.refund();
     }
 }
