@@ -17,6 +17,7 @@ public enum ExceptionStatus {
     MEMBER_NICKNAME_DUPLICATE(new DuplicateKeyException("중복된 회원 아이디입니다.")),
     MEMBER_EMAIL_NOT_FOUND(new NoSuchElementException("가입되지 않은 이메일입니다.")),
     MEMBER_EMAIL_DUPLICATE(new DuplicateKeyException("이미 가입된 이메일입니다.")),
+    MEMBER_PASSWORD_INVALID(new IllegalArgumentException("비밀번호 형식이 유효하지 않습니다.")),
 
     //Auth Status
     JWT_EXPIRED(new ExpiredTokenException("JWT가 만료되었습니다.")),

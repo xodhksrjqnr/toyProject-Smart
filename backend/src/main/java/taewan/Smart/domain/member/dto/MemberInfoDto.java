@@ -1,8 +1,6 @@
 package taewan.Smart.domain.member.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import taewan.Smart.domain.member.entity.Member;
 
 import java.time.LocalDate;
@@ -10,6 +8,8 @@ import java.util.Map;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @ToString
 public class MemberInfoDto {
 

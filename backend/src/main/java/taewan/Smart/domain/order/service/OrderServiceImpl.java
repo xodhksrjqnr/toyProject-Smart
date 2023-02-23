@@ -14,6 +14,7 @@ import taewan.Smart.domain.product.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static taewan.Smart.global.error.ExceptionStatus.MEMBER_NOT_FOUND;
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
@@ -28,13 +29,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderInfoDto> findAll(Long memberId) {
-        List<OrderInfoDto> orderInfoDtoList = new ArrayList<>();
-
-        memberRepository.findById(memberId)
-                .orElseThrow(MEMBER_NOT_FOUND::exception)
-                .getOrders()
-                .forEach(o -> orderInfoDtoList.add(o.toInfoDto()));
-        return orderInfoDtoList;
+        memberRepository.findById(memberId).orElseThrow(MEMBER_NOT_FOUND::exception);
+        return orderRepository
+                .findAllByMemberId(memberId)
+                .stream().map(Order::toInfoDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional

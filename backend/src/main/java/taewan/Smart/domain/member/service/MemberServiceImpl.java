@@ -22,18 +22,24 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberInfoDto findOne(Long memberId) {
-        return new MemberInfoDto(memberRepository.findById(memberId)
-                .orElseThrow(MEMBER_NOT_FOUND::exception));
+        return memberRepository
+                .findById(memberId)
+                .orElseThrow(MEMBER_NOT_FOUND::exception)
+                .toInfoDto();
     }
 
     public MemberInfoDto findOne(String email) {
-        return new MemberInfoDto(memberRepository.findByEmail(email)
-                .orElseThrow(MEMBER_EMAIL_NOT_FOUND::exception));
+        return memberRepository
+                .findByEmail(email)
+                .orElseThrow(MEMBER_EMAIL_NOT_FOUND::exception)
+                .toInfoDto();
     }
 
     public MemberInfoDto findOne(String nickName, String password) {
-        return new MemberInfoDto(memberRepository.findByNickNameAndPassword(nickName, password)
-                .orElseThrow(MEMBER_NOT_FOUND::exception));
+        return memberRepository
+                .findByNickNameAndPassword(nickName, password)
+                .orElseThrow(MEMBER_NOT_FOUND::exception)
+                .toInfoDto();
     }
 
     @Transactional
@@ -41,7 +47,8 @@ public class MemberServiceImpl implements MemberService {
     public Long save(MemberSaveDto dto) {
         memberRepository.findByNickName(dto.getNickName())
                 .ifPresent(m -> {throw MEMBER_NICKNAME_DUPLICATE.exception();});
-        return memberRepository.save(dto.toEntity()).getMemberId();
+        Member member = dto.toEntity();
+        return memberRepository.save(member).getMemberId();
     }
 
     @Transactional
@@ -53,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.findByNickName(dto.getNickName())
                 .ifPresent(m -> {throw MEMBER_NICKNAME_DUPLICATE.exception();});
         found.updateMember(dto);
-        return new MemberInfoDto(found);
+        return found.toInfoDto();
     }
 
     @Transactional
