@@ -1,49 +1,39 @@
 package taewan.Smart.domain.product.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import taewan.Smart.domain.order.repository.OrderItemRepository;
+import taewan.Smart.domain.product.dto.ProductDto;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductRepository;
 
-import java.util.Optional;
+import static taewan.Smart.global.error.ExceptionStatus.*;
+import static taewan.Smart.global.utils.FileUtil.*;
 
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NAME_DUPLICATE;
-import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
-import static taewan.Smart.global.util.FileUtils.*;
-
-@Transactional(readOnly = true)
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    @Value("${root.path}")
-    private String root;
-    @Value("${server.address.basic}")
-    private String address;
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public ProductInfoDto findOne(Long productId) {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        return new ProductInfoDto(found, findFiles(found.getImgFolderPath(), root, address), address);
+        return convertInfoDto(found);
     }
 
     @Override
     public Page<ProductInfoDto> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
+        return productRepository.findAll(pageable).map(this::convertInfoDto);
     }
 
     @Override
@@ -52,53 +42,40 @@ public class ProductServiceImpl implements ProductService {
 
         if (!search.isEmpty() && !code.isEmpty()) {
             found = productRepository.findAllByCodeContainsAndNameContains(pageable, code, search);
+        } else if (search.isEmpty() && code.isEmpty()) {
+            found = productRepository.findAll(pageable);
         } else if (search.isEmpty()) {
             found = productRepository.findAllByCodeContains(pageable, code);
         } else {
             found = productRepository.findAllByNameContains(pageable, search);
         }
-        return found.map(p -> new ProductInfoDto(p, findFiles(p.getImgFolderPath(), root, address), address));
+        return found.map(this::convertInfoDto);
     }
 
     @Transactional
     @Override
-    public Long save(ProductSaveDto productSaveDto) {
-        productRepository.findByName(productSaveDto.getName())
+    public Long save(ProductSaveDto dto) {
+        productRepository.findByName(dto.getName())
                 .ifPresent(p -> {throw PRODUCT_NAME_DUPLICATE.exception();});
-
-        String[] paths = saveImgFile(productSaveDto);
-
-        return productRepository.save(new Product(productSaveDto, paths[0], paths[1])).getProductId();
+        return productRepository.save(dto.toEntity(saveImgFile(dto)))
+                .getProductId();
     }
 
     @Transactional
     @Override
-    public Long update(ProductUpdateDto productUpdateDto) {
-        Optional<Product> equalNameProduct = productRepository.findByName(productUpdateDto.getName());
+    public Long update(ProductUpdateDto dto) {
+        Product found = productRepository.findById(dto.getProductId())
+                .orElseThrow(PRODUCT_NOT_FOUND::exception);
 
-        if (equalNameProduct.isPresent() && !equalNameProduct.get().getProductId().equals(productUpdateDto.getProductId())) {
-            throw PRODUCT_NAME_DUPLICATE.exception();
-        }
-
-        Product found = productRepository.findById(productUpdateDto.getProductId()).orElseThrow();
-        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
-
-        deleteDirectory(directoryPath);
-
-        String[] paths = saveImgFile(productUpdateDto);
-
-        found.updateProduct(productUpdateDto, paths[0], paths[1]);
+        productRepository.findByName(dto.getName())
+                .ifPresent(p -> {
+                    if (!p.getProductId().equals(dto.getProductId())) {
+                        throw PRODUCT_NAME_DUPLICATE.exception();
+                    }
+                });
+        deleteDirectory(found.getDirectoryPath());
+        found.updateProduct(dto, saveImgFile(dto));
         return found.getProductId();
-    }
-
-    private String[] saveImgFile(ProductSaveDto dto) {
-        String[] paths = new String[2];
-
-        paths[0] = "images/products/" + dto.getCode() + "/" + dto.getName();
-        paths[1] = paths[0] + "/" + saveFile(dto.getDetailInfo(), root + paths[0]);
-        paths[0] += "/view";
-        saveFiles(dto.getImgFiles(), root + paths[0]);
-        return paths;
     }
 
     @Transactional
@@ -106,9 +83,27 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId) {
         Product found = productRepository.findById(productId)
                 .orElseThrow(PRODUCT_NOT_FOUND::exception);
-        String directoryPath = root + found.getImgFolderPath().replaceFirst("/view", "");
 
-        deleteDirectory(directoryPath);
+        if (orderItemRepository.existsByProductId(productId))
+            throw PRODUCT_REFERRED.exception();
         productRepository.deleteById(productId);
+        deleteDirectory(found.getDirectoryPath());
+    }
+
+    private String saveImgFile(ProductDto dto) {
+        try {
+            saveFiles(dto.getImgFiles(), dto.getViewPath());
+            return saveFile(dto.getDetailInfo(), dto.getDirectoryPath());
+        } catch (NullPointerException e) {
+            throw PRODUCT_IMAGE_EMPTY.exception();
+        }
+    }
+
+    private ProductInfoDto convertInfoDto(Product product) {
+        return new ProductInfoDto(
+                product,
+                getAccessUrls(product.getImgFolderPath()),
+                getAccessUrl(product.getDetailInfo())
+        );
     }
 }

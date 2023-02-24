@@ -1,47 +1,46 @@
 package taewan.Smart.domain.order.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemCancelDto;
 import taewan.Smart.domain.order.dto.OrderSaveDto;
 import taewan.Smart.domain.order.service.OrderItemService;
 import taewan.Smart.domain.order.service.OrderService;
-import taewan.Smart.global.util.JwtUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static taewan.Smart.global.utils.JwtUtil.parseJwt;
 
 @RestController
 @RequestMapping("orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
     private final OrderItemService orderItemService;
 
-    @Autowired
-    public OrderController(OrderService orderService, OrderItemService orderItemService) {
-        this.orderService = orderService;
-        this.orderItemService = orderItemService;
-    }
-
     @GetMapping
-    public List<OrderInfoDto> search(HttpServletRequest request) {
-        return orderService.findAll(JwtUtils.getMemberId(request));
+    public List<OrderInfoDto> search(@RequestHeader("Authorization") String token) {
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
+
+        return orderService.findAll(memberId);
     }
 
     @PostMapping
-    public void upload(HttpServletRequest request, @RequestBody OrderSaveDto orderSaveDto) {
-        orderService.save(JwtUtils.getMemberId(request), orderSaveDto);
+    public void upload(@RequestHeader("Authorization") String token, @RequestBody OrderSaveDto dto) {
+        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
+
+        orderService.save(memberId, dto);
     }
 
     @PostMapping("/cancel")
-    public void cancel(OrderItemCancelDto orderCancelDto) {
-        orderItemService.cancel(orderCancelDto);
+    public void cancel(@ModelAttribute OrderItemCancelDto dto) {
+        orderItemService.cancel(dto);
     }
 
     @PostMapping("/refund")
-    public void refund(OrderItemCancelDto orderCancelDto) {
-        orderItemService.refund(orderCancelDto);
+    public void refund(@ModelAttribute OrderItemCancelDto dto) {
+        orderItemService.refund(dto);
     }
 }

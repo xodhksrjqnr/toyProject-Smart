@@ -1,20 +1,34 @@
 package taewan.Smart.domain.category.entity;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id @GeneratedValue
+    private Long categoryId;
     private String name;
     private String code;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<CategoryItem> categoryItems = new ArrayList<>();
+
+    @Builder
+    private Category(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public void addCategoryItem(CategoryItem categoryItem) {
+        this.categoryItems.add(categoryItem);
+        categoryItem.setCategory(this);
+    }
 }

@@ -1,42 +1,46 @@
 package taewan.Smart.domain.category.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import taewan.Smart.domain.category.dto.CategoryFullInfoDto;
+import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.category.dto.CategoryInfoDto;
-import taewan.Smart.domain.category.dto.CategoryItemInfoDto;
+import taewan.Smart.domain.category.dto.CategorySaveDto;
 import taewan.Smart.domain.category.entity.Category;
-import taewan.Smart.domain.category.entity.CategoryItem;
 import taewan.Smart.domain.category.repository.CategoryItemRepository;
 import taewan.Smart.domain.category.repository.CategoryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static taewan.Smart.global.error.ExceptionStatus.CATEGORY_NAME_DUPLICATE;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
-    private CategoryItemRepository categoryItemRepository;
+    private final CategoryRepository categoryRepository;
+    private final CategoryItemRepository categoryItemRepository;
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryItemRepository categoryItemRepository) {
-        this.categoryRepository = categoryRepository;
-        this.categoryItemRepository = categoryItemRepository;
+    @Transactional
+    public Long save(CategorySaveDto dto) {
+        Optional<Category> found = categoryRepository.findByName(dto.getClassification());
+
+        categoryItemRepository.findByName(dto.getMiddleClassification())
+                .ifPresent(c -> {throw CATEGORY_NAME_DUPLICATE.exception();});
+
+        String categoryCode = found.isPresent() ?
+                found.get().getCode() : Character.toString('A' + (int)categoryRepository.count());
+        String categoryItemCode = found.isPresent() ?
+                String.format("02d", found.get().getCategoryItems().size() + 1) : "01";
+
+        return categoryRepository.save(dto.toEntity(categoryCode, categoryItemCode)).getCategoryId();
     }
 
-    public List<CategoryFullInfoDto> findAll() {
-        List<Category> categories = categoryRepository.findAll(Sort.by("code"));
-        List<CategoryItem> categoryItems = categoryItemRepository.findAll(Sort.by("parentCode"));
-        List<CategoryFullInfoDto> result = new ArrayList<>();
-
-        for (Category c : categories) {
-            List<CategoryItemInfoDto> dtos = new ArrayList<>();
-            while (!categoryItems.isEmpty() && categoryItems.get(0).getParentCode().equals(c.getCode()))
-                dtos.add(new CategoryItemInfoDto(categoryItems.remove(0)));
-            result.add(new CategoryFullInfoDto(new CategoryInfoDto(c), dtos));
-        }
-        return result;
+    public List<CategoryInfoDto> findAll() {
+        return categoryRepository.findAll(Sort.by("code"))
+                .stream().map(CategoryInfoDto::new).collect(Collectors.toList());
     }
 }

@@ -1,60 +1,62 @@
 package taewan.Smart.domain.product.entity;
 
-import com.sun.istack.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @ToString
-@EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
-    @NotNull
+    @NotBlank
     private String imgFolderPath;
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @PositiveOrZero
     private Integer price;
-    @NotNull
+    @NotBlank
     private String code;
+    @NotBlank
     private String size;
-    @NotNull
+    @NotBlank
     private String detailInfo;
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
-    public Product(ProductSaveDto dto, String imgFolderPath, String infoPath) {
+    @Builder
+    public Product(String imgFolderPath, String name, Integer price, String code, String size, String detailInfo) {
         this.imgFolderPath = imgFolderPath;
-        this.name = dto.getName();
-        this.price = dto.getPrice();
-        this.code = dto.getCode();
-        this.size = dto.getSize();
-        this.detailInfo = infoPath;
+        this.name = name;
+        this.price = price;
+        this.code = code;
+        this.size = size;
+        this.detailInfo = detailInfo;
     }
 
-    public void updateProduct(ProductUpdateDto dto, String imgFolderPath, String infoPath) {
-        this.imgFolderPath = imgFolderPath;
+    public void updateProduct(ProductUpdateDto dto, String fileName) {
+        this.imgFolderPath = dto.getViewPath();
         this.name = dto.getName();
         this.price = dto.getPrice();
         this.code = dto.getCode();
         this.size = dto.getSize();
-        this.detailInfo = infoPath;
+        this.detailInfo = dto.getDirectoryPath() + fileName;
+    }
+
+    public String getDirectoryPath() {
+        return this.imgFolderPath.replaceFirst("view/", "");
     }
 }

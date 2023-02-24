@@ -1,10 +1,10 @@
 package taewan.Smart.domain.order.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.order.dto.OrderInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
 
@@ -15,55 +15,44 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long orderId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Long memberId;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
     @CreatedDate
     private LocalDateTime orderDateTime;
 
-    public static Order createOrder(Member member, OrderItem... orderItems) {
-        Order order = new Order();
-
-        order.setMember(member);
+    private Order(Long memberId, List<OrderItem> orderItems) {
+        this.memberId = memberId;
         for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
-        return order;
-    }
-
-    public void cancel(Long orderItemId, String reason) {
-        for (OrderItem orderItem : orderItems) {
-            if (orderItem.getOrderItemId().equals(orderItemId)) {
-                orderItem.cancel(reason);
-                break;
-            }
+            this.orderItems.add(orderItem);
+            orderItem.setOrder(this);
         }
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getOrders().add(this);
+    public static Order createOrder(Long memberId, List<OrderItem> orderItems) {
+        return new Order(memberId, orderItems);
     }
 
-    public void addOrderItem(OrderItem orderItem) {
-        this.orderItems.add(orderItem);
-        orderItem.setOrder(this);
+    private int totalPrice() {
+        int price = 0;
+
+        for (OrderItem orderItem : orderItems)
+            price += orderItem.getQuantity() * orderItem.getProduct().getPrice();
+        return price;
     }
 
-    public OrderInfoDto toInfoDto(String root, String address) {
+    public OrderInfoDto toInfoDto() {
         List<OrderItemInfoDto> orderItemInfoDtoList = new ArrayList<>();
 
         for (OrderItem orderItem : orderItems)
-            orderItemInfoDtoList.add(orderItem.toInfoDto(root, address));
+            orderItemInfoDtoList.add(orderItem.toInfoDto());
         return new OrderInfoDto(this.orderId, orderItemInfoDtoList);
     }
 }

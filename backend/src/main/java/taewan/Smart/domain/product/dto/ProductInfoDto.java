@@ -22,13 +22,13 @@ public class ProductInfoDto {
     private String size;
     private String detailInfo;
 
-    public ProductInfoDto(Product product, List<String> imgFiles, String host) {
+    public ProductInfoDto(Product product, List<String> productAccessImgUrl, String detailInfoAccessImgUrl) {
         this.productId = product.getProductId();
-        this.imgFiles = imgFiles;
+        this.imgFiles = productAccessImgUrl;
         this.name = product.getName();
         this.price = product.getPrice();
         this.code = product.getCode();
         this.size = product.getSize();
-        this.detailInfo = host + product.getDetailInfo();
+        this.detailInfo = detailInfoAccessImgUrl;
     }
 }

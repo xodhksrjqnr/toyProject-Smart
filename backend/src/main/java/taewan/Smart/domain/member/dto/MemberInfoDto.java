@@ -1,14 +1,15 @@
 package taewan.Smart.domain.member.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import taewan.Smart.domain.member.entity.Member;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @ToString
 public class MemberInfoDto {
 
@@ -32,5 +33,16 @@ public class MemberInfoDto {
         this.email = dto.getEmail();
         this.phoneNumber = dto.getPhoneNumber();
         this.birthday = dto.getBirthday();
+    }
+
+    public Map<String, Object> toClaimsMap() {
+        return Map.of(
+                "memberId", this.memberId,
+                "email", this.email
+        );
+    }
+
+    public Map<String, Object> toClaimMap() {
+        return Map.of("memberId", this.memberId);
     }
 }

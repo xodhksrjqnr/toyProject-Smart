@@ -1,13 +1,12 @@
 package taewan.Smart.domain.order.dto;
 
 import lombok.Getter;
-import lombok.Setter;
 import taewan.Smart.domain.order.entity.OrderItem;
 
-import static taewan.Smart.global.util.FileUtils.findFile;
+import static taewan.Smart.global.utils.FileUtil.findFiles;
+import static taewan.Smart.global.utils.FileUtil.getAccessUrls;
 
 @Getter
-@Setter
 public class OrderItemInfoDto {
 
     private Long productId;
@@ -19,10 +18,10 @@ public class OrderItemInfoDto {
     private Integer price;
     private String deliveryStatus;
 
-    public OrderItemInfoDto(OrderItem orderItem, String root, String address) {
+    public OrderItemInfoDto(OrderItem orderItem) {
         this.productId = orderItem.getProduct().getProductId();
         this.orderItemId = orderItem.getOrderItemId();
-        this.thumbnail = findFile(orderItem.getProduct().getImgFolderPath(), root, address);
+        this.thumbnail = getAccessUrls(orderItem.getProduct().getImgFolderPath()).get(0);
         this.name = orderItem.getProduct().getName();
         this.size = orderItem.getSize();
         this.quantity = orderItem.getQuantity();

@@ -1,4 +1,4 @@
-package taewan.Smart.member;
+package taewan.Smart.unit.member;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,12 +8,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import taewan.Smart.member.dto.MemberInfoDto;
-import taewan.Smart.member.dto.MemberSaveDto;
-import taewan.Smart.member.dto.MemberUpdateDto;
-import taewan.Smart.member.entity.Member;
-import taewan.Smart.member.repository.MemberRepository;
-import taewan.Smart.member.service.MemberServiceImpl;
+import taewan.Smart.domain.member.dto.MemberInfoDto;
+import taewan.Smart.domain.member.dto.MemberSaveDto;
+import taewan.Smart.domain.member.dto.MemberUpdateDto;
+import taewan.Smart.domain.member.entity.Member;
+import taewan.Smart.domain.member.repository.MemberRepository;
+import taewan.Smart.domain.member.service.MemberServiceImpl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -97,23 +97,6 @@ class MemberServiceImplTest {
 //    }
 //
 //    @Test
-//    void 회원_전체조회() {
-//        //given
-//        Mockito.when(memberRepository.findAll()).thenReturn(entities);
-//
-//        //when
-//        List<MemberInfoDto> found = memberService.findAll();
-//
-//        //then
-//        Assertions.assertThat(found.size()).isEqualTo(3);
-//        for (int i = 0; i < 3; i++) {
-//            Assertions.assertThat(found.get(i).toString().replace("MemberInfoDto", ""))
-//                    .isEqualTo(entities.get(i).toString().replace("Member", ""));
-//        }
-//        Mockito.verify(memberRepository, Mockito.times(1)).findAll();
-//    }
-//
-//    @Test
 //    void 회원_수정() {
 //        //given
 //        Member member = entities.get(0);
@@ -127,7 +110,7 @@ class MemberServiceImplTest {
 //        Mockito.when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
 //
 //        //when
-//        Long id = memberService.modify(dto);
+//        Long id = memberService.update(dto);
 //
 //        //then
 //        Assertions.assertThat(id).isEqualTo(1L);

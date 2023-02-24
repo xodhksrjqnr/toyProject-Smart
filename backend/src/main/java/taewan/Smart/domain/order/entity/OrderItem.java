@@ -1,8 +1,6 @@
 package taewan.Smart.domain.order.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import taewan.Smart.domain.order.dto.OrderItemInfoDto;
 import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.product.entity.Product;
@@ -10,11 +8,15 @@ import taewan.Smart.domain.product.entity.Product;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private enum Status {
+        WAIT, CANCEL, REFUND
+    }
+
+    @Id @GeneratedValue
     private Long orderItemId;
     private Integer quantity;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,24 +25,38 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-    private String deliveryStatus;
+    @Enumerated(value = EnumType.STRING)
+    private Status deliveryStatus;
     private String size;
 
-    public static OrderItem createOrderItem(OrderItemSaveDto orderItemSaveDto, Product product) {
-        OrderItem orderItem = new OrderItem();
-
-        orderItem.setProduct(product);
-        orderItem.setSize(orderItemSaveDto.getSize());
-        orderItem.setQuantity(orderItemSaveDto.getQuantity());
-        orderItem.setDeliveryStatus("대기중");
-        return orderItem;
+    private OrderItem(OrderItemSaveDto dto, Product product) {
+        this.quantity = dto.getQuantity();
+        this.size = dto.getSize();
+        this.product = product;
+        this.deliveryStatus = Status.WAIT;
     }
 
-    public void cancel(String stats) {
-        this.deliveryStatus = stats;
+    public static OrderItem createOrderItem(OrderItemSaveDto dto, Product product) {
+        return new OrderItem(dto, product);
     }
 
-    public OrderItemInfoDto toInfoDto(String root, String address) {
-        return new OrderItemInfoDto(this, root, address);
+    void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void cancel() {
+        this.deliveryStatus = Status.CANCEL;
+    }
+
+    public void refund() {
+        this.deliveryStatus = Status.REFUND;
+    }
+
+    public String getDeliveryStatus() {
+        return this.deliveryStatus.name();
+    }
+
+    public OrderItemInfoDto toInfoDto() {
+        return new OrderItemInfoDto(this);
     }
 }

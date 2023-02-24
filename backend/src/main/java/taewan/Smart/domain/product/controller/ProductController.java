@@ -1,6 +1,6 @@
 package taewan.Smart.domain.product.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +13,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("products")
+@RequiredArgsConstructor
 public class ProductController {
 
-    private ProductService productService;
-
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductService productService;
 
     @GetMapping("/{productId}")
     public ProductInfoDto searchOne(@PathVariable Long productId) {
@@ -40,12 +36,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Long upload(@Valid ProductSaveDto dto) {
+    public Long upload(@Valid @ModelAttribute ProductSaveDto dto) {
         return productService.save(dto);
     }
 
     @PostMapping("/update")
-    public Long modify(@Valid ProductUpdateDto dto) {
+    public Long modify(@Valid @ModelAttribute ProductUpdateDto dto) {
         return productService.update(dto);
     }
 

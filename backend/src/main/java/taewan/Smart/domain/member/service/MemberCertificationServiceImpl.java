@@ -1,7 +1,6 @@
 package taewan.Smart.domain.member.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.dto.MemberCertificateDto;
@@ -11,19 +10,13 @@ import taewan.Smart.domain.member.repository.MemberRepository;
 import java.util.UUID;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
+import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MemberCertificationServiceImpl implements MemberCertificationService {
-
-    @Value("${client.address}")
-    private String clientAddress;
-
     private final MemberRepository memberRepository;
-
-    @Autowired
-    public MemberCertificationServiceImpl(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
 
     @Override
     public MemberCertificateDto findEmail(String email) {
@@ -31,7 +24,7 @@ public class MemberCertificationServiceImpl implements MemberCertificationServic
                 .ifPresent(m -> {throw MEMBER_EMAIL_DUPLICATE.exception();});
 
         String message = "[Smart] 회원가입 이메일 인증 안내 메일입니다.";
-        String text = clientAddress + "signup";
+        String text = getClientAddress() + "signup";
 
         return new MemberCertificateDto(email, message, text);
     }

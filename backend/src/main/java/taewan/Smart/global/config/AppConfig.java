@@ -48,7 +48,7 @@ public class AppConfig {
 
     @Bean
     public ProductService productService() {
-        return new ProductServiceImpl(this.productRepository);
+        return new ProductServiceImpl(this.productRepository, this.orderItemRepository);
     }
 
     @Bean
