@@ -1,5 +1,6 @@
 package taewan.Smart.domain.category.entity;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,10 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long categoryItemId;
     private String name;
     private String code;
@@ -20,8 +21,12 @@ public class CategoryItem {
     private Category category;
 
     @Builder
-    public CategoryItem(String name, String code) {
+    private CategoryItem(String name, String code) {
         this.name = name;
         this.code = code;
+    }
+
+    void setCategory(Category category) {
+        this.category = category;
     }
 }
