@@ -6,8 +6,13 @@ import java.util.List;
 
 public interface ProductDto {
 
-    String getDirectoryPath();
-    String getViewPath();
     List<MultipartFile> getImgFiles();
     MultipartFile getDetailInfo();
+    String getImgSavePath();
+    default String getProductImgSavePath() {
+        return getImgSavePath() + "/view";
+    }
+    default String getDetailInfoImgSavePath() {
+        return getImgSavePath() + "/info";
+    }
 }
