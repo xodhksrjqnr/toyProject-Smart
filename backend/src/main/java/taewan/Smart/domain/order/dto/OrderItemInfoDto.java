@@ -21,7 +21,7 @@ public class OrderItemInfoDto {
     public OrderItemInfoDto(OrderItem orderItem) {
         this.productId = orderItem.getProduct().getProductId();
         this.orderItemId = orderItem.getOrderItemId();
-        this.thumbnail = getAccessUrls(orderItem.getProduct().getImgFolderPath()).get(0);
+        this.thumbnail = getAccessUrls(orderItem.getProduct().getImgPath()).get(0);
         this.name = orderItem.getProduct().getName();
         this.size = orderItem.getSize();
         this.quantity = orderItem.getQuantity();
