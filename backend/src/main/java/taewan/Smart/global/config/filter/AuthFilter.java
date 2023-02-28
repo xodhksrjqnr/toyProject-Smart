@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Set;
 
-import static taewan.Smart.global.utils.JwtUtil.parseJwt;
+import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
 @Slf4j
 public class AuthFilter implements Filter {

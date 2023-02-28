@@ -10,7 +10,7 @@ import taewan.Smart.global.config.filter.AuthFilter;
 
 import javax.servlet.Filter;
 
-import static taewan.Smart.global.utils.PropertyUtil.*;
+import static taewan.Smart.global.util.PropertyUtils.*;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

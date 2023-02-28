@@ -52,8 +52,9 @@ public class CustomFileUtils {
 
             if (f.isDirectory()) {
                 recursivelyFind(target);
+            } else if (f.isFile()) {
+                foundImage.get().add(target);
             }
-            foundImage.get().add(target);
         }
     }
 
