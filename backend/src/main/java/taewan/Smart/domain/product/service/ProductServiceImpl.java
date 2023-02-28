@@ -12,9 +12,10 @@ import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductDao;
+import taewan.Smart.global.converter.PathConverter;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.FileUtil.*;
+import static taewan.Smart.global.util.CustomFileUtils.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
         String preImgPath = found.getImgPath();
 
         found.updateProduct(dto);
-        deleteDirectory(preImgPath);
+        deleteDirectory(PathConverter.toImgAccessLocal(preImgPath));
         saveImgFile(dto);
         return found.getProductId();
     }
@@ -78,14 +79,14 @@ public class ProductServiceImpl implements ProductService {
             throw PRODUCT_REFERRED.exception();
         }
         productDao.deleteById(productId);
-        deleteDirectory(found.getImgPath());
+        deleteDirectory(PathConverter.toImgAccessLocal(found.getImgPath()));
     }
 
     private void saveImgFile(ProductDto dto) {
         try {
-            saveFiles(dto.getImgFiles(), dto.getProductImgSavePath());
-            saveFile(dto.getDetailInfo(), dto.getDetailInfoImgSavePath());
-        } catch (NullPointerException e) {
+            saveFiles(dto.getImgFiles(), PathConverter.toImgAccessLocal(dto.getProductImgSavePath()));
+            saveFile(dto.getDetailInfo(), PathConverter.toImgAccessLocal(dto.getDetailInfoImgSavePath()));
+        } catch (IllegalArgumentException ex) {
             throw PRODUCT_IMAGE_EMPTY.exception();
         }
     }

@@ -10,7 +10,7 @@ import taewan.Smart.domain.order.service.OrderService;
 
 import java.util.List;
 
-import static taewan.Smart.global.utils.JwtUtil.parseJwt;
+import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
 @RestController
 @RequestMapping("orders")

@@ -2,9 +2,9 @@ package taewan.Smart.domain.order.dto;
 
 import lombok.Getter;
 import taewan.Smart.domain.order.entity.OrderItem;
+import taewan.Smart.global.converter.PathConverter;
+import taewan.Smart.global.util.CustomFileUtils;
 
-import static taewan.Smart.global.utils.FileUtil.findFiles;
-import static taewan.Smart.global.utils.FileUtil.getAccessUrls;
 
 @Getter
 public class OrderItemInfoDto {
@@ -21,7 +21,9 @@ public class OrderItemInfoDto {
     public OrderItemInfoDto(OrderItem orderItem) {
         this.productId = orderItem.getProduct().getProductId();
         this.orderItemId = orderItem.getOrderItemId();
-        this.thumbnail = getAccessUrls(orderItem.getProduct().getImgPath()).get(0);
+        this.thumbnail = PathConverter.toImgAccessUrl(
+                CustomFileUtils.findFilePaths(orderItem.getProduct().getImgPath())
+        ).get(0);
         this.name = orderItem.getProduct().getName();
         this.size = orderItem.getSize();
         this.quantity = orderItem.getQuantity();

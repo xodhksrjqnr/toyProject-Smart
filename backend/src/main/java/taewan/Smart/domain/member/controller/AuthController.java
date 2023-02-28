@@ -8,7 +8,7 @@ import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.infra.Mail;
 
-import static taewan.Smart.global.utils.JwtUtil.createJwt;
+import static taewan.Smart.global.util.JwtUtils.createJwt;
 
 @RestController
 @RequestMapping("members")

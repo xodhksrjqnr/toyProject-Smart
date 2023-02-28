@@ -12,8 +12,8 @@ import taewan.Smart.domain.member.service.MemberService;
 import javax.validation.Valid;
 
 import static taewan.Smart.global.error.ExceptionStatus.DATA_FALSIFICATION;
-import static taewan.Smart.global.utils.JwtUtil.createJwt;
-import static taewan.Smart.global.utils.JwtUtil.parseJwt;
+import static taewan.Smart.global.util.JwtUtils.createJwt;
+import static taewan.Smart.global.util.JwtUtils.parseJwt;
 
 @RestController
 @RequestMapping("members")

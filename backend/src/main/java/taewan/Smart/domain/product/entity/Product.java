@@ -8,12 +8,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
+import taewan.Smart.global.converter.PathConverter;
+import taewan.Smart.global.util.CustomFileUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static taewan.Smart.global.utils.FileUtil.getAccessUrls;
 
 @Entity
 @Getter
@@ -50,7 +50,8 @@ public class Product {
     }
 
     public ProductInfoDto toInfoDto() {
-        List<String> urls = getAccessUrls(imgPath);
+        String localPath = PathConverter.toImgAccessLocal(imgPath);
+        List<String> urls = PathConverter.toImgAccessUrl(CustomFileUtils.findFilePaths(localPath));
         String detailInfoPath = null;
 
         for (int i = 0; i < urls.size(); i++) {

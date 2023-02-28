@@ -10,7 +10,7 @@ import taewan.Smart.domain.order.entity.Order;
 import taewan.Smart.domain.order.entity.OrderItem;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.product.entity.Product;
-import taewan.Smart.domain.product.repository.ProductRepository;
+import taewan.Smart.domain.product.repository.ProductDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_NOT_FOUND;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private final ProductRepository productRepository;
+    private final ProductDao productDao;
 
     @Override
     public List<OrderInfoDto> findAll(Long memberId) {
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
         dto.getOrderItemSaveDtoList()
                 .forEach(oi -> {
-                    Product product = productRepository.findById(oi.getProductId())
+                    Product product = productDao.findById(oi.getProductId())
                             .orElseThrow(PRODUCT_NOT_FOUND::exception);
                     orderItems.add(OrderItem.createOrderItem(oi, product));
                 });
