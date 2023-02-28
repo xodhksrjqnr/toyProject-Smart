@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.entity.Product;
-import taewan.Smart.global.utils.PropertyUtil;
+import taewan.Smart.global.util.PropertyUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +18,8 @@ import java.io.InputStream;
 import java.util.*;
 
 import static taewan.Smart.global.error.ExceptionStatus.PRODUCT_IMAGE_EMPTY;
-import static taewan.Smart.global.utils.FileUtil.saveFile;
-import static taewan.Smart.global.utils.FileUtil.saveFiles;
+import static taewan.Smart.global.util.CustomFileUtils.saveFile;
+import static taewan.Smart.global.util.CustomFileUtils.saveFiles;
 
 public class ProductTestFixture {
     private static String[] category = {"A", "B", "C", "D"};
@@ -54,10 +54,10 @@ public class ProductTestFixture {
         DETAIL_INFO_IMG_PATH = properties.getProperty("path.testImg.detail");
         IMG_FOLDER_PATH = ROOT + properties.getProperty("path.image");
         ACCESS_IMG_URL = SERVER_ADDRESS + properties.getProperty("path.image");
-        ReflectionTestUtils.setField(PropertyUtil.class, "ROOT_PATH", ROOT);
-        ReflectionTestUtils.setField(PropertyUtil.class, "SERVER_ADDRESS", SERVER_ADDRESS);
-        ReflectionTestUtils.setField(PropertyUtil.class, "IMG_FOLDER_PATH", IMG_FOLDER_PATH);
-        ReflectionTestUtils.setField(PropertyUtil.class, "ACCESS_IMG_URL", ACCESS_IMG_URL);
+        ReflectionTestUtils.setField(PropertyUtils.class, "ROOT_PATH", ROOT);
+        ReflectionTestUtils.setField(PropertyUtils.class, "SERVER_ADDRESS", SERVER_ADDRESS);
+        ReflectionTestUtils.setField(PropertyUtils.class, "IMG_FOLDER_PATH", IMG_FOLDER_PATH);
+        ReflectionTestUtils.setField(PropertyUtils.class, "ACCESS_IMG_URL", ACCESS_IMG_URL);
         products = createProducts();
         productSaveDtoList = createProductSaveDtoList();
         createdCodeInfo = getCodeInfo(products);
@@ -109,16 +109,12 @@ public class ProductTestFixture {
         return category[index % 4] + categoryItem[index % 2] + gender[index % 2];
     }
 
+    private static String createImgSavePath(String root, String name, String code) {
+        return root + createPath(name, code);
+    }
+
     private static String createPath(String name, String code) {
         return code + "/" + name;
-    }
-
-    public static String createImgFilePath(String root, String name, String code) {
-        return root + createPath(name, code) + "/view";
-    }
-
-    public static String createDetailInfoPath(String root, String name, String code) {
-        return root + createPath(name, code) + "/" + UUID.randomUUID();
     }
 
     public static Map<String, Integer> getCodeInfo(List<Product> products) {
@@ -160,8 +156,8 @@ public class ProductTestFixture {
 
     public static String saveImgFile(ProductSaveDto dto) {
         try {
-            saveFiles(dto.getImgFiles(), dto.getViewPath());
-            return saveFile(dto.getDetailInfo(), dto.getDirectoryPath());
+            saveFiles(dto.getImgFiles(), dto.getImgSavePath());
+            return saveFile(dto.getDetailInfo(), dto.getImgSavePath());
         } catch (NullPointerException e) {
             throw PRODUCT_IMAGE_EMPTY.exception();
         }
@@ -180,8 +176,7 @@ public class ProductTestFixture {
                 .price(createPrice())
                 .code(code)
                 .size("s,m,l,xl,xxl")
-                .imgFolderPath(createImgFilePath(ROOT, name, code))
-                .detailInfo(createDetailInfoPath(ROOT, name, code))
+                .imgPath(createImgSavePath(ROOT, name, code))
                 .build();
     }
 

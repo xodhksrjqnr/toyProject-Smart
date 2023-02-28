@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.dto.MemberCertificateDto;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static taewan.Smart.fixture.MemberTestFixture.createPhoneNumber;
 import static taewan.Smart.fixture.MemberTestFixture.getMemberSaveDtoList;
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
+import static taewan.Smart.global.util.PropertyUtils.getClientAddress;
 
 @SpringBootTest
 @Transactional
