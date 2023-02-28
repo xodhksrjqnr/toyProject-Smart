@@ -21,6 +21,8 @@ import javax.persistence.PersistenceException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static taewan.Smart.fixture.ProductTestFixture.createProduct;
+import static taewan.Smart.fixture.ProductTestFixture.toStringForTest;
 
 
 @Import(ProductDaoImpl.class)
@@ -31,32 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ProductDaoTest {
     @Autowired
     private ProductDao productDao;
-
-    private static Product createProduct(int index) {
-        return Product.builder()
-                .name("test" + index)
-                .price(1000 * index)
-                .code("A01M")
-                .size("s,m,l")
-                .imgPath("testPath" + index)
-                .build();
-    }
-
-    private static Product createProduct() {
-        return createProduct(1);
-    }
-
-    private static String toStringForTest(Product product) {
-        StringBuilder str = new StringBuilder()
-                .append(product.getProductId()).append(",")
-                .append(product.getName()).append(",")
-                .append(product.getCode()).append(",")
-                .append(product.getPrice()).append(",")
-                .append(product.getSize()).append(",")
-                .append(product.getImgPath());
-
-        return str.toString();
-    }
 
     @Test
     @DisplayName("유효한 제품 저장 테스트")
