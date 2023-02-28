@@ -1,6 +1,7 @@
-package taewan.Smart.global.utils;
+package taewan.Smart.global.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,11 +13,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static taewan.Smart.global.utils.PropertyUtil.getAccessImgUrl;
-import static taewan.Smart.global.utils.PropertyUtil.getImgFolderPath;
+import static taewan.Smart.global.util.PropertyUtils.getAccessImgUrl;
+import static taewan.Smart.global.util.PropertyUtils.getImgFolderPath;
 
 @Slf4j
-public class FileUtil {
+public class CustomFileUtils extends FileUtils {
     private static final String EMPTY_PATH = "empty/noimg.jpeg";
 
     public static String getAccessUrl(String filePath) {
@@ -93,7 +94,7 @@ public class FileUtil {
         try {
             for (File f : files) {
                 String target = directoryPath + f.getName();
-                log.info(target);
+
                 if (f.isDirectory())
                     deleteAllFiles(target + "/");
                 Files.deleteIfExists(Paths.get(target));

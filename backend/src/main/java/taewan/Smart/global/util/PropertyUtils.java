@@ -1,9 +1,9 @@
-package taewan.Smart.global.utils;
+package taewan.Smart.global.util;
 
 import org.springframework.core.env.Environment;
 import taewan.Smart.global.config.ApplicationContextProvider;
 
-public class PropertyUtil {
+public class PropertyUtils {
 
     private static String SERVER_ADDRESS;
     private static String CLIENT_ADDRESS;
