@@ -1,10 +1,10 @@
 package taewan.Smart.domain.order.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Builder
+@AllArgsConstructor
 public class OrderItemCancelDto {
 
     private Long orderItemId;

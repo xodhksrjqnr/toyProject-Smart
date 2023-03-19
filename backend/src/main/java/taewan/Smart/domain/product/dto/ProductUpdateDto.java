@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProductUpdateDto implements ProductDto {
+public class ProductUpdateDto extends ProductDto {
 
     private Long productId;
     private List<MultipartFile> imgFiles;

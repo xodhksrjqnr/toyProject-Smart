@@ -10,22 +10,28 @@ import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.global.converter.PathConverter;
 import taewan.Smart.global.util.CustomFileUtils;
+import taewan.Smart.global.util.PropertyUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@Table(name = "products")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "bigint unsigned")
     private Long productId;
     @Column(unique = true)
     private String name;
+    @Column(columnDefinition = "int unsigned")
     private Integer price;
+    @Column(columnDefinition = "char(4)")
     private String code;
     private String size;
     private String imgPath;
@@ -51,7 +57,10 @@ public class Product {
 
     public ProductInfoDto toInfoDto() {
         String localPath = PathConverter.toImgAccessLocal(imgPath);
-        List<String> urls = PathConverter.toImgAccessUrl(CustomFileUtils.findFilePaths(localPath));
+        List<String> found = CustomFileUtils.findFilePaths(localPath)
+                .stream().map(path -> path.replace(PropertyUtils.getImgFolderPath(), ""))
+                .collect(Collectors.toList());
+        List<String> urls = PathConverter.toImgAccessUrl(found);
         String detailInfoPath = null;
 
         for (int i = 0; i < urls.size(); i++) {

@@ -7,23 +7,23 @@ import lombok.NoArgsConstructor;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.dto.MemberUpdateDto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
-
-import static taewan.Smart.global.error.ExceptionStatus.MEMBER_PASSWORD_INVALID;
 
 @Entity
 @Getter
+@Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "bigint unsigned")
     private Long memberId;
     private String nickName;
+    @Column(columnDefinition = "varchar(320)")
     private String email;
     private String password;
+    @Column(columnDefinition = "char(13)")
     private String phoneNumber;
     private LocalDate birthday;
 
@@ -38,7 +38,6 @@ public class Member {
 
     public void updateMember(MemberUpdateDto dto) {
         this.nickName = dto.getNickName();
-        this.email = dto.getEmail();
         this.phoneNumber = dto.getPhoneNumber();
         this.birthday = dto.getBirthday();
         updateMemberPassword(dto.getPassword());
@@ -46,7 +45,7 @@ public class Member {
 
     public void updateMemberPassword(String password) {
         if (password.isEmpty()) {
-            throw MEMBER_PASSWORD_INVALID.exception();
+            return;
         }
         this.password = password;
     }

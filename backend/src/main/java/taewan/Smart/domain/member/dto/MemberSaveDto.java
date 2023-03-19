@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class MemberSaveDto {
 
@@ -29,11 +29,11 @@ public class MemberSaveDto {
 
     public Member toEntity() {
         return Member.builder()
-                .nickName(this.nickName)
-                .password(this.password)
-                .email(this.email)
-                .birthday(this.birthday)
-                .phoneNumber(this.phoneNumber)
+                .nickName(nickName)
+                .password(password)
+                .email(email)
+                .birthday(birthday)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 }

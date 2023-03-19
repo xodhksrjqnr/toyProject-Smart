@@ -29,7 +29,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderInfoDto> findAll(Long memberId) {
-        memberRepository.findById(memberId).orElseThrow(MEMBER_NOT_FOUND::exception);
+        if (!memberRepository.existsById(memberId)) {
+            throw MEMBER_NOT_FOUND.exception();
+        }
         return orderRepository
                 .findAllByMemberId(memberId)
                 .stream().map(Order::toInfoDto)
@@ -38,8 +40,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Long save(Long memberId, OrderSaveDto dto) {
-        memberRepository.findById(memberId).orElseThrow(MEMBER_NOT_FOUND::exception);
+    public void save(Long memberId, OrderSaveDto dto) {
+        if (!memberRepository.existsById(memberId)) {
+            throw MEMBER_NOT_FOUND.exception();
+        }
 
         List<OrderItem> orderItems = new ArrayList<>();
 
@@ -52,6 +56,6 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = Order.createOrder(memberId, orderItems);
 
-        return orderRepository.save(order).getOrderId();
+        orderRepository.save(order);
     }
 }

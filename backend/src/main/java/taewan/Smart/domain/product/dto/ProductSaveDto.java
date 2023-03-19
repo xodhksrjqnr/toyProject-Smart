@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProductSaveDto implements ProductDto {
+public class ProductSaveDto extends ProductDto {
 
     private List<MultipartFile> imgFiles;
     @NotBlank(message = "제품 이름이 필요합니다.")

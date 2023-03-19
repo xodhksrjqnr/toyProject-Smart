@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.product.entity.Product;
 
 import javax.persistence.EntityManager;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductDaoImpl implements ProductDao {
 
@@ -24,7 +26,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public boolean existsByName(String name) {
         return entityManager
-                .createNativeQuery("select exists(select * from Product where name=:name limit 1)")
+                .createNativeQuery("select exists(select * from Products where name=:name)")
                 .setParameter("name", name)
                 .getSingleResult() == BigInteger.ONE;
     }
@@ -32,7 +34,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public boolean existsByNameAndProductIdNot(Long productId, String name) {
         return entityManager
-                .createNativeQuery("select exists(select * from Product where name=:name and product_id!=:productId limit 1)")
+                .createNativeQuery("select exists(select * from Products where name=:name and product_id!=:productId)")
                 .setParameter("name", name)
                 .setParameter("productId", productId)
                 .getSingleResult() == BigInteger.ONE;
@@ -49,7 +51,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Page<Product> findAllByFilter(Pageable pageable, String code, String name) {
-        String sql = "select * from Product" +
+        String sql = "select * from Products" +
                 createWhere(code, name) +
                 createSort(pageable.getSort()) +
                 " limit " + pageable.getPageSize() + " offset " + pageable.getOffset();
@@ -61,27 +63,27 @@ public class ProductDaoImpl implements ProductDao {
         if (!name.isEmpty()) {
             query.setParameter("name", "%" + name + "%");
         }
+        query.getResultList();
         return new PageImpl<Product>(query.getResultList(), pageable, count());
     }
 
+    @Transactional
     @Override
     public Long save(Product product) {
         entityManager.persist(product);
         return product.getProductId();
     }
 
+    @Transactional
     @Override
     public void deleteById(Long productId) {
-        entityManager
-                .createQuery("delete from Product p where p.productId=:productId")
-                .setParameter("productId", productId)
-                .executeUpdate();
+        entityManager.remove(entityManager.find(Product.class, productId));
     }
 
     @Override
     public long count() {
         return ((Number) entityManager
-                .createNativeQuery("select count(*) from Product")
+                .createNativeQuery("select count(*) from Products")
                 .getSingleResult())
                 .longValue();
     }

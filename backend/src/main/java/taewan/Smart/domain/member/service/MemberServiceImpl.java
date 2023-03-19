@@ -47,8 +47,7 @@ public class MemberServiceImpl implements MemberService {
     public Long save(MemberSaveDto dto) {
         memberRepository.findByNickName(dto.getNickName())
                 .ifPresent(m -> {throw MEMBER_NICKNAME_DUPLICATE.exception();});
-        Member member = dto.toEntity();
-        return memberRepository.save(member).getMemberId();
+        return memberRepository.save(dto.toEntity()).getMemberId();
     }
 
     @Transactional

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 /**
  * 해당 클래스는 파일에 대한 저장, 조회, 제거 기능을 처리하기 위해 구현되었다.
  */
@@ -31,7 +30,7 @@ public class CustomFileUtils {
         foundImage.set(new ArrayList<>());
         recursivelyFind(path);
 
-        List<String> found = new ArrayList<>(foundImage.get());
+        List<String> found = foundImage.get();
 
         foundImage.remove();
         return found;

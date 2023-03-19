@@ -4,15 +4,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface ProductDto {
+public abstract class ProductDto {
 
-    List<MultipartFile> getImgFiles();
-    MultipartFile getDetailInfo();
-    String getImgSavePath();
-    default String getProductImgSavePath() {
+    public abstract List<MultipartFile> getImgFiles();
+    public abstract MultipartFile getDetailInfo();
+    abstract String getImgSavePath();
+    public String getProductImgSavePath() {
         return getImgSavePath() + "/view";
     }
-    default String getDetailInfoImgSavePath() {
+    public String getDetailInfoImgSavePath() {
         return getImgSavePath() + "/info";
     }
 }

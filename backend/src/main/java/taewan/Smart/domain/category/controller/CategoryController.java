@@ -21,7 +21,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Long upload(@ModelAttribute CategorySaveDto dto) {
-        return categoryService.save(dto);
+    public void upload(@ModelAttribute CategorySaveDto dto) {
+        categoryService.save(dto);
     }
 }

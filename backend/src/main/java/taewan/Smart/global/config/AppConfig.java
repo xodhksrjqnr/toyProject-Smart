@@ -13,7 +13,8 @@ import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberCertificationServiceImpl;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.domain.member.service.MemberServiceImpl;
-import taewan.Smart.domain.order.repository.OrderItemRepository;
+import taewan.Smart.domain.order.repository.OrderItemDao;
+import taewan.Smart.domain.order.repository.OrderItemDaoImpl;
 import taewan.Smart.domain.order.repository.OrderRepository;
 import taewan.Smart.domain.order.service.OrderItemService;
 import taewan.Smart.domain.order.service.OrderItemServiceImpl;
@@ -36,7 +37,6 @@ public class AppConfig {
     private final CategoryRepository categoryRepository;
     private final CategoryItemRepository categoryItemRepository;
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
 
     @Bean
     public ProductDao productDao() {
@@ -45,7 +45,7 @@ public class AppConfig {
 
     @Bean
     public ProductService productService() {
-        return new ProductServiceImpl(productDao(), this.orderItemRepository);
+        return new ProductServiceImpl(productDao(), orderItemDao());
     }
 
     @Bean
@@ -71,7 +71,12 @@ public class AppConfig {
     }
 
     @Bean
+    public OrderItemDao orderItemDao() {
+        return new OrderItemDaoImpl(this.entityManager);
+    }
+
+    @Bean
     public OrderItemService orderItemService() {
-        return new OrderItemServiceImpl(this.orderItemRepository);
+        return new OrderItemServiceImpl(orderItemDao());
     }
 }

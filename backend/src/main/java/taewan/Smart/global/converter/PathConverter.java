@@ -28,7 +28,7 @@ public class PathConverter {
      */
     public static List<String> toImgAccessUrl(List<String> imgPaths) {
         return imgPaths.stream()
-                .map(p -> PropertyUtils.getAccessImgUrl() + (p == null ? PropertyUtils.getEmptyImgPath() : imgPaths))
+                .map(p -> PropertyUtils.getAccessImgUrl() + (p == null ? PropertyUtils.getEmptyImgPath() : p))
                 .collect(Collectors.toList());
     }
 
