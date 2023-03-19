@@ -10,12 +10,9 @@ public class OrderTestFixture {
 
     private static final String[] size = {"s", "m", "l", "xl", "xxl"};
 
-    private static final OrderSaveDto orderSaveDto = createOrderSaveDto();
-
     public static OrderSaveDto createOrderSaveDto() {
-        OrderSaveDto dto = new OrderSaveDto();
+        OrderSaveDto dto = new OrderSaveDto(createOrderItemSaveDtoList());
 
-        dto.setOrderItemSaveDtoList(createOrderItemSaveDtoList());
         return dto;
     }
 
@@ -24,11 +21,8 @@ public class OrderTestFixture {
     }
 
     public static OrderItemSaveDto createOrderItemSaveDto(int index) {
-        OrderItemSaveDto dto = new OrderItemSaveDto();
+        OrderItemSaveDto dto = new OrderItemSaveDto((long)(index + 1), size[index % 5], index % 5);
 
-        dto.setProductId((long)(index + 1));
-        dto.setSize(size[index % 5]);
-        dto.setQuantity(index % 5);
         return dto;
     }
 
@@ -42,9 +36,5 @@ public class OrderTestFixture {
         for (int i = 0; i < size; i++)
             list.add(createOrderItemSaveDto(i));
         return list;
-    }
-
-    public static OrderSaveDto getOrderSaveDto() {
-        return orderSaveDto;
     }
 }

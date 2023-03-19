@@ -6,36 +6,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.product.entity.Product;
 import taewan.Smart.domain.product.repository.ProductDao;
 import taewan.Smart.domain.product.repository.ProductDaoImpl;
-
-import javax.persistence.PersistenceException;
+import taewan.Smart.fixture.ProductTestFixture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static taewan.Smart.fixture.ProductTestFixture.createProduct;
-import static taewan.Smart.fixture.ProductTestFixture.toStringForTest;
 
 
-@Import(ProductDaoImpl.class)
+@Import({ProductDaoImpl.class, PersistenceExceptionTranslationPostProcessor.class})
 @DataJpaTest
 @EnableJpaRepositories(basePackages = "taewan.Smart.domain.product.repository")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional
 public class ProductDaoTest {
     @Autowired
     private ProductDao productDao;
 
     @Test
-    @DisplayName("유효한 제품 저장 테스트")
+    @DisplayName("제품 정상 저장")
     void save() {
         //given
         Product product = createProduct();
@@ -48,7 +47,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    @DisplayName("동일한 제품명을 가진 제품 저장 테스트")
+    @DisplayName("저장하려는 제품명이 이미 등록되어있는 경우 DataIntegrityViolationException 발생")
     void save_duplicate() {
         //given
         Product product1 = createProduct();
@@ -64,12 +63,12 @@ public class ProductDaoTest {
         productDao.save(product1);
 
         //then
-        assertThrows(PersistenceException.class,
+        assertThrows(DataIntegrityViolationException.class,
                 () -> productDao.save(product2));
     }
 
     @Test
-    @DisplayName("기본키가 유효한 제품 삭제 테스트")
+    @DisplayName("존재하는 기본키로 해당 제품 정상 삭제")
     void delete() {
         //given
         Product product = createProduct();
@@ -78,72 +77,85 @@ public class ProductDaoTest {
         Long savedId = productDao.save(product);
 
         //then
-        assertEquals(productDao.count(), 1L);
+        assertThat(productDao.findById(savedId)).isNotEmpty();
         productDao.deleteById(savedId);
-        assertEquals(productDao.count(), 0L);
+        assertThat(productDao.findById(savedId)).isEmpty();
     }
 
     @Test
-    @DisplayName("기본키가 유효하지 않은 제품 삭제 테스트")
+    @DisplayName("존재하지 않는 기본키로 삭제시 IllegalArgumentException가 발생")
     void delete_invalid_productId() {
         //given
         Long invalidId = 0L;
+        Product product = createProduct();
 
-        //when //then
-        assertEquals(productDao.count(), 0L);
-        productDao.deleteById(invalidId);
+        //when
+        productDao.save(product);
+
+        //then
+        assertEquals(productDao.count(), 1L);
+        assertThrows(InvalidDataAccessApiUsageException.class,
+                () -> productDao.deleteById(invalidId));
+        assertEquals(productDao.count(), 1L);
     }
 
     @Test
-    @DisplayName("찾으려는 제품명을 가진 제품의 존재여부 테스트")
+    @DisplayName("존재하는 제품명을 이용해 제품을 조회하는 경우 true 반환")
     void existsByName() {
         //given
         Product product = createProduct();
-        String invalidName = "invalidName";
 
         //when
         productDao.save(product);
 
         //then
         assertThat(productDao.existsByName(product.getName())).isTrue();
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 제품명을 이용해 제품을 조회하는 경우 false 반환")
+    void existsByName_invalid_productName() {
+        //given
+        String invalidName = "invalidName";
+
+        //when //then
         assertThat(productDao.existsByName(invalidName)).isFalse();
     }
 
     @Test
-    @DisplayName("제품명이 같고 기본키가 다른 제품의 존재여부 테스트")
+    @DisplayName("이미 등록된 제품명 수정 시 새로 등록할 제품명이 중복되지 않은 경우 false 반환")
     void existsByNameAndProductIdNot() {
         //given
-        Product product = createProduct();
-        String invalidName = "invalidName";
-        Long invalidId = 0L;
+        Product product1 = createProduct(1);
+        String modifiedName = "productName2";
 
         //when
-        Long validId = productDao.save(product);
-
-        /**
-         * result1 : validId, validName
-         * result2 : validId, invalidName
-         * result3 : invalidId, validName
-         * result4 : invalidId, invalidName
-         */
-        boolean result1 = productDao
-                .existsByNameAndProductIdNot(validId, product.getName());
-        boolean result2 = productDao
-                .existsByNameAndProductIdNot(validId, invalidName);
-        boolean result3 = productDao
-                .existsByNameAndProductIdNot(invalidId, product.getName());
-        boolean result4 = productDao
-                .existsByNameAndProductIdNot(invalidId, invalidName);
+        productDao.save(product1);
+        boolean result = productDao.existsByNameAndProductIdNot(product1.getProductId(), modifiedName);
 
         //then
-        assertThat(result1).isFalse();
-        assertThat(result2).isFalse();
-        assertThat(result3).isTrue();
-        assertThat(result4).isFalse();
+        assertThat(result).isFalse();
     }
 
     @Test
-    @DisplayName("유효한 기본키를 이용한 제품 조회 테스트")
+    @DisplayName("이미 등록된 제품명 수정 시 새로 등록할 제품명이 중복된 경우 true 반환")
+    void existsByNameAndProductIdNot_duplicate_productName() {
+        //given
+        Product product1 = createProduct(1);
+        Product product2 = createProduct(2);
+        String modifiedName = product2.getName();
+
+        //when
+        productDao.save(product1);
+        productDao.save(product2);
+        boolean result = productDao.existsByNameAndProductIdNot(product1.getProductId(), modifiedName);
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("존재하는 기본키를 이용해 제품을 조회하는 경우 반환된 Optional의 내용과 생성한 Product의 내용이 동일함")
     void findById() {
         //given
         Product product = createProduct();
@@ -154,11 +166,14 @@ public class ProductDaoTest {
                 .orElseThrow();
 
         //then
-        assertEquals(toStringForTest(found), toStringForTest(product));
+        assertEquals(
+                ProductTestFixture.toString(found),
+                ProductTestFixture.toString(product)
+        );
     }
 
     @Test
-    @DisplayName("유효하지 않은 기본키를 이용한 제품 조회 테스트")
+    @DisplayName("존재하지 않는 기본키를 이용해 제품을 조회하는 경우 반환된 Optional이 비어있음")
     void findById_invalid_productId() {
         //given
         Long invalidId = 0L;
@@ -166,7 +181,7 @@ public class ProductDaoTest {
         //when //then
         assertThat(productDao.findById(invalidId)).isEmpty();
     }
-
+/////////
     @Test
     @DisplayName("pageable만 유효한 경우의 제품 필터 조회 테스트")
     void findAllByFilter_valid_pageable() {

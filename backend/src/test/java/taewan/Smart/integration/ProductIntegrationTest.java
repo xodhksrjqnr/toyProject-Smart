@@ -15,12 +15,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.order.dto.OrderItemSaveDto;
 import taewan.Smart.domain.order.entity.OrderItem;
-import taewan.Smart.domain.order.repository.OrderItemRepository;
+import taewan.Smart.domain.order.repository.OrderItemDao;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
 import taewan.Smart.domain.product.dto.ProductUpdateDto;
 import taewan.Smart.domain.product.repository.ProductDao;
 import taewan.Smart.domain.product.service.ProductService;
+import taewan.Smart.fixture.ProductTestFixture;
 import taewan.Smart.global.converter.PathConverter;
 import taewan.Smart.global.exception.ForeignKeyException;
 import taewan.Smart.global.util.PropertyUtils;
@@ -30,8 +31,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static taewan.Smart.fixture.ProductTestFixture.*;
 import static taewan.Smart.global.error.ExceptionStatus.*;
 import static taewan.Smart.global.util.CustomFileUtils.deleteDirectory;
@@ -46,7 +46,7 @@ class ProductIntegrationTest {
 	@Autowired
 	private ProductDao productDao;
 	@Autowired
-	private OrderItemRepository orderItemRepository;
+	private OrderItemDao orderItemDao;
 	@Value("${path.testImg}")
 	private String testImgPath;
 
@@ -385,7 +385,10 @@ class ProductIntegrationTest {
 		List<String> updatedImages = findFilePaths(PathConverter.toImgAccessLocal(updateDto.getImgSavePath()));
 
 		//then
-		assertThat(toStringForTest(saved).equals(toStringForTest(updated))).isFalse();
+		assertNotEquals(
+				ProductTestFixture.toString(saved),
+				ProductTestFixture.toString(updated)
+		);
 		assertEquals(savedImages.size(), 0);
 		assertEquals(updatedImages.size(), size);
 	}
@@ -423,7 +426,10 @@ class ProductIntegrationTest {
 
 		ProductInfoDto after = productService.findOne(productId);
 
-		assertThat(toStringForTest(before).equals(toStringForTest(after))).isTrue();
+		assertEquals(
+				ProductTestFixture.toString(before),
+				ProductTestFixture.toString(after)
+		);
 		assertEquals(saved1Images.size(), dto1Size);
 		assertEquals(saved2Images.size(), dto2Size);
 		assertEquals(updatedImages.size(), 0);
@@ -483,14 +489,10 @@ class ProductIntegrationTest {
 		//given
 		ProductSaveDto dto = createProductSaveDto(testImgPath);
 		Long savedProductId = productService.save(dto);
-		OrderItemSaveDto dto2 = new OrderItemSaveDto();
-
-		dto2.setProductId(savedProductId);
-		dto2.setSize("s");
-		dto2.setQuantity(2);
+		OrderItemSaveDto dto2 = new OrderItemSaveDto(savedProductId, "s", 2);
 
 		//when
-		orderItemRepository.save(OrderItem.createOrderItem(dto2, productDao.findById(savedProductId).get()));
+		orderItemDao.save(OrderItem.createOrderItem(dto2, productDao.findById(savedProductId).get()));
 
 		//then
 		ForeignKeyException ex = assertThrows(ForeignKeyException.class,
