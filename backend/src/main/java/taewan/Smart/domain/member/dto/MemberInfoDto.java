@@ -1,5 +1,6 @@
 package taewan.Smart.domain.member.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberInfoDto {
 
     private Long memberId;
@@ -20,12 +21,16 @@ public class MemberInfoDto {
 
     public Map<String, Object> toClaimsMap() {
         return Map.of(
-                "memberId", this.memberId,
-                "email", this.email
+                "memberId", memberId,
+                "email", email,
+                "type", "login"
         );
     }
 
     public Map<String, Object> toClaimMap() {
-        return Map.of("memberId", this.memberId);
+        return Map.of(
+                "memberId", memberId,
+                "type", "refresh"
+        );
     }
 }

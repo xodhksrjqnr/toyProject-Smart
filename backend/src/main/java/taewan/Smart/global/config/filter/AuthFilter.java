@@ -15,7 +15,7 @@ import static taewan.Smart.global.util.JwtUtils.parseJwt;
 public class AuthFilter implements Filter {
 
     private final Set<String> excludeUrl = Set.of(
-            "/members/create", "/members/login", "/members/certificate"
+            "/members/create", "/members/login", "/members/certificate/*"
     );
 
     @Override
@@ -40,7 +40,7 @@ public class AuthFilter implements Filter {
             }
             chain.doFilter(request, response);
         } catch (JwtException ex) {
-            log.error("JwtException : Request Method : {}, URL : {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI());
+            log.warn("JwtException : Request Method : {}, URL : {}", httpServletRequest.getMethod(), httpServletRequest.getRequestURI());
             throw ex;
         }
     }

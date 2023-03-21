@@ -4,6 +4,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import taewan.Smart.global.config.filter.AuthFilter;
@@ -24,6 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
         return filter;
     }
 
+    @Bean
+    public JwtInterceptor jwtInterceptor() {
+        return new JwtInterceptor();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(getAccessPath())
@@ -36,5 +42,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(getClientAddress())
                 .allowedMethods("GET", "POST", "OPTIONS")
                 .allowCredentials(true).maxAge(-1);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jwtInterceptor())
+                .addPathPatterns("/members/*", "/orders/*")
+                .excludePathPatterns("/members/create", "/members/login", "/members/certificate/*");
     }
 }

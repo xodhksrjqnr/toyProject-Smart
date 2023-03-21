@@ -10,8 +10,6 @@ import taewan.Smart.domain.order.service.OrderService;
 
 import java.util.List;
 
-import static taewan.Smart.global.util.JwtUtils.parseJwt;
-
 @RestController
 @RequestMapping("orders")
 @RequiredArgsConstructor
@@ -21,17 +19,13 @@ public class OrderController {
     private final OrderItemService orderItemService;
 
     @GetMapping
-    public List<OrderInfoDto> search(@RequestHeader("Authorization") String token) {
-        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
-
-        return orderService.findAll(memberId);
+    public List<OrderInfoDto> search(@RequestAttribute Long tokenMemberId) {
+        return orderService.findAll(tokenMemberId);
     }
 
     @PostMapping
-    public void upload(@RequestHeader("Authorization") String token, @RequestBody OrderSaveDto dto) {
-        Long memberId = Long.valueOf((Integer)parseJwt(token).get("memberId"));
-
-        orderService.save(memberId, dto);
+    public void upload(@RequestAttribute Long tokenMemberId, @RequestBody OrderSaveDto dto) {
+        orderService.save(tokenMemberId, dto);
     }
 
     @PostMapping("/cancel")
