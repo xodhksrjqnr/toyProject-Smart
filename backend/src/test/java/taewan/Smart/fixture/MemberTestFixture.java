@@ -1,12 +1,17 @@
 package taewan.Smart.fixture;
 
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.dto.MemberSaveDto;
 import taewan.Smart.domain.member.entity.Member;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 public class MemberTestFixture {
 
@@ -94,5 +99,50 @@ public class MemberTestFixture {
                 + member.getPhoneNumber();
 
         return str;
+    }
+
+    //MemberController
+    private static Map<String, String> requestDefault = new HashMap<>();
+
+    public static void setRequestDefault() {
+        requestDefault.put("memberId", "1");
+        requestDefault.put("nickName", "test");
+        requestDefault.put("email", "test@test.com");
+        requestDefault.put("password", "test1234!");
+        requestDefault.put("phoneNumber", "010-1111-1111");
+        requestDefault.put("birthday", LocalDate.now().toString());
+    }
+
+    private static MockHttpServletRequestBuilder setParam(MockHttpServletRequestBuilder sr) {
+        return sr.param("nickName", requestDefault.get("nickName"))
+                .param("email", requestDefault.get("email"))
+                .param("password", requestDefault.get("password"))
+                .param("phoneNumber", requestDefault.get("phoneNumber"))
+                .param("birthday", requestDefault.get("birthday"));
+    }
+
+    public static MockHttpServletRequestBuilder createJoinRequest() {
+        return setParam(post("/members/create"));
+    }
+
+    public static MockHttpServletRequestBuilder createJoinRequest(String target, String value) {
+        String savePreValue = requestDefault.get(target);
+        requestDefault.put(target, value);
+        MockHttpServletRequestBuilder created = createJoinRequest();
+        requestDefault.put(target, savePreValue);
+        return created;
+    }
+
+    public static MockHttpServletRequestBuilder createModifyRequest() {
+        return setParam(post("/members/update"))
+                .param("memberId", requestDefault.get("memberId"));
+    }
+
+    public static MockHttpServletRequestBuilder createModifyRequest(String target, String value) {
+        String savePreValue = requestDefault.get(target);
+        requestDefault.put(target, value);
+        MockHttpServletRequestBuilder created = createModifyRequest();
+        requestDefault.put(target, savePreValue);
+        return created;
     }
 }
