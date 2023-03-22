@@ -1,6 +1,9 @@
 package taewan.Smart.unit.member;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -17,7 +20,6 @@ import taewan.Smart.domain.member.dto.MemberInfoDto;
 import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberService;
 import taewan.Smart.fixture.ExceptionTestFixture;
-import taewan.Smart.fixture.MemberTestFixture;
 import taewan.Smart.global.error.GlobalExceptionHandler;
 import taewan.Smart.global.util.JwtUtils;
 import taewan.Smart.infra.Mail;
@@ -43,11 +45,6 @@ public class AuthControllerTest {
     private MemberCertificationService memberCertificationService;
     @Mock
     private Mail mail;
-
-    @BeforeAll
-    static void beforeAllSetup() {
-        MemberTestFixture.setRequestDefault();
-    }
 
     @BeforeEach
     void setup() {

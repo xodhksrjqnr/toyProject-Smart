@@ -1,6 +1,8 @@
 package taewan.Smart.fixture;
 
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.web.multipart.MultipartFile;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
 import taewan.Smart.domain.product.dto.ProductSaveDto;
@@ -9,8 +11,9 @@ import taewan.Smart.domain.product.entity.Product;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 
 public class ProductTestFixture {
     // Product
@@ -96,5 +99,56 @@ public class ProductTestFixture {
             str += dto.getImgFiles().get(i).toString() + ",";
         }
         return str;
+    }
+
+    //ProductController
+    private static Map<String, Object> createDefault = new HashMap<>();
+
+    public static void setCreateDefault() {
+        MultipartFile file1 = new MockMultipartFile("imgFiles", new byte[0]);
+        MultipartFile file2 = new MockMultipartFile("detailInfo", new byte[0]);
+
+        createDefault.put("productId", 1L);
+        createDefault.put("imgFiles", file1);
+        createDefault.put("name", "test");
+        createDefault.put("price", 1000);
+        createDefault.put("code", "A01M");
+        createDefault.put("size", "s,m,l,xl");
+        createDefault.put("detailInfo", file2);
+    }
+
+    private static MockHttpServletRequestBuilder setParam(MockMultipartHttpServletRequestBuilder sr) {
+        return sr.file((MockMultipartFile) createDefault.get("imgFiles"))
+                .file((MockMultipartFile) createDefault.get("detailInfo"))
+                .param("name", (String) createDefault.get("name"))
+                .param("price", String.valueOf(createDefault.get("price")))
+                .param("code", (String) createDefault.get("code"))
+                .param("size", (String) createDefault.get("size"));
+    }
+
+    public static MockHttpServletRequestBuilder createUploadRequest() {
+        return setParam(multipart("/products"));
+
+    }
+
+    public static MockHttpServletRequestBuilder createUploadRequest(String target, Object value) {
+        Object preValue = createDefault.get(target);
+        createDefault.put(target, value);
+        MockHttpServletRequestBuilder sr = createUploadRequest();
+        createDefault.put(target, preValue);
+        return sr;
+    }
+
+    public static MockHttpServletRequestBuilder createUpdateRequest() {
+        return setParam(multipart("/products/update"))
+                .param("productId", String.valueOf(createDefault.get("productId")));
+    }
+
+    public static MockHttpServletRequestBuilder createUpdateRequest(String target, Object value) {
+        Object preValue = createDefault.get(target);
+        createDefault.put(target, value);
+        MockHttpServletRequestBuilder sr = createUpdateRequest();
+        createDefault.put(target, preValue);
+        return sr;
     }
 }

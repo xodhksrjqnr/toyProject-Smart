@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import taewan.Smart.domain.category.controller.CategoryController;
 import taewan.Smart.domain.category.service.CategoryService;
+import taewan.Smart.fixture.ExceptionTestFixture;
 import taewan.Smart.global.error.GlobalExceptionHandler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -79,12 +79,7 @@ public class CategoryControllerTest {
                         .param("classification", "상의")
                         .param("middleClassification", "맨투맨"))
                 .andExpect(status().isBadRequest())
-                .andExpect(
-                        result -> assertEquals(
-                                result.getResolvedException().getClass(),
-                                DuplicateKeyException.class
-                        )
-                );
+                .andExpect(ExceptionTestFixture.isDuplicateKeyException());
         verify(categoryService, only()).save(any());
         verify(categoryService, times(1)).save(any());
     }
@@ -101,12 +96,7 @@ public class CategoryControllerTest {
                                 .param("classification", "상의")
                                 .param("middleClassification", "맨투맨"))
                 .andExpect(status().isBadRequest())
-                .andExpect(
-                        result -> assertEquals(
-                                result.getResolvedException().getClass(),
-                                DuplicateKeyException.class
-                        )
-                );
+                .andExpect(ExceptionTestFixture.isDuplicateKeyException());
         verify(categoryService, only()).save(any());
         verify(categoryService, times(1)).save(any());
     }
