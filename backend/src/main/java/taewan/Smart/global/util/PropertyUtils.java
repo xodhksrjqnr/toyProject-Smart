@@ -16,28 +16,16 @@ public class PropertyUtils {
     private static String emptyImgPath;
 
     static {
-        try {
-            Environment e = ApplicationContextProvider.getApplicationContext().getEnvironment();
-            serverAddress = e.getProperty("address.server");
-            clientAddress = e.getProperty("address.client");
-            rootPath = e.getProperty("path.home");
-            accessPath = e.getProperty("path.access");
-            resourcePath = e.getProperty("path.resource");
-            secretKey = e.getProperty("auth.secretKey");
-            imgFolderPath = rootPath + e.getProperty("path.image");
-            accessImgUrl = serverAddress + e.getProperty("path.image");
-            emptyImgPath = e.getProperty("path.image.empty");
-        } catch (NullPointerException ex) {
-            serverAddress = null;
-            clientAddress = null;
-            rootPath = null;
-            accessPath = null;
-            resourcePath = null;
-            imgFolderPath = null;
-            secretKey = null;
-            accessImgUrl = null;
-            emptyImgPath = null;
-        }
+        Environment e = ApplicationContextProvider.getApplicationContext().getEnvironment();
+        serverAddress = e.getProperty("address.server");
+        clientAddress = e.getProperty("address.client");
+        rootPath = e.getProperty("path.home");
+        accessPath = e.getProperty("path.access");
+        resourcePath = e.getProperty("path.resource");
+        secretKey = e.getProperty("auth.secretKey");
+        imgFolderPath = rootPath + e.getProperty("path.image");
+        accessImgUrl = serverAddress + e.getProperty("path.image");
+        emptyImgPath = e.getProperty("path.image.empty");
     }
 
     public static String getServerAddress() {
