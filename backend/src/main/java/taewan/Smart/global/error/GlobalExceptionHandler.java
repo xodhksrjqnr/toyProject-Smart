@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import taewan.Smart.global.exception.AuthAccessException;
+import taewan.Smart.global.exception.ForeignKeyException;
 
 import java.util.NoSuchElementException;
 
@@ -65,6 +66,13 @@ public class GlobalExceptionHandler {
         log.warn("MethodArgumentNotValidException", e);
         String message = e.getAllErrors().get(0).getDefaultMessage();
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, message);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ForeignKeyException.class)
+    public ResponseEntity<ErrorResponse> handleForeignKeyException(ForeignKeyException e) {
+        log.warn("ForeignKeyException", e);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
