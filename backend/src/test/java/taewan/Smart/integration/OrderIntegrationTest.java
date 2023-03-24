@@ -178,7 +178,7 @@ public class OrderIntegrationTest {
     //OrderItemServiceTest
 
     @Test
-    @DisplayName("주문의 특정 아이템을 취소하는 경우 해당 특정 목록의 배달상태가 CANCEL로 변경")
+    @DisplayName("주문의 특정 아이템을 취소하는 경우 해당 특정 목록의 배달상태가 '취소'로 변경")
     void cancel() {
         //given
         Long memberId = validMemberId;
@@ -193,7 +193,7 @@ public class OrderIntegrationTest {
         OrderItemInfoDto cancel = orderService.findAll(memberId).get(0).getOrderItemInfoDtoList().get(0);
 
         //then
-        assertEquals(cancel.getDeliveryStatus(), "CANCEL");
+        assertEquals(cancel.getDeliveryStatus(), "취소");
     }
 
     @Test
@@ -209,7 +209,7 @@ public class OrderIntegrationTest {
     }
 
     @Test
-    @DisplayName("주문의 특정 아이템을 환불하는 경우 해당 특정 목록의 배달상태가 REFUND로 변경")
+    @DisplayName("주문의 특정 아이템을 환불하는 경우 해당 특정 목록의 배달상태가 '환불'로 변경")
     void refund() {
         //given
         Long memberId = validMemberId;
@@ -224,7 +224,7 @@ public class OrderIntegrationTest {
         OrderItemInfoDto refund = orderService.findAll(memberId).get(0).getOrderItemInfoDtoList().get(0);
 
         //then
-        assertEquals(refund.getDeliveryStatus(), "REFUND");
+        assertEquals(refund.getDeliveryStatus(), "환불");
     }
 
     @Test
