@@ -1,6 +1,8 @@
 package taewan.Smart.domain.product.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
+import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.product.entity.Product;
 
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigInteger;
@@ -104,7 +107,7 @@ public class ProductDaoImpl implements ProductDao {
         for (Sort.Order o : orders) {
             sortSql
                     .append(" ")
-                    .append(o.getProperty())
+                    .append(toColumn(o.getProperty()))
                     .append(" ")
                     .append(o.getDirection());
             if (size > 1) {
@@ -114,9 +117,24 @@ public class ProductDaoImpl implements ProductDao {
         }
         if (sortSql.length() != 0) {
             sortSql.insert(0, " order by");
-        } else {
-
         }
         return sortSql.toString();
+    }
+
+    private String toColumn(String target) {
+        StringBuilder sb = new StringBuilder(target);
+        int index = 0;
+
+        while (index < sb.length()) {
+            char c = sb.charAt(index);
+
+            if ('A' <= c && c <= 'Z') {
+                sb.setCharAt(index, (char)(c + 32));
+                sb.insert(index, '_');
+                index++;
+            }
+            index++;
+        }
+        return sb.toString();
     }
 }
