@@ -107,7 +107,7 @@ public class ProductDaoImpl implements ProductDao {
         for (Sort.Order o : orders) {
             sortSql
                     .append(" ")
-                    .append(toColumn(o.getProperty()))
+                    .append(toColumnName(o.getProperty()))
                     .append(" ")
                     .append(o.getDirection());
             if (size > 1) {
@@ -121,7 +121,7 @@ public class ProductDaoImpl implements ProductDao {
         return sortSql.toString();
     }
 
-    private String toColumn(String target) {
+    private String toColumnName(String target) {
         StringBuilder sb = new StringBuilder(target);
         int index = 0;
 

@@ -22,7 +22,7 @@ public class ProductSaveDto extends ProductDto {
     private String name;
     @PositiveOrZero(message = "가격은 0원 이상이어야 합니다.")
     private Integer price;
-    @Pattern(regexp = "[A-Z][0-9]{2}[MW]", message = "제품 분류번호의 형식이 유효하지 않습니다.")
+    @Pattern(regexp = "[A-Z][0-9]{2}[MW]?", message = "제품 분류번호의 형식이 유효하지 않습니다.")
     private String code;
     @NotBlank(message = "제품 유효 사이즈가 필요합니다.")
     private String size;
