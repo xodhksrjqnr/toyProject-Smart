@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.order.dto.OrderItemCancelDto;
-import taewan.Smart.domain.order.repository.OrderItemRepository;
+import taewan.Smart.domain.order.repository.OrderItemDao;
 
 import static taewan.Smart.global.error.ExceptionStatus.ORDER_ITEM_NOT_FOUND;
 
@@ -12,13 +12,12 @@ import static taewan.Smart.global.error.ExceptionStatus.ORDER_ITEM_NOT_FOUND;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
-
-    private final OrderItemRepository orderItemRepository;
+    private final OrderItemDao orderItemDao;
 
     @Transactional
     @Override
     public void cancel(OrderItemCancelDto dto) {
-        orderItemRepository
+        orderItemDao
                 .findById(dto.getOrderItemId())
                 .orElseThrow(ORDER_ITEM_NOT_FOUND::exception)
                 .cancel();
@@ -27,7 +26,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional
     @Override
     public void refund(OrderItemCancelDto dto) {
-        orderItemRepository
+        orderItemDao
                 .findById(dto.getOrderItemId())
                 .orElseThrow(ORDER_ITEM_NOT_FOUND::exception)
                 .refund();

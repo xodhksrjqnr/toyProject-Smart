@@ -1,210 +1,512 @@
 package taewan.Smart.unit.product;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import taewan.Smart.domain.product.controller.ProductController;
 import taewan.Smart.domain.product.dto.ProductInfoDto;
-import taewan.Smart.domain.product.dto.ProductSaveDto;
-import taewan.Smart.domain.product.service.ProductServiceImpl;
+import taewan.Smart.domain.product.service.ProductService;
+import taewan.Smart.fixture.ExceptionTestFixture;
+import taewan.Smart.fixture.ProductTestFixture;
+import taewan.Smart.global.error.GlobalExceptionHandler;
+import taewan.Smart.global.exception.ForeignKeyException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.Normalizer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductController.class)
+@ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @MockBean
-    ProductServiceImpl productService;
+    private MockMvc mockMvc;
+    @Mock
+    private ProductService productService;
 
-//    private static String root = "/Users/taewan/Desktop/";
-//
-//    private static Map<String, String> codeInfo = Map.of(
-//            "A01", "후드 티셔츠",
-//            "A02", "맨투맨",
-//            "B01", "코트",
-//            "B02", "패딩",
-//            "C01", "트레이닝 팬츠",
-//            "C02", "숏팬츠"
-//    );
-//
-//    static List<ProductSaveDto> dtos = new ArrayList<>();
-//
-//    static List<ProductInfoDto> dtos2 = new ArrayList<>();
-//
-//    @BeforeAll
-//    static void setup() throws IOException {
-//        String[] tmp = {"A", "B", "C"};
-//        String[] tmp2 = {"M", "W"};
-//
-//        for (int i = 1; i <= 3; i++) {
-//            ProductSaveDto dto = new ProductSaveDto();
-//            dto.setName("product" + i);
-//            dto.setPrice((int)(Math.random() * 10 + 1) * 10000);
-//            dto.setCode(tmp[i - 1] + "0" + (i % 2 + 1) + tmp2[i % 2]);
-//            dto.setSize("s,m,l,xl,xxl");
-//            dto.setDetailInfo(createMultipartFile(dto.getCode(), i));
-//            List<MultipartFile> imgs = new ArrayList<>();
-//            for (int j = 1; j <= 3; j++)
-//                imgs.add(createMultipartFile(dto.getCode(), j));
-//            dto.setImgFiles(imgs);
-//            dtos.add(dto);
-//
-//            ProductInfoDto dto2 = new ProductInfoDto();
-//            dto2.setProductId((long)i);
-//            dto2.setName(dto.getName());
-//            dto2.setPrice(dto.getPrice());
-//            dto2.setCode(dto.getCode());
-//            dto2.setSize(dto.getSize());
-//            String path = "http://localhost:8080/images/products/" + dto2.getCode() + "/" + dto2.getName();
-//            dto2.setDetailInfo(path + "/" + UUID.randomUUID());
-//            List<String> imgFiles = new ArrayList<>();
-//            for (int j = 1; j <= 3; j++)
-//                imgFiles.add(path + "/view/" + UUID.randomUUID());
-//            dto2.setImgFiles(imgFiles);
-//            dtos2.add(dto2);
-//        }
-//    }
-//
-//    static MultipartFile createMultipartFile(String code, int i) throws IOException {
-//        String keyword = codeInfo.get(code.substring(0, 3)) + i;
-//        String path = root + "testImg/product";
-//        File[] imgs = new File(path).listFiles();
-//        String imgName = "구두1.jpeg";
-//        String contentType = "image/";
-//
-//        for (File img : imgs) {
-//            String normalizedName = Normalizer.normalize(img.getName(), Normalizer.Form.NFC);
-//            if (normalizedName.contains(keyword)) {
-//                imgName = normalizedName;
-//                contentType += imgName.substring(imgName.lastIndexOf(".") + 1);
-//                break;
-//            }
-//        }
-//        if (contentType.equals("image/"))
-//            contentType += "jpeg";
-//        return new MockMultipartFile("image", imgName, contentType, new FileInputStream(path + "/" + imgName));
-//    }
-//
-//    @Test
-//    void 제품_단일조회() throws Exception {
-//        //given
-//        when(productService.findOne(1L)).thenReturn(dtos2.get(0));
-//
-//        //when //then
-//        mockMvc.perform(get("/products/{productId}", 1))
-//                .andExpect(status().isOk());
-//        verify(productService, times(1)).findOne(1L);
-//    }
-//
-//    @Test
-//    void 없는_제품_단일조회() throws Exception {
-//        //given
-//        when(productService.findOne(1L)).thenThrow(new NoSuchElementException());
-//
-//        //when //then
-//        mockMvc.perform(get("/products/{productId}", 1))
-//                .andExpect(status().isNotFound())
-//                .andExpect(e -> assertTrue(e.getResolvedException() instanceof NoSuchElementException));
-//        verify(productService, times(1)).findOne(1L);
-//    }
-//
-//    @Test
-//    void 제품_페이지단위_조회() throws Exception {
-//        //given
-//        Pageable pageable = PageRequest.ofSize(10);
-//        Page<ProductInfoDto> page = new PageImpl<>(dtos2, pageable, 3);
-//        when(productService.findAll(pageable)).thenReturn(page);
-//
-//        //when //then
-//        mockMvc.perform(
-//                get("/products")
-//                        .param("size", "10"))
-//                .andExpect(status().isOk());
-//        verify(productService, times(1)).findAll(pageable);
-//    }
-//
-//    @Test
-//    void 제품_필터조회() throws Exception {
-//        //given
-//        Pageable pageable = PageRequest.ofSize(10);
-//        String code = dtos2.get(0).getCode();
-//        String search = dtos2.get(0).getName();
-//        List<ProductInfoDto> found = new ArrayList<>();
-//        found.add(dtos2.get(0));
-//        Page<ProductInfoDto> page = new PageImpl<>(found, pageable, 3);
-//        when(productService.findAllWithFilter(pageable, code, "")).thenReturn(page);
-//        when(productService.findAllWithFilter(pageable, "", search)).thenReturn(page);
-//        when(productService.findAllWithFilter(pageable, code, search)).thenReturn(page);
-//
-//        //when //then
-//        mockMvc.perform(
-//                get("/products/filter")
-//                        .param("code", code)
-//                        .param("size", "10"))
-//                .andExpect(status().isOk());
-//
-//        mockMvc.perform(
-//                        get("/products/filter")
-//                                .param("search", search)
-//                                .param("size", "10"))
-//                .andExpect(status().isOk());
-//
-//        mockMvc.perform(
-//                        get("/products/filter")
-//                                .param("code", code)
-//                                .param("search", search)
-//                                .param("size", "10"))
-//                .andExpect(status().isOk());
-//        verify(productService, times(3)).findAllWithFilter(any(), any(), any());
-//    }
-//
-//    @Test
-//    void 제품_등록() throws Exception {
-//        //given
-//        when(productService.save(any())).thenReturn(1L);
-//
-//        //when //then
-//        mockMvc.perform(post("/products"))
-//                .andExpect(status().isOk());
-//        verify(productService, times(1)).save(any());
-//    }
-//
-//    @Test
-//    void 제품_수정() throws Exception {
-//        //given
-//        when(productService.update(any())).thenReturn(1L);
-//
-//        //when //then
-//        mockMvc.perform(post("/products/update"))
-//                .andExpect(status().isOk());
-//        verify(productService, times(1)).update(any());
-//    }
-//
-//    @Test
-//    void 제품_삭제() throws Exception {
-//        //when //then
-//        mockMvc.perform(post("/products/{productId}/delete", 1))
-//                .andExpect(status().isOk());
-//        verify(productService, times(1)).delete(1L);
-//    }
+    @BeforeEach
+    void setup() {
+        this.mockMvc = MockMvcBuilders
+                .standaloneSetup(new ProductController(productService))
+                .setControllerAdvice(GlobalExceptionHandler.class)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .build();
+    }
+
+    @BeforeAll
+    static void beforeAllSetup() {
+        ProductTestFixture.setCreateDefault();
+    }
+
+    @Test
+    @DisplayName("제품 저장 테스트")
+    void upload() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUploadRequest();
+
+        when(productService.save(any())).thenReturn(1L);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+        verify(productService, only()).save(any());
+        verify(productService, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("제품 이름이 비어있는 경우 제품 저장 시 isBadRequest를 반환")
+    void upload_empty_name() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUploadRequest("name", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUploadRequest("name", " ");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("제품 가격이 유효하지 않은 경우 제품 저장 시 isBadRequest를 반환")
+    void upload_invalid_price() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUploadRequest("price", -1);
+
+        //when
+        ResultActions isMinus = mockMvc.perform(request);
+
+        //then
+        isMinus.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("제품 분류번호가 유효하지 않은 경우 제품 저장 시 isBadRequest를 반환")
+    void upload_invalid_code() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUploadRequest("code", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUploadRequest("code", " ");
+        MockHttpServletRequestBuilder request3 = ProductTestFixture.createUploadRequest("code", "A11B");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+        ResultActions invalidPattern = mockMvc.perform(request3);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        invalidPattern.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("제품 사이즈가 비어있는 경우 제품 저장 시 isBadRequest를 반환")
+    void upload_invalid_size() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUploadRequest("size", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUploadRequest("size", " ");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("저장하려는 제품명이 이미 등록된 경우 isBadRequest를 반환")
+    void upload_duplicate_name() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUploadRequest();
+
+        when(productService.save(any())).thenThrow(DuplicateKeyException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isDuplicateKeyException());
+        verify(productService, only()).save(any());
+        verify(productService, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("ProductSaveDto의 imgFiles가 비어있는 경우 isBadRequest를 반환")
+    void upload_empty_imgFiles() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUploadRequest();
+
+        when(productService.save(any())).thenThrow(IllegalArgumentException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isIllegalArgumentException());
+        verify(productService, only()).save(any());
+        verify(productService, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("ProductSaveDto의 detailInfo가 비어있는 경우 isBadRequest를 반환")
+    void upload_empty_detailInfo() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUploadRequest();
+
+        when(productService.save(any())).thenThrow(IllegalArgumentException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isIllegalArgumentException());
+        verify(productService, only()).save(any());
+        verify(productService, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("제품 단일 조회 테스트")
+    void searchOne() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = get("/products/{productId}", 1);
+        ProductInfoDto dto = ProductInfoDto.builder()
+                .productId(1L)
+                .size("s,m,l")
+                .imgFiles(new ArrayList<>())
+                .detailInfo("path")
+                .price(1000)
+                .code("A01M")
+                .name("test")
+                .build();
+
+        when(productService.findOne(anyLong())).thenReturn(dto);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        verify(productService, only()).findOne(anyLong());
+        verify(productService, times(1)).findOne(anyLong());
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 제품 기본키를 이용해 제품 단일 조회 시 isNotFound를 반환")
+    void searchOne_invalid_productId() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = get("/products/{productId}", 0);
+
+        when(productService.findOne(anyLong())).thenThrow(NoSuchElementException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isNotFound())
+                .andExpect(ExceptionTestFixture.isNoSuchElementException());
+        verify(productService, only()).findOne(anyLong());
+        verify(productService, times(1)).findOne(anyLong());
+    }
+
+//    Pageable 처리 필요
+    @Test
+    @DisplayName("필터 조합에 따른 제품 전체 조회 테스트")
+    void searchAllByFilter() throws Exception {
+        //given
+        Page<ProductInfoDto> page = new PageImpl<>(new ArrayList<>());
+        MockHttpServletRequestBuilder request1 = get("/products/filter")
+                .param("code", "A")
+                .param("search", "t")
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "productId,DESC");
+        MockHttpServletRequestBuilder request2 = get("/products/filter")
+                .param("search", "t")
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "productId,DESC");
+        MockHttpServletRequestBuilder request3 = get("/products/filter")
+                .param("code", "A")
+                .param("page", "0")
+                .param("size", "10")
+                .param("sort", "productId,DESC");
+        MockHttpServletRequestBuilder request4 = get("/products/filter")
+                .param("code", "A")
+                .param("search", "t");
+
+        when(productService.findAllByFilter(any(), any(), any())).thenReturn(page);
+
+        //when
+        ResultActions basic = mockMvc.perform(request1);
+        ResultActions defaultCode = mockMvc.perform(request2);
+        ResultActions defaultSearch = mockMvc.perform(request3);
+        ResultActions defaultPageable = mockMvc.perform(request4);
+
+        //then
+        basic.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        defaultCode.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        defaultSearch.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        defaultPageable.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        verify(productService, times(4)).findAllByFilter(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("제품 정보 수정 테스트")
+    void modify() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest();
+
+        when(productService.update(any())).thenReturn(1L);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isOk());
+        verify(productService, only()).update(any());
+        verify(productService, times(1)).update(any());
+    }
+
+    @Test
+    @DisplayName("제품 이름이 비어있을 때 수정 시 isBadRequest를 반환")
+    void modify_empty_name() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUpdateRequest("name", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUpdateRequest("name", " ");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).update(any());
+    }
+
+    @Test
+    @DisplayName("제품 가격이 유효하지 않은 경우 수정 시 isBadRequest를 반환")
+    void modify_invalid_price() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest("price", -1);
+
+        //when
+        ResultActions isMinus = mockMvc.perform(request);
+
+        //then
+        isMinus.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).update(any());
+    }
+
+    @Test
+    @DisplayName("제품 코드가 유효하지 않은 경우 수정 시 isBadRequest를 반환")
+    void modify_invalid_code() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUpdateRequest("code", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUpdateRequest("code", " ");
+        MockHttpServletRequestBuilder request3 = ProductTestFixture.createUpdateRequest("code", "a11G");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+        ResultActions invalidPattern = mockMvc.perform(request2);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        invalidPattern.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).update(any());
+    }
+
+    @Test
+    @DisplayName("제품 사이즈가 비어있는 경우 수정 시 isBadRequest를 반환")
+    void modify_empty_size() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request1 = ProductTestFixture.createUpdateRequest("size", "");
+        MockHttpServletRequestBuilder request2 = ProductTestFixture.createUpdateRequest("size", " ");
+
+        //when
+        ResultActions isNull = mockMvc.perform(request1);
+        ResultActions isBlank = mockMvc.perform(request2);
+
+        //then
+        isNull.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        isBlank.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isBindException());
+        verify(productService, never()).update(any());
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 제품 기본키를 이용해 제품 정보 수정 시 isNotFound를 반환")
+    void modify_invalid_productId() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest();
+
+        when(productService.update(any())).thenThrow(NoSuchElementException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isNotFound())
+                .andExpect(ExceptionTestFixture.isNoSuchElementException());
+        verify(productService, only()).update(any());
+        verify(productService, times(1)).update(any());
+    }
+
+    @Test
+    @DisplayName("수정하려는 제품명을 이미 다른 제품으로 등록되어 있는 경우 제품 정보 수정 시 isBadRequest를 반환")
+    void modify_duplicate_name() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest();
+
+        when(productService.update(any())).thenThrow(DuplicateKeyException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isDuplicateKeyException());
+        verify(productService, only()).update(any());
+        verify(productService, times(1)).update(any());
+    }
+
+    @Test
+    @DisplayName("ProductUpdateDto의 imgFiles가 비어있는 경우 isBadRequest를 반환")
+    void modify_empty_imgFiles() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest();
+
+        when(productService.update(any())).thenThrow(IllegalArgumentException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isIllegalArgumentException());
+        verify(productService, only()).update(any());
+        verify(productService, times(1)).update(any());
+    }
+
+    @Test
+    @DisplayName("ProductUpdateDto의 detailInfo가 비어있는 경우 isBadRequest를 반환")
+    void modify_empty_detailInfo() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = ProductTestFixture.createUpdateRequest();
+
+        when(productService.update(any())).thenThrow(IllegalArgumentException.class);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isIllegalArgumentException());
+        verify(productService, only()).update(any());
+        verify(productService, times(1)).update(any());
+    }
+
+    @Test
+    @DisplayName("제품 삭제 테스트")
+    void delete() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = post("/products/{productId}/delete", 1L);
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isOk());
+        verify(productService, only()).delete(anyLong());
+        verify(productService, times(1)).delete(anyLong());
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 제품 기본키를 이용해 제품 삭제 시 isNotFound를 반환")
+    void delete_invalid_productId() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = post("/products/{productId}/delete", 1L);
+
+        doThrow(NoSuchElementException.class).when(productService).delete(anyLong());
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isNotFound())
+                .andExpect(ExceptionTestFixture.isNoSuchElementException());
+        verify(productService, only()).delete(anyLong());
+        verify(productService, times(1)).delete(anyLong());
+    }
+
+    @Test
+    @DisplayName("제품과 관련된 주문 아이템이 존재하는 경우 삭제 시 isBadRequest를 반환")
+    void delete_foreignKey_productId() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = post("/products/{productId}/delete", 1L);
+
+        doThrow(ForeignKeyException.class).when(productService).delete(anyLong());
+
+        //when
+        ResultActions response = mockMvc.perform(request);
+
+        //then
+        response.andExpect(status().isBadRequest())
+                .andExpect(ExceptionTestFixture.isForeignKeyException());
+        verify(productService, only()).delete(anyLong());
+        verify(productService, times(1)).delete(anyLong());
+    }
 }

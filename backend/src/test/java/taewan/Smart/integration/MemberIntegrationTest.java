@@ -1,10 +1,10 @@
 package taewan.Smart.integration;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import taewan.Smart.domain.member.dto.MemberCertificateDto;
 import taewan.Smart.domain.member.dto.MemberInfoDto;
@@ -14,6 +14,7 @@ import taewan.Smart.domain.member.entity.Member;
 import taewan.Smart.domain.member.repository.MemberRepository;
 import taewan.Smart.domain.member.service.MemberCertificationService;
 import taewan.Smart.domain.member.service.MemberService;
+import taewan.Smart.fixture.MemberTestFixture;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static taewan.Smart.fixture.MemberTestFixture.createPhoneNumber;
 import static taewan.Smart.fixture.MemberTestFixture.getMemberSaveDtoList;
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
+import static taewan.Smart.global.util.PropertyUtils.getClientAddress;
 
 @SpringBootTest
 @Transactional
@@ -38,7 +39,8 @@ public class MemberIntegrationTest {
     //MemberServiceTest
 
     @Test
-    void 회원_저장_테스트() {
+    @DisplayName("회원 저장 테스트")
+    void save() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
 
@@ -50,7 +52,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 닉네임이_중복된_회원_저장_테스트() {
+    @DisplayName("회원가입시 회원 닉네임이 중복된 경우 DuplicateKeyException가 발생")
+    void save_duplicate_nickName() {
         //given
         MemberSaveDto dto1 = getMemberSaveDtoList().get(0);
         MemberSaveDto dto2 = MemberSaveDto.builder()
@@ -69,7 +72,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void memberId로_회원_조회_테스트() {
+    @DisplayName("회원 기본키를 이용한 회원 조회 테스트")
+    void findOne_valid_memberId() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
 
@@ -85,7 +89,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_memberId로_회원_조회_테스트() {
+    @DisplayName("존재하지 않는 회원 기본키를 이용해 회원을 조회하는 경우 NoSuchElementException가 발생")
+    void findOne_invalid_memberId() {
         //when //then
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> memberService.findOne(1L));
@@ -93,7 +98,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void email로_회원_조회_테스트() {
+    @DisplayName("이메일을 이용한 회원 조회 테스트")
+    void findOne_valid_email() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
 
@@ -109,7 +115,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_email로_회원_조회_테스트() {
+    @DisplayName("존재하지 않는 이메일을 이용해 회원을 조회하는 경우 NoSuchElementException가 발생")
+    void findOne_invalid_email() {
         //when //then
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> memberService.findOne("invalid"));
@@ -117,7 +124,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 닉네임과_패스워드로_회원_조회_테스트() {
+    @DisplayName("닉네임과 패스워드를 이용한 회원 조회 테스트")
+    void findOne_valid_nickName_valid_password() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
 
@@ -133,7 +141,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_닉네임과_패스워드로_회원_조회_테스트() {
+    @DisplayName("등록되지 않는 닉네임과 등록된 패스워드를 이용해 회원을 조회하는 경우 NoSuchElementException가 발생")
+    void findOne_invalid_nickName_valid_password() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         String nickName = "invalidNickName";
@@ -149,7 +158,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 닉네임과_없는_패스워드로_회원_조회_테스트() {
+    @DisplayName("등록된 닉네임과 등록되지 않은 패스워드를 이용해 회원을 조회하는 경우 NoSuchElementException가 발생")
+    void findOne_valid_nickName_invalid_password() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         String nickName = dto.getNickName();
@@ -165,7 +175,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_닉네임과_없는_패스워드로_회원_조회_테스트() {
+    @DisplayName("닉네임과 패스워드 모두 등록되지 않았을 때 회원을 조회하는 경우 NoSuchElementException가 발생")
+    void findOne_invalid_all() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         String nickName = "invalidNickName";
@@ -181,7 +192,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 회원_수정_테스트() {
+    @DisplayName("회원 정보 수정 테스트")
+    void update() {
         //given
         MemberSaveDto saveDto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(saveDto);
@@ -199,11 +211,15 @@ public class MemberIntegrationTest {
         MemberInfoDto found = memberService.findOne(memberId);
 
         //then
-        assertEquals(updated.toString(), found.toString());
+        assertEquals(
+                MemberTestFixture.toString(updated),
+                MemberTestFixture.toString(found)
+        );
     }
 
     @Test
-    void 없는_회원_수정_테스트() {
+    @DisplayName("등록되지 않은 회원 기본키를 이용해 회원 정보를 수정하는 경우 NoSuchElementException가 발생")
+    void update_invalid_memberId() {
         //given
         MemberUpdateDto updateDto = MemberUpdateDto.builder()
                 .memberId(1L)
@@ -221,7 +237,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 비밀번호를_비워둔_회원_수정_테스트() {
+    @DisplayName("회원 정보 수정 시 비밀번호가 비워져 있는 경우 비밀번호를 수정하지 않는다고 판단하여 이전 비밀번호를 그대로 사용")
+    void update_blank_password() {
         //given
         MemberSaveDto saveDto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(saveDto);
@@ -236,13 +253,15 @@ public class MemberIntegrationTest {
 
         //when
         Optional<Member> found = memberRepository.findById(memberId);
+        found.get().updateMember(updateDto);
 
         // then
         assertEquals(found.get().getPassword(), saveDto.getPassword());
     }
 
     @Test
-    void 수정하려는_닉네임이_중복된_회원_수정_테스트() {
+    @DisplayName("회원 정보 수정 시 변경하려는 회원 닉네임이 중복된 경우 DuplicateKeyException가 발생")
+    void update_duplicate_nickName() {
         //given
         MemberSaveDto saveDto1 = getMemberSaveDtoList().get(0);
         MemberSaveDto saveDto2 = getMemberSaveDtoList().get(1);
@@ -263,7 +282,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 회원_탈퇴_테스트() {
+    @DisplayName("회원 탈퇴 테스트")
+    void delete() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
 
@@ -280,7 +300,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_회원_탈퇴_테스트() {
+    @DisplayName("존재하지 않는 회원 기본키를 이용해 회원 탈퇴를 시도하는 경우 NoSuchElementException가 발생")
+    void delete_invalid_memberId() {
         //when //then
         NoSuchElementException ex = assertThrows(NoSuchElementException.class,
                 () -> memberService.delete(1L));
@@ -290,7 +311,8 @@ public class MemberIntegrationTest {
     //MemberCertificationTest
 
     @Test
-    void 이메일_인증_테스트() {
+    @DisplayName("인증받으려는 이메일이 등록되어있지 않은 사용 가능한 이메일인 경우 회원가입 링크를 담은 메시지를 담아 반환")
+    void findEmail() {
         //given
         String email = "test@test.com";
 
@@ -303,7 +325,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 중복된_이메일_인증_테스트() {
+    @DisplayName("인증받으려는 이메일이 이미 등록된 경우 DuplicateKeyException가 발생")
+    void findEmail_duplicate_email() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         memberService.save(dto);
@@ -316,7 +339,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 이메일로_회원_아이디_찾기_테스트() {
+    @DisplayName("이메일을 이용한 회원 닉네임 조회 테스트")
+    void findMember() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         memberService.save(dto);
@@ -330,7 +354,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_이메일로_회원_아이디_찾기_테스트() {
+    @DisplayName("등록되지 않은 이메일을 이용해 회원 닉네임을 조회하는 경우 NoSuchElementException가 발생")
+    void findMember_invalid_email() {
         //given
         String email = "test.@test.com";
 
@@ -341,7 +366,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 이메일과_닉네임으로_회원_아이디_찾기_테스트() {
+    @DisplayName("이메일과 닉네임을 이용해 회원 패스워드를 조회하는 경우 임시 비밀번호를 생성")
+    void findMember_valid_email_valid_nickName() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(dto);
@@ -358,7 +384,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_이메일과_닉네임으로_회원_아이디_찾기_테스트() {
+    @DisplayName("등록되지 않은 이메일과 등록된 닉네임으로 회원 패스워드를 조회하는 경우 NoSuchElementException가 발생")
+    void findMember_invalid_email_valid_nickName() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(dto);
@@ -373,7 +400,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 이메일과_없는_닉네임으로_회원_아이디_찾기_테스트() {
+    @DisplayName("등록된 이메일과 등록되지 않은 닉네임으로 회원 패스워드를 조회하는 경우 NoSuchElementException가 발생")
+    void findMember_valid_email_invalid_nickName() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(dto);
@@ -388,7 +416,8 @@ public class MemberIntegrationTest {
     }
 
     @Test
-    void 없는_이메일과_없는_닉네임으로_회원_아이디_찾기_테스트() {
+    @DisplayName("이메일과 닉네임 모두 등록되지 않았을 때 회원 패스워드를 조회하는 경우 NoSuchElementException가 발생")
+    void findMember_invalid_all() {
         //given
         MemberSaveDto dto = getMemberSaveDtoList().get(0);
         Long memberId = memberService.save(dto);

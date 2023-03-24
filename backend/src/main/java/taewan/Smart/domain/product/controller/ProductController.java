@@ -23,16 +23,11 @@ public class ProductController {
         return productService.findOne(productId);
     }
 
-    @GetMapping
-    public Page<ProductInfoDto> searchAll(Pageable pageable) {
-        return productService.findAll(pageable);
-    }
-
     @GetMapping("/filter")
-    public Page<ProductInfoDto> searchAllWithFilter(@RequestParam(name = "code", defaultValue = "") String code,
+    public Page<ProductInfoDto> searchAllByFilter(@RequestParam(name = "code", defaultValue = "") String code,
                                                     @RequestParam(name = "search", defaultValue = "") String search,
                                                     Pageable pageable) {
-        return productService.findAllWithFilter(pageable, code, search);
+        return productService.findAllByFilter(pageable, code, search);
     }
 
     @PostMapping

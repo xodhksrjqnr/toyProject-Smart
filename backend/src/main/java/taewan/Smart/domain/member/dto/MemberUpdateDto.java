@@ -10,8 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@AllArgsConstructor
-@ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberUpdateDto {
 
     private Long memberId;
@@ -20,7 +19,6 @@ public class MemberUpdateDto {
     @NotEmpty(message = "이메일을 입력해야합니다.")
     @Email(message = "이메일 형식이 잘못되었습니다.")
     private String email;
-    @NotEmpty(message = "패스워드를 입력해야합니다.")
     private String password;
     @Pattern(regexp = "^(010-\\d{4}-\\d{4})|()$", message = "핸드폰 번호 형식이 잘못되었습니다.")
     private String phoneNumber;

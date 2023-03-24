@@ -20,8 +20,10 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "bigint unsigned")
     private Long orderId;
+    @Column(columnDefinition = "bigint unsigned")
     private Long memberId;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();

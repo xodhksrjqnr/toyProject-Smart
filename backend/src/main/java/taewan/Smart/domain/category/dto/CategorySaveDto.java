@@ -1,13 +1,11 @@
 package taewan.Smart.domain.category.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import taewan.Smart.domain.category.entity.Category;
 import taewan.Smart.domain.category.entity.CategoryItem;
 
 @Getter
-@Builder
 @AllArgsConstructor
 public class CategorySaveDto {
 
@@ -15,19 +13,13 @@ public class CategorySaveDto {
     private String middleClassification;
 
     public Category toEntity(String categoryCode, String categoryItemCode) {
-        Category category = Category.builder()
-                .name(this.classification)
-                .code(categoryCode)
-                .build();
+        Category category = new Category(categoryCode, this.classification);
 
         category.addCategoryItem(this.toItemEntity(categoryItemCode));
         return category;
     }
 
-    private CategoryItem toItemEntity(String code) {
-        return CategoryItem.builder()
-                .name(this.middleClassification)
-                .code(code)
-                .build();
+    public CategoryItem toItemEntity(String code) {
+        return new CategoryItem(code, this.middleClassification);
     }
 }

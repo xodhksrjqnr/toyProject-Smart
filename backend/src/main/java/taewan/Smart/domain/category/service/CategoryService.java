@@ -8,5 +8,5 @@ import java.util.List;
 public interface CategoryService {
 
     List<CategoryInfoDto> findAll();
-    Long save(CategorySaveDto dto);
+    void save(CategorySaveDto dto);
 }

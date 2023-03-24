@@ -15,15 +15,8 @@ public class CategoryTestFixture {
 
     private static final List<CategorySaveDto> categorySaveDtoList = createCategorySaveDtoList();
 
-    public static CategorySaveDto createCategorySaveDto() {
-        return createCategorySaveDto(0);
-    }
-
     public static CategorySaveDto createCategorySaveDto(int index) {
-        return CategorySaveDto.builder()
-                .classification(category[index / 2])
-                .middleClassification(categoryItem[index / 2][index % 2])
-                .build();
+        return new CategorySaveDto(category[index / 2], categoryItem[index / 2][index % 2]);
     }
 
     public static List<CategorySaveDto> createCategorySaveDtoList() {

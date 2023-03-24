@@ -1,4 +1,4 @@
-package taewan.Smart.global.utils;
+package taewan.Smart.global.util;
 
 import io.jsonwebtoken.*;
 
@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.Map;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.PropertyUtil.getSecretKey;
+import static taewan.Smart.global.util.PropertyUtils.getSecretKey;
 
 
-public class JwtUtil {
+public class JwtUtils {
     public static String createJwt(Map<String, Object> claims) {
         Date now = new Date();
         String jwt = Jwts.builder()

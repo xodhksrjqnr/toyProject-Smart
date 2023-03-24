@@ -10,7 +10,7 @@ import taewan.Smart.domain.member.repository.MemberRepository;
 import java.util.UUID;
 
 import static taewan.Smart.global.error.ExceptionStatus.*;
-import static taewan.Smart.global.utils.PropertyUtil.getClientAddress;
+import static taewan.Smart.global.util.PropertyUtils.getClientAddress;
 
 @Service
 @Transactional(readOnly = true)
