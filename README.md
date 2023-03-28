@@ -100,6 +100,9 @@
 |**POST** /orders/cancel| 주문 취소       |
 |**POST** /orders/refund| 주문 환불       |
 
+### ERD
+<img width="985" alt="ERD" src="https://user-images.githubusercontent.com/48250370/228131323-4c28bec6-93ec-4a00-b3b6-3616ce115ebc.png">
+
 ### 구조
 <img width="949" alt="스크린샷 2023-01-13 오후 9 54 06" src="https://user-images.githubusercontent.com/48250370/212324851-7bf4691d-61a6-408a-96ba-4491b5c92928.png">
 
