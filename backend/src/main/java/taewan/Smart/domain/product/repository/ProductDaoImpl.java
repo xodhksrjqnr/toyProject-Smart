@@ -66,7 +66,6 @@ public class ProductDaoImpl implements ProductDao {
         if (!name.isEmpty()) {
             query.setParameter("name", "%" + name + "%");
         }
-        query.getResultList();
         return new PageImpl<Product>(query.getResultList(), pageable, count());
     }
 
