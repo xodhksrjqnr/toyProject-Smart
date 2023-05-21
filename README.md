@@ -110,3 +110,4 @@
 토이 프로젝트 종료후 코드를 다시 살펴보는 과정에서 구현에만 치중했다는 점이 확연히 드러났다. 따라서 코드 전체를 리팩토링하는 과정을 진행하게 되었으며 주제에 따라 나누어서 정리할 계획이다.
 
 - [Entity 리팩토링](https://github.com/xodhksrjqnr/toyProject-Smart/wiki/Entity-%EC%9D%91%EC%A7%91%EC%84%B1-%ED%96%A5%EC%83%81)
+- [Preflight Error](https://github.com/xodhksrjqnr/toyProject-Smart/wiki/Preflight-Error-%ED%95%B4%EA%B2%B0%EA%B3%BC%EC%A0%95)
