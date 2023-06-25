@@ -112,7 +112,7 @@
 <img width="985" alt="ERD" src="https://user-images.githubusercontent.com/48250370/228131323-4c28bec6-93ec-4a00-b3b6-3616ce115ebc.png">
 
 ### 구조
-<img width="949" alt="스크린샷 2023-01-13 오후 9 54 06" src="https://user-images.githubusercontent.com/48250370/212324851-7bf4691d-61a6-408a-96ba-4491b5c92928.png">
+<img width="531" alt="스크린샷 2023-06-25 오후 9 48 53" src="https://github.com/xodhksrjqnr/toyProject-Smart/assets/48250370/04bc1b38-b823-47e3-8937-86ad82d28741">
 
 ### 생각&고민
 토이 프로젝트 종료후 코드를 다시 살펴보는 과정에서 구현에만 치중했다는 점이 확연히 드러났다. 따라서 코드 전체를 리팩토링하는 과정을 진행하게 되었으며 주제에 따라 나누어서 정리할 계획이다.
